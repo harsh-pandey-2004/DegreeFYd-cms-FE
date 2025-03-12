@@ -18,6 +18,7 @@ import { CollegeForm } from "./CRM";
 import { useNavigate } from "react-router-dom";
 import ApproveComponent from "./components/ApproveComponent";
 import RejectComponent from "./components/RejectComponent";
+import DOMPurify from 'dompurify';
 
 const Dashboard = () => {
   const [responses, setResponses] = useState([]);
@@ -63,10 +64,10 @@ const Dashboard = () => {
       let response;
       if (isContentCreator) {
         response = await axios.get(
-          `https://degreefydcmsbe.onrender.com/api/colleges/userId/${userId}`
+          `http://localhost:5000/api/colleges/userId/${userId}`
         );
       } else {
-        response = await axios.get("https://degreefydcmsbe.onrender.com/api/colleges");
+        response = await axios.get("http://localhost:5000/api/colleges");
       }
       setResponses(response.data);
       setFilteredResponses(response.data);
@@ -94,7 +95,7 @@ const Dashboard = () => {
       if (!emailMap[id]) {
         try {
           const response = await axios.get(
-            `https://degreefydcmsbe.onrender.com/api/auth/user/${id}`
+            `http://localhost:5000/api/auth/user/${id}`
           );
           emailMap[id] = response.data.data.email;
         } catch (error) {
@@ -221,6 +222,17 @@ const Dashboard = () => {
     setPopupReason(reason);
     setPopupCollegeName(collegeName);
     setShowReasonPopup(true);
+    
+    // Configure DOMPurify to allow list elements
+    DOMPurify.addHook('afterSanitizeAttributes', function(node) {
+      // Fix display issues for list elements by adding style
+      if(node.nodeName === 'UL' || node.nodeName === 'OL') {
+        node.setAttribute('style', 'display: block; list-style-type: disc; padding-left: 40px; margin: 1em 0;');
+      }
+      if(node.nodeName === 'LI') {
+        node.setAttribute('style', 'display: list-item;');
+      }
+    });
   };
 
   // Close rejection reason popup
@@ -236,7 +248,7 @@ const Dashboard = () => {
 
     try {
       const response = await axios.put(
-        `https://degreefydcmsbe.onrender.com/api/colleges/approve/${selectedCollege._id}`,
+        `http://localhost:5000/api/colleges/approve/${selectedCollege._id}`,
         {
           userId: userId,
           status: "approved",
@@ -271,7 +283,7 @@ const Dashboard = () => {
 
     try {
       const response = await axios.put(
-        `https://degreefydcmsbe.onrender.com/api/colleges/approve/${selectedCollege._id}`,
+        `http://localhost:5000/api/colleges/approve/${selectedCollege._id}`,
         {
           userId: userId,
           status: "rejected",
@@ -393,7 +405,7 @@ const Dashboard = () => {
 
         {/* Rejection Reason Popup */}
         {showReasonPopup && (
-          <div className="fixed inset-0 bg-transparent backdrop-blur-xs flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-transparent bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
             <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 overflow-hidden">
               <div className="flex justify-between items-center px-6 py-4 bg-blue-600 text-white">
                 <h3 className="text-lg font-medium">
@@ -406,9 +418,18 @@ const Dashboard = () => {
                   <XCircle size={24} />
                 </button>
               </div>
-              <div className="p-6 max-h-96 overflow-y-auto">
+              <div className="p-6 max-h-96 overflow-y-auto prose">
                 {popupReason ? (
-                  <div dangerouslySetInnerHTML={{ __html: popupReason }} />
+                  <div 
+                    className="rejection-reason-content"
+                    dangerouslySetInnerHTML={{ 
+                      __html: DOMPurify.sanitize(popupReason, {
+                        USE_PROFILES: { html: true },
+                        ADD_ATTR: ['style'],
+                        ADD_TAGS: ['ul', 'ol', 'li']
+                      }) 
+                    }} 
+                  />
                 ) : (
                   <p className="text-gray-500 italic">No reason provided</p>
                 )}

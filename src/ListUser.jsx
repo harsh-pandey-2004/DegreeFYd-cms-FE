@@ -16,12 +16,13 @@ const ListUser = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [passwordStrength, setPasswordStrength] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const fetchUsersWithColleges = async () => {
     try {
       // Fetch all users
       const usersResponse = await axios.get(
-        "https://degreefydcmsbe.onrender.com/api/auth/user"
+        "http://localhost:5000/api/auth/user"
       );
 
       // Extract the user data from the nested structure
@@ -42,7 +43,7 @@ const ListUser = () => {
         userData.map(async (user) => {
           try {
             const collegeResponse = await axios.get(
-              `https://degreefydcmsbe.onrender.com/api/colleges/userId/${user._id}`
+              `http://localhost:5000/api/colleges/userId/${user._id}`
             );
 
             // Handle possible nested structure in college response as well
@@ -107,7 +108,7 @@ const ListUser = () => {
     try {
       // Call the delete API endpoint
       const response = await axios.delete(
-        `https://degreefydcmsbe.onrender.com/api/auth/user/${userId}`
+        `http://localhost:5000/api/auth/user/${userId}`
       );
 
       if (response.data.success) {
@@ -134,6 +135,7 @@ const ListUser = () => {
     setSelectedUser(user);
     setNewPassword("");
     setPasswordStrength("");
+    setShowPassword(false);
     setShowPasswordModal(true);
   };
 
@@ -169,6 +171,10 @@ const ListUser = () => {
     setPasswordStrength(checkPasswordStrength(password));
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleResetPassword = async () => {
     if (!newPassword) {
       toast.error("Please enter a new password");
@@ -183,7 +189,7 @@ const ListUser = () => {
     setPasswordLoading(selectedUser._id);
     try {
       const response = await axios.post(
-        "https://degreefydcmsbe.onrender.com/api/auth/reset-password",
+        "http://localhost:5000/api/auth/reset-password",
         { id: selectedUser._id, newPassword }
       );
 
@@ -219,7 +225,7 @@ const ListUser = () => {
     setRoleLoading(selectedUser._id);
     try {
       const response = await axios.post(
-        "https://degreefydcmsbe.onrender.com/api/auth/change-role",
+        "http://localhost:5000/api/auth/change-role",
         { id: selectedUser._id, role: newRole }
       );
 
@@ -273,7 +279,7 @@ const ListUser = () => {
             >
               <option value="Admin">Admin</option>
               <option value="Content-creator">Content Creator</option>
-              <option value="Approvals">Approvals</option>
+              <option value="approver">Approver</option>
             </select>
           </div>
           <div className="flex justify-end space-x-2">
@@ -309,13 +315,31 @@ const ListUser = () => {
             <label className="block text-gray-700 text-sm font-bold mb-2">
               New Password
             </label>
-            <input
-              type="password"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={newPassword}
-              onChange={handlePasswordChange}
-              placeholder="Enter new password (min 6 characters)"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"
+                value={newPassword}
+                onChange={handlePasswordChange}
+                placeholder="Enter new password (min 6 characters)"
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-700 focus:outline-none"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? (
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                  </svg>
+                ) : (
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                )}
+              </button>
+            </div>
             {newPassword && (
               <div className="mt-1">
                 <span className="text-sm">

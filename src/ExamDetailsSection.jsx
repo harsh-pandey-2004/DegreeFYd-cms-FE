@@ -194,7 +194,7 @@ const ExamDetailsSection = ({
             {/* Gallery Images */}
             <div 
               id="gallery"
-              className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300"
+              className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
               <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-blue-700">
                 Gallery Images <span className="text-red-500">*</span>
@@ -262,7 +262,7 @@ const ExamDetailsSection = ({
             {/* Sample Degree */}
             <div 
               id="sample-degree"
-              className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300"
+              className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
               <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-blue-700">
                 Sample Degree <span className="text-red-500">*</span>
@@ -340,7 +340,7 @@ const ExamDetailsSection = ({
             {/* Student Reviews */}
             <div 
               id="student-reviews"
-              className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300"
+              className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
               <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-blue-700">
                 Student Reviews <span className="text-red-500">*</span>
@@ -541,7 +541,7 @@ const ExamDetailsSection = ({
             {/* Exam Pattern */}
             <div 
               id="exam-pattern"
-              className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300"
+              className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
               <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-blue-700">
                 Exam Pattern <span className="text-red-500">*</span>

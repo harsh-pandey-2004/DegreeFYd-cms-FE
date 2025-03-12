@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
@@ -38,27 +38,37 @@ const CoursesAndFeeSection = ({
     return num.toLocaleString("en-IN");
   };
 
+  // Ref for minFee input
+  const minFeeRef = useRef(null);
+
   // Auto calculate min and max fees based on courses
   useEffect(() => {
     if (formData.coursesAndFee && formData.coursesAndFee.length > 0) {
       const fees = formData.coursesAndFee
         .map((course) => {
           if (!course.fee) return null;
+
+          // Remove any non-numeric characters (e.g., commas)
           const numericString = course.fee.replace(/[^\d]/g, "");
           const numericFee = parseInt(numericString, 10);
+
+          // Return null if the fee is not a valid number
           return isNaN(numericFee) ? null : numericFee;
         })
-        .filter((fee) => fee !== null && fee > 0);
+        .filter((fee) => fee !== null && fee > 0); // Filter out null and non-positive fees
 
+      // Only update min and max fees if there are valid fees
       if (fees.length > 0) {
         const minFee = Math.min(...fees);
         const maxFee = Math.max(...fees);
 
-        // Update both values in a single batch
+        // Update the ref value for minFee
+        minFeeRef.current.value = formatIndianNumber(minFee);
+
         handleChange({
           target: {
             name: "minFee",
-            value: formatIndianNumber(minFee),
+            value: minFee,
           },
         });
 
@@ -66,6 +76,23 @@ const CoursesAndFeeSection = ({
           target: {
             name: "maxFee",
             value: formatIndianNumber(maxFee),
+          },
+        });
+      } else {
+        // If no valid fees, reset min and max fees
+        minFeeRef.current.value = "No valid fees";
+
+        handleChange({
+          target: {
+            name: "minFee",
+            value: "",
+          },
+        });
+
+        handleChange({
+          target: {
+            name: "maxFee",
+            value: "",
           },
         });
       }
@@ -363,9 +390,9 @@ const CoursesAndFeeSection = ({
             <input
               type="text"
               name="minFee"
-              value={formData.minFee || "Auto-calculated"}
+              ref={minFeeRef}
               className="w-full p-2 pl-8 border rounded bg-gray-100 text-gray-700"
-              placeholder="Auto-calculated"
+              placeholder="No valid fees"
               disabled
             />
           </div>
@@ -385,9 +412,9 @@ const CoursesAndFeeSection = ({
             <input
               type="text"
               name="maxFee"
-              value={formData.maxFee || "Auto-calculated"}
+              value={formData.maxFee || "No valid fees"}
               className="w-full p-2 pl-8 border rounded bg-gray-100 text-gray-700"
-              placeholder="Auto-calculated"
+              placeholder="No valid fees"
               disabled
             />
           </div>

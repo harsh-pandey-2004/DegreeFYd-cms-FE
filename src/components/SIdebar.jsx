@@ -60,7 +60,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="fixed top-16 left-0 h-screen bg-white w-80 shadow-md p-4 overflow-y-auto">
+    <div className="fixed top-16 left-0 h-screen bg-white w-80 shadow-md p-4 overflow-y-auto pb-20">
       <h3 className="text-lg font-semibold mb-4 text-violet-800 border-b pb-2">
         College Information
       </h3>

@@ -54,7 +54,7 @@ const FaqSection = ({ formData, handleArrayChange }) => {
           <button
             type="button"
             onClick={() => removeFaqItem(index)}
-            className="text-red-600 hover:text-red-800"
+            className="text-red-600 hover:text-red-800 border-2 px-4 py-1 rounded"
           >
             Remove FAQ
           </button>
