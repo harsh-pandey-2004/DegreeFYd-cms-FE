@@ -43,6 +43,7 @@ const CoursesAndFeeSection = ({
 
   // Auto calculate min and max fees based on courses
   useEffect(() => {
+    console.log("formData.coursesAndFee:", formData.coursesAndFee);
     if (formData.coursesAndFee && formData.coursesAndFee.length > 0) {
       const fees = formData.coursesAndFee
         .map((course) => {

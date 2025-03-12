@@ -217,7 +217,6 @@ export const CollegeForm = ({ userIdprop }) => {
 
   // Generic handler for simple fields
   const handleChange = (e) => {
-    
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -371,51 +370,84 @@ export const CollegeForm = ({ userIdprop }) => {
   };
 
   // Handler for courses array
-  const handleCourseChange = (index, field, value) => {
-    const updatedCourses = [...formData.coursesAndFee];
-    updatedCourses[index] = { ...updatedCourses[index], [field]: value };
-
-    // For dropdown dependencies
+  // Handler for courses array - fixed version
+const handleCourseChange = (index, field, value) => {
+  console.log("handleCourseChange called with index:", index, "field:", field, "value:", value);
+  setFormData((prevData) => {
+    const updatedCourses = [...prevData.coursesAndFee];
+    
+    // Update only the specified field for the current course
+    updatedCourses[index] = {
+      ...updatedCourses[index],
+      [field]: value
+    };
+    
+    // Reset dependent fields only for the current course if needed
     if (field === "stream") {
-      updatedCourses[index].level = "";
-      updatedCourses[index].degreeName = "";
-      updatedCourses[index].specialization = "";
-      updatedCourses[index].courseName = "";
+      updatedCourses[index] = {
+        ...updatedCourses[index],
+        level: "",
+        degreeName: "",
+        specialization: "",
+        courseName: "",
+      };
+      // Update dropdown options for the current selection
       updateLevelOptions(value);
     } else if (field === "level") {
-      updatedCourses[index].degreeName = "";
-      updatedCourses[index].specialization = "";
-      updatedCourses[index].courseName = "";
-      updateDegreeOptions(updatedCourses[index].stream, value);
+      updatedCourses[index] = {
+        ...updatedCourses[index],
+        degreeName: "",
+        specialization: "",
+        courseName: "",
+      };
+      // Only update options if we have the required field value
+      if (updatedCourses[index].stream) {
+        updateDegreeOptions(updatedCourses[index].stream, value);
+      }
     } else if (field === "degreeName") {
-      updatedCourses[index].specialization = "";
-      updatedCourses[index].courseName = "";
-      updateSpecializationOptions(
-        updatedCourses[index].stream,
-        updatedCourses[index].level,
-        value
-      );
+      updatedCourses[index] = {
+        ...updatedCourses[index],
+        specialization: "",
+        courseName: "",
+      };
+      // Only update if we have the required field values
+      if (updatedCourses[index].stream && updatedCourses[index].level) {
+        updateSpecializationOptions(
+          updatedCourses[index].stream,
+          updatedCourses[index].level,
+          value
+        );
+      }
     } else if (field === "specialization") {
-      updatedCourses[index].courseName = "";
-      updateCourseNameOptions(
-        updatedCourses[index].stream,
-        updatedCourses[index].level,
-        updatedCourses[index].degreeName,
-        value
-      );
+      updatedCourses[index] = {
+        ...updatedCourses[index],
+        courseName: "",
+      };
+      // Only update if we have all required field values
+      if (
+        updatedCourses[index].stream &&
+        updatedCourses[index].level &&
+        updatedCourses[index].degreeName
+      ) {
+        updateCourseNameOptions(
+          updatedCourses[index].stream,
+          updatedCourses[index].level,
+          updatedCourses[index].degreeName,
+          value
+        );
+      }
     } else if (field === "courseName") {
-      // Auto-generate college course name
       const streamAbbr = updatedCourses[index].stream
-        .substring(0, 3)
-        .toUpperCase();
-      const degreeAbbr = updatedCourses[index].degreeName;
-      updatedCourses[
-        index
-      ].course = `${streamAbbr} - ${degreeAbbr} in ${value}`;
+        ? updatedCourses[index].stream.substring(0, 3).toUpperCase()
+        : "";
+      const degreeAbbr = updatedCourses[index].degreeName || "";
+      updatedCourses[index].course = `${streamAbbr} - ${degreeAbbr} in ${value}`;
     }
 
-    setFormData({ ...formData, coursesAndFee: updatedCourses });
-  };
+    return { ...prevData, coursesAndFee: updatedCourses };
+  });
+};
+  
 
   // Add new course
   const addCourse = () => {
@@ -751,8 +783,8 @@ export const CollegeForm = ({ userIdprop }) => {
       console.log("Submitting data:", formattedData);
 
       let response;
-      console.log(collegeId,"harsgh");
-      if (!collegeId && !isEditMode) {
+      console.log(collegeId, "harsgh");
+      if (userIdprop) {
         console.log("Editing college with ID:", userIdprop);
         response = await axios.put(
           `https://degreefydcmsbe.onrender.com/api/colleges/${userIdprop}`,
@@ -793,7 +825,9 @@ export const CollegeForm = ({ userIdprop }) => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("https://degreefydcmsbe.onrender.com/api/courses");
+        const response = await axios.get(
+          "https://degreefydcmsbe.onrender.com/api/courses"
+        );
         if (response.data) {
           // Extract unique streams
           const streams = [
@@ -947,8 +981,8 @@ export const CollegeForm = ({ userIdprop }) => {
           formData={formData}
           handleNestedChange={handleNestedChange}
         />
-      <ApprovalsSection formData={formData} setFormData={setFormData} />
-      <CertificatesSection
+        <ApprovalsSection formData={formData} setFormData={setFormData} />
+        <CertificatesSection
           handleRemoveImage1={handleRemoveImage1}
           formData={formData}
           handleMultipleFileUpload1={handleMultipleFileUpload1}
