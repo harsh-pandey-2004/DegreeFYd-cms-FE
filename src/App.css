@@ -1,0 +1,17 @@
+@import "tailwindcss";
+.ql-editor {
+  min-height: 200px; /* Set the desired min height */
+}
+
+.ql-container {
+  border: none !important; /* Remove the inner border */
+}
+
+.ql-toolbar {
+  border-bottom: 1px solid #ddd !important; /* Ensure toolbar has a border */
+}
+
+.ql-container.ql-snow {
+  border-radius: 6px; /* Ensure smooth rounded edges */
+  border: 1px solid #ddd; /* Apply border only to the main container */
+}
