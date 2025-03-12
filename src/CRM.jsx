@@ -752,7 +752,7 @@ export const CollegeForm = ({ userIdprop }) => {
 
       let response;
       console.log(collegeId,"harsgh");
-      if (!collegeId) {
+      if (!collegeId && !isEditMode) {
         console.log("Editing college with ID:", userIdprop);
         response = await axios.put(
           `https://degreefydcmsbe.onrender.com/api/colleges/${userIdprop}`,

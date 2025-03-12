@@ -56,7 +56,7 @@ const Dashboard = () => {
   const userId = localStorage.getItem("userId");
   const isContentCreator = userRole === "content-creator";
   const canApprove =
-    userRole === "admin" ||
+    userRole !== "content-creator" ||
     (localStorage.getItem("permissions") || "").includes("approveColleges");
 
   const fetchColleges = async () => {
