@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 
 const CoursesAndFeeSection = ({
   formData,
+  userIdprop,
   handleChange,
   handleCourseChange,
   addCourse,
@@ -57,7 +58,7 @@ const CoursesAndFeeSection = ({
 
   // Handle duration value and unit changes
   const handleDurationChange = (index, value) => {
-    handleCourseChange(index, "durationValue", value);
+    handleCourseChange(index, "duration", value);
   };
 
   const handleDurationUnitChange = (index, unit) => {
@@ -358,7 +359,7 @@ const CoursesAndFeeSection = ({
             {/* Degree Name Dropdown - Searchable */}
             <SearchableDropdown
               label="Degree Name"
-              value={course.DegreeName || ""}
+              value={course.degreeName || course.DegreeName || ""}
               onChange={(e) =>
                 handleCourseChange(index, "degreeName", e.target.value)
               }
@@ -372,7 +373,7 @@ const CoursesAndFeeSection = ({
             {/* Specialization Dropdown - Searchable */}
             <SearchableDropdown
               label="Specialization"
-              value={course.Specialization || ""}
+              value={course.specialization || course.Specialization || ""}
               onChange={(e) =>
                 handleCourseChange(index, "specialization", e.target.value)
               }
@@ -386,7 +387,7 @@ const CoursesAndFeeSection = ({
             {/* Course Name Dropdown - Searchable */}
             <SearchableDropdown
               label="Course Name"
-              value={course.CourseName || ""}
+              value={course.courseName || course.CourseName || ""}
               onChange={(e) =>
                 handleCourseChange(index, "courseName", e.target.value)
               }
@@ -404,7 +405,9 @@ const CoursesAndFeeSection = ({
               </label>
               <input
                 type="text"
-                value={course.CourseName || ""}
+                value={
+                   course.courseName ||  course.CourseName || ""
+                }
                 onChange={(e) =>
                   handleCourseChange(index, "course", e.target.value)
                 }
@@ -419,10 +422,13 @@ const CoursesAndFeeSection = ({
               <label className="block mb-2 font-medium text-gray-700">
                 Duration <span className="text-red-500">*</span>
               </label>
+              {/* {console.log(course,"hdhd")} */}
               <div className="flex space-x-2">
                 <input
                   type="number"
-                  value={course.duration || ""}
+                  value={
+                    userIdprop ? course.duration || "" : course.duration || ""
+                  }
                   onChange={(e) => handleDurationChange(index, e.target.value)}
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="4"
