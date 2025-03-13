@@ -20,15 +20,15 @@ const CoursesAndFeeSection = ({
     level: Array(formData.coursesAndFee.length).fill(""),
     degreeName: Array(formData.coursesAndFee.length).fill(""),
     specialization: Array(formData.coursesAndFee.length).fill(""),
-    courseName: Array(formData.coursesAndFee.length).fill("")
+    courseName: Array(formData.coursesAndFee.length).fill(""),
   });
 
   // Update search states when a new course is added
   useEffect(() => {
     if (formData.coursesAndFee.length > searchStates.stream.length) {
-      setSearchStates(prev => {
+      setSearchStates((prev) => {
         const newSearchStates = { ...prev };
-        Object.keys(newSearchStates).forEach(key => {
+        Object.keys(newSearchStates).forEach((key) => {
           newSearchStates[key] = [...newSearchStates[key], ""];
         });
         return newSearchStates;
@@ -38,7 +38,7 @@ const CoursesAndFeeSection = ({
 
   // Update search field for a specific dropdown
   const updateSearchState = (index, field, value) => {
-    setSearchStates(prev => {
+    setSearchStates((prev) => {
       const newState = { ...prev };
       newState[field][index] = value;
       return newState;
@@ -148,28 +148,28 @@ const CoursesAndFeeSection = ({
   // Filter options based on search input
   const filterOptions = (options, searchTerm) => {
     if (!searchTerm) return options;
-    return options.filter(option => 
+    return options.filter((option) =>
       option.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
 
   // Custom searchable dropdown component
-  const SearchableDropdown = ({ 
-    label, 
-    value, 
-    onChange, 
-    options, 
+  const SearchableDropdown = ({
+    label,
+    value,
+    onChange,
+    options,
     index,
     fieldName,
     placeholder = "Search...",
     required = false,
-    disabled = false 
+    disabled = false,
   }) => {
     const [isOpen, setIsOpen] = useState(false);
-    
+
     // Get the current search value for this field and index
     const searchValue = searchStates[fieldName][index] || "";
-    
+
     // Set search value handler
     const setSearchValue = (value) => {
       updateSearchState(index, fieldName, value);
@@ -183,18 +183,29 @@ const CoursesAndFeeSection = ({
           {label} {required && <span className="text-red-500">*</span>}
         </label>
         <div className="relative">
-          <div 
-            className={`flex justify-between items-center w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer ${disabled ? 'bg-gray-100' : 'bg-white'}`}
+          <div
+            className={`flex justify-between items-center w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer ${
+              disabled ? "bg-gray-100" : "bg-white"
+            }`}
             onClick={() => !disabled && setIsOpen(!isOpen)}
           >
-            <div className="truncate">
-              {value || placeholder}
-            </div>
-            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+            <div className="truncate">{value || placeholder}</div>
+            <svg
+              className="w-4 h-4 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
             </svg>
           </div>
-          
+
           {isOpen && (
             <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
               <div className="sticky top-0 z-10 bg-white p-2 border-b">
@@ -212,7 +223,9 @@ const CoursesAndFeeSection = ({
                   filteredOptions.map((option) => (
                     <div
                       key={option}
-                      className={`p-2 hover:bg-blue-100 cursor-pointer ${value === option ? 'bg-blue-50' : ''}`}
+                      className={`p-2 hover:bg-blue-100 cursor-pointer ${
+                        value === option ? "bg-blue-50" : ""
+                      }`}
                       onClick={() => {
                         onChange({ target: { value: option } });
                         setIsOpen(false);
@@ -312,14 +325,15 @@ const CoursesAndFeeSection = ({
               </button>
             )}
           </div>
-
           {/* Course Details Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             {/* Stream Dropdown - Searchable */}
             <SearchableDropdown
               label="Stream"
               value={course.stream || ""}
-              onChange={(e) => handleCourseChange(index, "stream", e.target.value)}
+              onChange={(e) =>
+                handleCourseChange(index, "stream", e.target.value)
+              }
               options={streamOptions}
               index={index}
               fieldName="stream"
@@ -331,7 +345,9 @@ const CoursesAndFeeSection = ({
             <SearchableDropdown
               label="Level"
               value={course.level || ""}
-              onChange={(e) => handleCourseChange(index, "level", e.target.value)}
+              onChange={(e) =>
+                handleCourseChange(index, "level", e.target.value)
+              }
               options={levelOptions}
               index={index}
               fieldName="level"
@@ -342,8 +358,10 @@ const CoursesAndFeeSection = ({
             {/* Degree Name Dropdown - Searchable */}
             <SearchableDropdown
               label="Degree Name"
-              value={course.degreeName || ""}
-              onChange={(e) => handleCourseChange(index, "degreeName", e.target.value)}
+              value={course.DegreeName || ""}
+              onChange={(e) =>
+                handleCourseChange(index, "degreeName", e.target.value)
+              }
               options={degreeOptions}
               index={index}
               fieldName="degreeName"
@@ -354,8 +372,10 @@ const CoursesAndFeeSection = ({
             {/* Specialization Dropdown - Searchable */}
             <SearchableDropdown
               label="Specialization"
-              value={course.specialization || ""}
-              onChange={(e) => handleCourseChange(index, "specialization", e.target.value)}
+              value={course.Specialization || ""}
+              onChange={(e) =>
+                handleCourseChange(index, "specialization", e.target.value)
+              }
               options={specializationOptions}
               index={index}
               fieldName="specialization"
@@ -366,8 +386,10 @@ const CoursesAndFeeSection = ({
             {/* Course Name Dropdown - Searchable */}
             <SearchableDropdown
               label="Course Name"
-              value={course.courseName || ""}
-              onChange={(e) => handleCourseChange(index, "courseName", e.target.value)}
+              value={course.CourseName || ""}
+              onChange={(e) =>
+                handleCourseChange(index, "courseName", e.target.value)
+              }
               options={courseNameOptions}
               index={index}
               fieldName="courseName"
@@ -382,7 +404,7 @@ const CoursesAndFeeSection = ({
               </label>
               <input
                 type="text"
-                value={course.course || ""}
+                value={course.CourseName || ""}
                 onChange={(e) =>
                   handleCourseChange(index, "course", e.target.value)
                 }
@@ -400,7 +422,7 @@ const CoursesAndFeeSection = ({
               <div className="flex space-x-2">
                 <input
                   type="number"
-                  value={course.durationValue || ""}
+                  value={course.duration || ""}
                   onChange={(e) => handleDurationChange(index, e.target.value)}
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="4"

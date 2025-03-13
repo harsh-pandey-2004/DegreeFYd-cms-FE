@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import DegreeFydLogo  from '../assets/logo.png'
 const Navbar = ({ isAuthenticated, onLogout }) => {
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
@@ -23,13 +23,13 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
   };
 
   return (
-    <nav className="bg-violet-600 fixed w-full z-50">
+    <nav className="bg-gray-50 fixed w-full z-50 text-black shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <Link to="/list-user" className="text-white font-bold text-xl">
-                DegreeFyd CMS{" "}
+              <Link to="/list-user" className="text-black font-bold text-xl">
+               <img src={DegreeFydLogo} alt="logo" className="h-14 w-full"></img>
               </Link>
             </div>
 
@@ -39,7 +39,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                 <div className="relative">
                   <button
                     onClick={toggleDashboardDropdown}
-                    className="text-white hover:bg-violet-700 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                    className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center"
                   >
                     Dashboard
                     <svg
@@ -92,7 +92,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                 <div className="relative">
                   <button
                     onClick={toggleAddContentDropdown}
-                    className="text-white hover:bg-violet-700 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                    className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center"
                   >
                     Add Content
                     <svg
@@ -145,13 +145,13 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                   <>
                     <Link
                       to="/register"
-                      className="text-white hover:bg-violet-700 px-3 py-2 rounded-md text-sm font-medium"
+                      className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium"
                     >
                       Register New User
                     </Link>
                     <Link
                       to="/list-user"
-                      className="text-white hover:bg-violet-700 px-3 py-2 rounded-md text-sm font-medium"
+                      className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium"
                     >
                       List User
                     </Link>
@@ -165,14 +165,14 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
             {isAuthenticated ? (
               <button
                 onClick={handleLogout}
-                className="text-white bg-violet-700 hover:bg-violet-800 px-4 py-2 rounded-md text-sm font-medium"
+                className="text-white bg-violet-600 hover:bg-violet-600 px-4 py-2 rounded-md text-sm font-medium"
               >
                 Logout
               </button>
             ) : (
               <Link
                 to="/login"
-                className="text-white hover:bg-violet-700 px-3 py-2 rounded-md text-sm font-medium"
+                className="text-white bg-violet-600 hover:bg-violet-600 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Login
               </Link>

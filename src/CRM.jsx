@@ -143,7 +143,7 @@ export const CollegeForm = ({ userIdprop }) => {
     const fetchEditDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/colleges/collegeId/${userIdprop}`
+          `https://degreefydcmsbe.onrender.com/api/colleges/collegeId/${userIdprop}`
         );
 
         if (response.data) {
@@ -256,7 +256,7 @@ export const CollegeForm = ({ userIdprop }) => {
 
   const updateLevelOptions = (stream) => {
     axios
-      .get("http://localhost:5000/api/courses")
+      .get("https://degreefydcmsbe.onrender.com/api/courses")
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) => course.Stream === stream
@@ -274,7 +274,7 @@ export const CollegeForm = ({ userIdprop }) => {
 
   const updateDegreeOptions = (stream, level) => {
     axios
-      .get("http://localhost:5000/api/courses")
+      .get("https://degreefydcmsbe.onrender.com/api/courses")
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) => course.Stream === stream && course.Level === level
@@ -291,7 +291,7 @@ export const CollegeForm = ({ userIdprop }) => {
 
   const updateSpecializationOptions = (stream, level, degree) => {
     axios
-      .get("http://localhost:5000/api/courses")
+      .get("https://degreefydcmsbe.onrender.com/api/courses")
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) =>
@@ -312,7 +312,7 @@ export const CollegeForm = ({ userIdprop }) => {
 
   const updateCourseNameOptions = (stream, level, degree, specialization) => {
     axios
-      .get("http://localhost:5000/api/courses")
+      .get("https://degreefydcmsbe.onrender.com/api/courses")
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) =>
@@ -366,88 +366,97 @@ export const CollegeForm = ({ userIdprop }) => {
     setFormData({
       ...formData,
       [parent]: updatedParent,
-    });streamOptions
+    });
+    streamOptions;
   };
 
   // Handler for courses array
   // Handler for courses array - fixed version
-const handleCourseChange = (index, field, value) => {
-  console.log("handleCourseChange called with index:", index, "field:", field, "value:", value);
-  setFormData((prevData) => {
-    const updatedCourses = [...prevData.coursesAndFee];
-    
-    // Update only the specified field for the current course
-    updatedCourses[index] = {
-      ...updatedCourses[index],
-      [field]: value
-    };
-    
-    // Reset dependent fields only for the current course if needed
-    if (field === "stream") {
-      updatedCourses[index] = {
-        ...updatedCourses[index],
-        level: "",
-        degreeName: "",
-        specialization: "",
-        courseName: "",
-      };
-      // Update dropdown options for the current selection
-      updateLevelOptions(value);
-    } else if (field === "level") {
-      updatedCourses[index] = {
-        ...updatedCourses[index],
-        degreeName: "",
-        specialization: "",
-        courseName: "",
-      };
-      // Only update options if we have the required field value
-      if (updatedCourses[index].stream) {
-        updateDegreeOptions(updatedCourses[index].stream, value);
-      }
-    } else if (field === "degreeName") {
-      updatedCourses[index] = {
-        ...updatedCourses[index],
-        specialization: "",
-        courseName: "",
-      };
-      // Only update if we have the required field values
-      if (updatedCourses[index].stream && updatedCourses[index].level) {
-        updateSpecializationOptions(
-          updatedCourses[index].stream,
-          updatedCourses[index].level,
-          value
-        );
-      }
-    } else if (field === "specialization") {
-      updatedCourses[index] = {
-        ...updatedCourses[index],
-        courseName: "",
-      };
-      // Only update if we have all required field values
-      if (
-        updatedCourses[index].stream &&
-        updatedCourses[index].level &&
-        updatedCourses[index].degreeName
-      ) {
-        updateCourseNameOptions(
-          updatedCourses[index].stream,
-          updatedCourses[index].level,
-          updatedCourses[index].degreeName,
-          value
-        );
-      }
-    } else if (field === "courseName") {
-      const streamAbbr = updatedCourses[index].stream
-        ? updatedCourses[index].stream.substring(0, 3).toUpperCase()
-        : "";
-      const degreeAbbr = updatedCourses[index].degreeName || "";
-      updatedCourses[index].course = `${streamAbbr} - ${degreeAbbr} in ${value}`;
-    }
+  const handleCourseChange = (index, field, value) => {
+    console.log(
+      "handleCourseChange called with index:",
+      index,
+      "field:",
+      field,
+      "value:",
+      value
+    );
+    setFormData((prevData) => {
+      const updatedCourses = [...prevData.coursesAndFee];
 
-    return { ...prevData, coursesAndFee: updatedCourses };
-  });
-};
-  
+      // Update only the specified field for the current course
+      updatedCourses[index] = {
+        ...updatedCourses[index],
+        [field]: value,
+      };
+
+      // Reset dependent fields only for the current course if needed
+      if (field === "stream") {
+        updatedCourses[index] = {
+          ...updatedCourses[index],
+          level: "",
+          degreeName: "",
+          specialization: "",
+          courseName: "",
+        };
+        // Update dropdown options for the current selection
+        updateLevelOptions(value);
+      } else if (field === "level") {
+        updatedCourses[index] = {
+          ...updatedCourses[index],
+          degreeName: "",
+          specialization: "",
+          courseName: "",
+        };
+        // Only update options if we have the required field value
+        if (updatedCourses[index].stream) {
+          updateDegreeOptions(updatedCourses[index].stream, value);
+        }
+      } else if (field === "degreeName") {
+        updatedCourses[index] = {
+          ...updatedCourses[index],
+          specialization: "",
+          courseName: "",
+        };
+        // Only update if we have the required field values
+        if (updatedCourses[index].stream && updatedCourses[index].level) {
+          updateSpecializationOptions(
+            updatedCourses[index].stream,
+            updatedCourses[index].level,
+            value
+          );
+        }
+      } else if (field === "specialization") {
+        updatedCourses[index] = {
+          ...updatedCourses[index],
+          courseName: "",
+        };
+        // Only update if we have all required field values
+        if (
+          updatedCourses[index].stream &&
+          updatedCourses[index].level &&
+          updatedCourses[index].degreeName
+        ) {
+          updateCourseNameOptions(
+            updatedCourses[index].stream,
+            updatedCourses[index].level,
+            updatedCourses[index].degreeName,
+            value
+          );
+        }
+      } else if (field === "courseName") {
+        const streamAbbr = updatedCourses[index].stream
+          ? updatedCourses[index].stream.substring(0, 3).toUpperCase()
+          : "";
+        const degreeAbbr = updatedCourses[index].degreeName || "";
+        updatedCourses[
+          index
+        ].course = `${streamAbbr} - ${degreeAbbr} in ${value}`;
+      }
+
+      return { ...prevData, coursesAndFee: updatedCourses };
+    });
+  };
 
   // Add new course
   const addCourse = () => {
@@ -787,14 +796,14 @@ const handleCourseChange = (index, field, value) => {
       if (userIdprop) {
         console.log("Editing college with ID:", userIdprop);
         response = await axios.put(
-          `http://localhost:5000/api/colleges/${userIdprop}`,
+          `https://degreefydcmsbe.onrender.com/api/colleges/${userIdprop}`,
           formattedData
         );
         alert("College Approved Request Send Successfuly!");
         setMessage("College Approved Request Send Successfuly!");
       } else {
         response = await axios.post(
-          "http://localhost:5000/api/colleges",
+          "https://degreefydcmsbe.onrender.com/api/colleges",
           formattedData
         );
         alert("College Approved Request Send Successfuly!");
@@ -826,7 +835,7 @@ const handleCourseChange = (index, field, value) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://localhost:5000/api/courses"
+          "https://degreefydcmsbe.onrender.com/api/courses"
         );
         if (response.data) {
           // Extract unique streams
@@ -957,6 +966,7 @@ const handleCourseChange = (index, field, value) => {
         />
 
         <CoursesAndFeeSection
+          userIdprop={userIdprop}
           formData={formData}
           handleChange={handleChange}
           handleCourseChange={handleCourseChange}
