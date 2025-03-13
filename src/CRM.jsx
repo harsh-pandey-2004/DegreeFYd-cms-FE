@@ -379,17 +379,18 @@ export const CollegeForm = ({ userIdprop }) => {
       "field:",
       field,
       "value:",
-      value
+      value,
+      formData.coursesAndFee
     );
     setFormData((prevData) => {
       const updatedCourses = [...prevData.coursesAndFee];
-
+  
       // Update only the specified field for the current course
       updatedCourses[index] = {
         ...updatedCourses[index],
         [field]: value,
       };
-
+  
       // Reset dependent fields only for the current course if needed
       if (field === "stream") {
         updatedCourses[index] = {
@@ -398,6 +399,7 @@ export const CollegeForm = ({ userIdprop }) => {
           degreeName: "",
           specialization: "",
           courseName: "",
+          course: ""
         };
         // Update dropdown options for the current selection
         updateLevelOptions(value);
@@ -407,6 +409,7 @@ export const CollegeForm = ({ userIdprop }) => {
           degreeName: "",
           specialization: "",
           courseName: "",
+          course: ""
         };
         // Only update options if we have the required field value
         if (updatedCourses[index].stream) {
@@ -417,6 +420,7 @@ export const CollegeForm = ({ userIdprop }) => {
           ...updatedCourses[index],
           specialization: "",
           courseName: "",
+          course: ""
         };
         // Only update if we have the required field values
         if (updatedCourses[index].stream && updatedCourses[index].level) {
@@ -449,11 +453,9 @@ export const CollegeForm = ({ userIdprop }) => {
           ? updatedCourses[index].stream.substring(0, 3).toUpperCase()
           : "";
         const degreeAbbr = updatedCourses[index].degreeName || "";
-        updatedCourses[
-          index
-        ].course = `${streamAbbr} - ${degreeAbbr} in ${value}`;
+        updatedCourses[index].course = `${streamAbbr} - ${degreeAbbr} in ${value}`;
       }
-
+  
       return { ...prevData, coursesAndFee: updatedCourses };
     });
   };
@@ -785,6 +787,7 @@ export const CollegeForm = ({ userIdprop }) => {
           Specialization: course.specialization,
           duration: course.duration,
           fee: Number(course.fee),
+          course: course.course,
           // Don't include _id as MongoDB will auto-generate it for new entries
         })),
       };
