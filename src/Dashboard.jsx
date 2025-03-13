@@ -200,7 +200,7 @@ const Dashboard = () => {
 
   const handlePreview = (college) => {
     const collegeName = encodeURIComponent(college.collegeName); // Ensure the name is URL-safe
-    window.location.href = `https://preview.degreefyd.com/college/${collegeName}?istest=true`;
+    window.location.href = `https://degreefydce.netlify.app/college/${collegeName}?istest=true`;
   };
 
   const openApproveForm = (college) => {
