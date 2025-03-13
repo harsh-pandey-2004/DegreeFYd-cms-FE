@@ -143,7 +143,7 @@ export const CollegeForm = ({ userIdprop }) => {
     const fetchEditDetails = async () => {
       try {
         const response = await axios.get(
-          `https://degreefydcmsbe.onrender.com/api/colleges/collegeId/${userIdprop}`
+          `http://localhost:5000/api/colleges/collegeId/${userIdprop}`
         );
 
         if (response.data) {
@@ -256,7 +256,7 @@ export const CollegeForm = ({ userIdprop }) => {
 
   const updateLevelOptions = (stream) => {
     axios
-      .get("https://degreefydcmsbe.onrender.com/api/courses")
+      .get("http://localhost:5000/api/courses")
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) => course.Stream === stream
@@ -274,7 +274,7 @@ export const CollegeForm = ({ userIdprop }) => {
 
   const updateDegreeOptions = (stream, level) => {
     axios
-      .get("https://degreefydcmsbe.onrender.com/api/courses")
+      .get("http://localhost:5000/api/courses")
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) => course.Stream === stream && course.Level === level
@@ -291,7 +291,7 @@ export const CollegeForm = ({ userIdprop }) => {
 
   const updateSpecializationOptions = (stream, level, degree) => {
     axios
-      .get("https://degreefydcmsbe.onrender.com/api/courses")
+      .get("http://localhost:5000/api/courses")
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) =>
@@ -312,7 +312,7 @@ export const CollegeForm = ({ userIdprop }) => {
 
   const updateCourseNameOptions = (stream, level, degree, specialization) => {
     axios
-      .get("https://degreefydcmsbe.onrender.com/api/courses")
+      .get("http://localhost:5000/api/courses")
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) =>
@@ -366,7 +366,7 @@ export const CollegeForm = ({ userIdprop }) => {
     setFormData({
       ...formData,
       [parent]: updatedParent,
-    });
+    });streamOptions
   };
 
   // Handler for courses array
@@ -787,14 +787,14 @@ const handleCourseChange = (index, field, value) => {
       if (userIdprop) {
         console.log("Editing college with ID:", userIdprop);
         response = await axios.put(
-          `https://degreefydcmsbe.onrender.com/api/colleges/${userIdprop}`,
+          `http://localhost:5000/api/colleges/${userIdprop}`,
           formattedData
         );
         alert("College Approved Request Send Successfuly!");
         setMessage("College Approved Request Send Successfuly!");
       } else {
         response = await axios.post(
-          "https://degreefydcmsbe.onrender.com/api/colleges",
+          "http://localhost:5000/api/colleges",
           formattedData
         );
         alert("College Approved Request Send Successfuly!");
@@ -826,7 +826,7 @@ const handleCourseChange = (index, field, value) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://degreefydcmsbe.onrender.com/api/courses"
+          "http://localhost:5000/api/courses"
         );
         if (response.data) {
           // Extract unique streams

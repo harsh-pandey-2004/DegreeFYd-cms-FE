@@ -28,7 +28,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <Link to="/" className="text-white font-bold text-xl">
+              <Link to="/list-user" className="text-white font-bold text-xl">
                 DegreeFyd CMS{" "}
               </Link>
             </div>

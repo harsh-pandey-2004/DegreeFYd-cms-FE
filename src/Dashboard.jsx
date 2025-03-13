@@ -64,10 +64,10 @@ const Dashboard = () => {
       let response;
       if (isContentCreator) {
         response = await axios.get(
-          `https://degreefydcmsbe.onrender.com/api/colleges/userId/${userId}`
+          `http://localhost:5000/api/colleges/userId/${userId}`
         );
       } else {
-        response = await axios.get("https://degreefydcmsbe.onrender.com/api/colleges");
+        response = await axios.get("http://localhost:5000/api/colleges");
       }
       setResponses(response.data);
       setFilteredResponses(response.data);
@@ -95,7 +95,7 @@ const Dashboard = () => {
       if (!emailMap[id]) {
         try {
           const response = await axios.get(
-            `https://degreefydcmsbe.onrender.com/api/auth/user/${id}`
+            `http://localhost:5000/api/auth/user/${id}`
           );
           emailMap[id] = response.data.data.email;
         } catch (error) {
@@ -110,7 +110,7 @@ const Dashboard = () => {
 
   // Get email from cache
   const getUserEmail = (userId) => {
-    return userEmails[userId] || "Loading...";
+    return userEmails[userId] || "N/A";;
   };
 
   useEffect(() => {
@@ -200,7 +200,7 @@ const Dashboard = () => {
 
   const handlePreview = (college) => {
     const collegeName = encodeURIComponent(college.collegeName); // Ensure the name is URL-safe
-    window.location.href = `http://localhost:5174/college/${collegeName}?istest=true`;
+    window.location.href = `https://preview.degreefyd.com/college/${collegeName}?istest=true`;
   };
 
   const openApproveForm = (college) => {
@@ -248,7 +248,7 @@ const Dashboard = () => {
 
     try {
       const response = await axios.put(
-        `https://degreefydcmsbe.onrender.com/api/colleges/approve/${selectedCollege._id}`,
+        `http://localhost:5000/api/colleges/approve/${selectedCollege._id}`,
         {
           userId: userId,
           status: "approved",
@@ -283,7 +283,7 @@ const Dashboard = () => {
 
     try {
       const response = await axios.put(
-        `https://degreefydcmsbe.onrender.com/api/colleges/approve/${selectedCollege._id}`,
+        `http://localhost:5000/api/colleges/approve/${selectedCollege._id}`,
         {
           userId: userId,
           status: "rejected",
