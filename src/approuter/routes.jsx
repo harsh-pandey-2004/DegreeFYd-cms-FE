@@ -4,7 +4,6 @@ import {
   Route,
   Routes,
   Navigate,
-  useNavigate,
   useLocation,
 } from "react-router-dom";
 import { CollegeForm } from "../CRM";
@@ -12,8 +11,10 @@ import Login from "../components/login";
 import Register from "../components/register";
 import Navbar from "../components/Navbar";
 import Dashboard from "../Dashboard";
-import SIdebar from "../components/SIdebar";
+import Sidebar from "../components/Sidebar";
 import ListUser from "../ListUser";
+import DashboardCourse from "../pages/DashboardCourse";
+import CourseAdd from "../pages/CourseAdd";
 
 // Protected route component to check authentication
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -32,79 +33,6 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   return children;
 };
 
-// Main router component
-const AppRouter = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const location = useLocation();
-  const isRootPath = location.pathname === "/";
-
-  // Check for token on first render
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
-  }, []);
-
-  // Logout function to be passed to Navbar
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    setIsAuthenticated(false);
-  };
-
-  return (
-    <div>
-      <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} />
-      {isRootPath && <SIdebar />}
-      <div className={isRootPath ? "ml-80" : ""}>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/login" element={<Login />} />
-
-          {/* Admin-only route */}
-          <Route
-            path="/register"
-            element={
-              <ProtectedRoute adminOnly={true}>
-                <Register />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Protected routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <CollegeForm />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="*"
-            element={
-              isAuthenticated ? (
-                <Navigate to="/dashboard" replace />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            }
-          />
-        </Routes>
-      </div>
-    </div>
-  );
-};
-
 // Wrapper component to access location outside of Routes
 const AppRouterWithLocation = () => {
   return (
@@ -118,7 +46,7 @@ const AppRouterWithLocation = () => {
 const LocationAwareRouter = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
-  const isRootPath = location.pathname === "/";
+  const showSidebar = location.pathname === "/" || location.pathname === "/add-course";
 
   // Check for token on first render
   useEffect(() => {
@@ -136,13 +64,13 @@ const LocationAwareRouter = () => {
   return (
     <div>
       <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} />
-      {isRootPath && <SIdebar />}
-      <div className={isRootPath ? "ml-80" : ""}>
+      {showSidebar && <Sidebar />} {/* Sidebar only on / and /add-course */}
+      <div className={showSidebar ? "ml-80" : ""}>
         <Routes>
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
 
-          {/* Admin-only route */}
+          {/* Admin-only routes */}
           <Route
             path="/register"
             element={
@@ -169,7 +97,22 @@ const LocationAwareRouter = () => {
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/list-courses"
+            element={
+              <ProtectedRoute>
+                <DashboardCourse />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-course"
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <CourseAdd />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/"
             element={

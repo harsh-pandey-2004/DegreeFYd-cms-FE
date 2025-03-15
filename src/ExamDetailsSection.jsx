@@ -604,7 +604,6 @@ const ExamDetailsSection = ({
                           type="button"
                           onClick={() => handleRemoveStep(index)}
                           className="px-2 py-1 text-red-500 hover:text-red-700 rounded-md text-sm flex items-center"
-                          disabled={formData.examPattern.steps.length <= 1}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

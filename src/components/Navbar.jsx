@@ -124,7 +124,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                         Add Colleges
                       </Link>
                       <Link
-                        to="/"
+                        to="/add-course"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => setShowAddContentDropdown(false)}
                       >

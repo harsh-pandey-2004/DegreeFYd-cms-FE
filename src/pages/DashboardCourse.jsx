@@ -14,11 +14,11 @@ import {
   ChevronRight,
   XCircle,
 } from "lucide-react";
-import { CollegeForm } from "./CRM";
+import CollegeForm from "./CourseAdd";
 import { useNavigate } from "react-router-dom";
-import ApproveComponent from "./components/ApproveComponent";
-import RejectComponent from "./components/RejectComponent";
-import DOMPurify from 'dompurify';
+import ApproveComponent from "./ApproveCourse";
+import RejectComponent from "./RejectCourse";
+import DOMPurify from "dompurify";
 
 const Dashboard = () => {
   const [responses, setResponses] = useState([]);
@@ -34,7 +34,7 @@ const Dashboard = () => {
   const [actionError, setActionError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({
-    key: "collegeName",
+    key: "courseTitle",
     direction: "ascending",
   });
   const [filters, setFilters] = useState({
@@ -64,18 +64,19 @@ const Dashboard = () => {
       let response;
       if (isContentCreator) {
         response = await axios.get(
-          `https://degreefydcmsbe.onrender.com/api/colleges/userId/${userId}`
+          `https://degreefydcmsbe.onrender.com/api/courses1/${userId}`
         );
       } else {
-        response = await axios.get("https://degreefydcmsbe.onrender.com/api/colleges");
+        response = await axios.get("https://degreefydcmsbe.onrender.com/api/courses1");
       }
-      setResponses(response.data);
-      setFilteredResponses(response.data);
+      setResponses(response.data.data);
+      setFilteredResponses(response.data.data);
       setLoading(false);
 
       // Collect all unique user IDs that need email lookups
       const userIds = new Set();
-      response.data.forEach((college) => {
+      console.log(response?.data);
+      response?.data.data.forEach((college) => {
         if (college.createdBy) userIds.add(college.createdBy);
         if (college.approvedBy) userIds.add(college.approvedBy);
       });
@@ -97,7 +98,7 @@ const Dashboard = () => {
           const response = await axios.get(
             `https://degreefydcmsbe.onrender.com/api/auth/user/${id}`
           );
-          emailMap[id] = response?.data.data.email;
+          emailMap[id] = response.data.data.email;
         } catch (error) {
           console.error(`Error fetching email for user ${id}:`, error);
           emailMap[id] = "N/A";
@@ -110,7 +111,7 @@ const Dashboard = () => {
 
   // Get email from cache
   const getUserEmail = (userId) => {
-    return userEmails[userId] || "N/A";;
+    return userEmails[userId] || "N/A";
   };
 
   useEffect(() => {
@@ -200,10 +201,8 @@ const Dashboard = () => {
 
   const handlePreview = (college) => {
     const collegeName = encodeURIComponent(college.collegeName); // Ensure the name is URL-safe
-    const url = `http://localhost:5173/college/${collegeName}?istest=true`;
-    window.open(url, "_blank"); // Open in a new tab
+    window.location.href = `https://degreefydce.netlify.app/college/${collegeName}?istest=true`;
   };
-  
 
   const openApproveForm = (college) => {
     setSelectedCollege(college);
@@ -224,15 +223,18 @@ const Dashboard = () => {
     setPopupReason(reason);
     setPopupCollegeName(collegeName);
     setShowReasonPopup(true);
-    
+
     // Configure DOMPurify to allow list elements
-    DOMPurify.addHook('afterSanitizeAttributes', function(node) {
+    DOMPurify.addHook("afterSanitizeAttributes", function (node) {
       // Fix display issues for list elements by adding style
-      if(node.nodeName === 'UL' || node.nodeName === 'OL') {
-        node.setAttribute('style', 'display: block; list-style-type: disc; padding-left: 40px; margin: 1em 0;');
+      if (node.nodeName === "UL" || node.nodeName === "OL") {
+        node.setAttribute(
+          "style",
+          "display: block; list-style-type: disc; padding-left: 40px; margin: 1em 0;"
+        );
       }
-      if(node.nodeName === 'LI') {
-        node.setAttribute('style', 'display: list-item;');
+      if (node.nodeName === "LI") {
+        node.setAttribute("style", "display: list-item;");
       }
     });
   };
@@ -285,7 +287,7 @@ const Dashboard = () => {
 
     try {
       const response = await axios.put(
-        `https://degreefydcmsbe.onrender.com/api/colleges/approve/${selectedCollege._id}`,
+        `https://degreefydcmsbe.onrender.com/api/courses1/approve/${selectedCollege._id}`,
         {
           userId: userId,
           status: "rejected",
@@ -402,7 +404,7 @@ const Dashboard = () => {
     <div className="w-full p-4 bg-gray-50 min-h-screen">
       <div className="max-w-full mx-auto">
         <h1 className="text-2xl font-bold mb-4 text-gray-800">
-          College Dashboard
+          Course Dashboard
         </h1>
 
         {/* Rejection Reason Popup */}
@@ -422,15 +424,15 @@ const Dashboard = () => {
               </div>
               <div className="p-6 max-h-96 overflow-y-auto prose">
                 {popupReason ? (
-                  <div 
+                  <div
                     className="rejection-reason-content"
-                    dangerouslySetInnerHTML={{ 
+                    dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(popupReason, {
                         USE_PROFILES: { html: true },
-                        ADD_ATTR: ['style'],
-                        ADD_TAGS: ['ul', 'ol', 'li']
-                      }) 
-                    }} 
+                        ADD_ATTR: ["style"],
+                        ADD_TAGS: ["ul", "ol", "li"],
+                      }),
+                    }}
                   />
                 ) : (
                   <p className="text-gray-500 italic">No reason provided</p>
@@ -464,11 +466,11 @@ const Dashboard = () => {
               <div className="flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
                 <div>
                   <h2 className="text-lg font-semibold text-gray-800">
-                    College List
+                    Course List
                   </h2>
                   <p className="text-sm text-gray-600">
                     {filteredResponses.length}{" "}
-                    {filteredResponses.length === 1 ? "college" : "colleges"}{" "}
+                    {filteredResponses.length === 1 ? "course" : "courses"}{" "}
                     found
                   </p>
                 </div>
@@ -478,7 +480,7 @@ const Dashboard = () => {
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="Search colleges..."
+                      placeholder="Search Courses..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
@@ -601,11 +603,11 @@ const Dashboard = () => {
                     <th
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-40 min-w-[10rem]"
-                      onClick={() => handleSort("collegeName")}
+                      onClick={() => handleSort("courseTitle")}
                     >
                       <div className="flex items-center">
-                        College Name
-                        {getSortIcon("collegeName")}
+                        Course Name
+                        {getSortIcon("courseTitle")}
                       </div>
                     </th>
                     <th
@@ -690,49 +692,49 @@ const Dashboard = () => {
                         className="px-6 py-10 text-center text-sm text-gray-500"
                       >
                         {searchTerm || filters.status !== "all"
-                          ? "No colleges found matching your criteria"
-                          : "No colleges found"}
+                          ? "No courses found matching your criteria"
+                          : "No courses found"}
                       </td>
                     </tr>
                   ) : (
-                    currentItems.map((college, index) => (
+                    currentItems.map((courses, index) => (
                       <tr
-                        key={college._id}
+                        key={courses._id}
                         className={`hover:bg-blue-50 transition-colors ${
                           index % 2 === 0 ? "bg-white" : "bg-gray-50"
                         }`}
                       >
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           <TooltipCell
-                            text={college.collegeName}
+                            text={courses.courseTitle}
                             maxWidth="200px"
                           />
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <TooltipCell
-                            text={getUserEmail(college.createdBy)}
+                            text={getUserEmail(courses.createdBy)}
                             maxWidth="150px"
                           />
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <TooltipCell
-                            text={getUserEmail(college.approvedBy)}
+                            text={getUserEmail(courses.approvedBy)}
                             maxWidth="150px"
                           />
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {formatDate(college.approvalDate)}
+                          {formatDate(courses.approvalDate)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {formatDate(college.createdAt)}
+                          {formatDate(courses.createdAt)}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
-                          {college.rejectionReason ? (
+                          {courses.rejectionReason ? (
                             <button
                               onClick={() =>
                                 openRejectionReason(
-                                  college.rejectionReason,
-                                  college.collegeName
+                                  courses.rejectionReason,
+                                  courses.courseTitle
                                 )
                               }
                               className="text-blue-600 hover:text-blue-800 hover:underline focus:outline-none"
@@ -746,21 +748,21 @@ const Dashboard = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              college.status === "approved"
+                              courses.status === "approved"
                                 ? "bg-green-100 text-green-800"
-                                : college.status === "rejected"
+                                : courses.status === "rejected"
                                 ? "bg-red-100 text-red-800"
                                 : "bg-yellow-100 text-yellow-800"
                             }`}
                           >
-                            {college.status
-                              ? college.status.charAt(0).toUpperCase() +
-                                college.status.slice(1)
+                            {courses.status
+                              ? courses.status.charAt(0).toUpperCase() +
+                                courses.status.slice(1)
                               : "N/A"}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {formatDate(college.updatedAt)}
+                          {formatDate(courses.updatedAt)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <div className="flex space-x-2">
@@ -770,7 +772,7 @@ const Dashboard = () => {
                               title="Edit"
                               onClick={() => {
                                 setopenEdit(true);
-                                setSelectedCollege(college._id);
+                                setSelectedCollege(courses._id);
                               }}
                             >
                               <Edit size={16} />
@@ -780,28 +782,28 @@ const Dashboard = () => {
                             <button
                               className="p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-full transition-colors tooltip shadow-sm border border-gray-100"
                               title="Preview"
-                              onClick={() => handlePreview(college)}
+                              onClick={() => handlePreview(courses)}
                             >
                               <Eye size={16} />
                             </button>
 
                             {/* Approve button - only for admin/users with permission */}
-                            {canApprove && college.status === "pending" && (
+                            {canApprove && courses.status === "pending" && (
                               <button
                                 className="p-1.5 text-green-600 hover:text-green-900 hover:bg-green-50 rounded-full transition-colors tooltip shadow-sm border border-gray-100"
                                 title="Approve"
-                                onClick={() => openApproveForm(college)}
+                                onClick={() => openApproveForm(courses)}
                               >
                                 <Check size={16} />
                               </button>
                             )}
 
                             {/* Reject button - only for admin/users with permission */}
-                            {canApprove && college.status === "pending" && (
+                            {canApprove && courses.status === "pending" && (
                               <button
                                 className="p-1.5 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-full transition-colors tooltip shadow-sm border border-gray-100"
                                 title="Reject"
-                                onClick={() => openRejectForm(college)}
+                                onClick={() => openRejectForm(courses)}
                               >
                                 <X size={16} />
                               </button>

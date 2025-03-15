@@ -147,7 +147,6 @@ export const CollegeForm = ({ userIdprop }) => {
         );
 
         if (response.data) {
-          console.log("Fetched college data:", response.data);
           setEditableState(response.data);
 
           // Update formData with the fetched data
@@ -217,6 +216,7 @@ export const CollegeForm = ({ userIdprop }) => {
 
   // Generic handler for simple fields
   const handleChange = (e) => {
+    console.log("Handling change for field:", e.target.name);
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -384,13 +384,13 @@ export const CollegeForm = ({ userIdprop }) => {
     );
     setFormData((prevData) => {
       const updatedCourses = [...prevData.coursesAndFee];
-  
+
       // Update only the specified field for the current course
       updatedCourses[index] = {
         ...updatedCourses[index],
         [field]: value,
       };
-  
+
       // Reset dependent fields only for the current course if needed
       if (field === "stream") {
         updatedCourses[index] = {
@@ -399,7 +399,7 @@ export const CollegeForm = ({ userIdprop }) => {
           degreeName: "",
           specialization: "",
           courseName: "",
-          course: ""
+          course: "",
         };
         // Update dropdown options for the current selection
         updateLevelOptions(value);
@@ -409,7 +409,7 @@ export const CollegeForm = ({ userIdprop }) => {
           degreeName: "",
           specialization: "",
           courseName: "",
-          course: ""
+          course: "",
         };
         // Only update options if we have the required field value
         if (updatedCourses[index].stream) {
@@ -420,7 +420,7 @@ export const CollegeForm = ({ userIdprop }) => {
           ...updatedCourses[index],
           specialization: "",
           courseName: "",
-          course: ""
+          course: "",
         };
         // Only update if we have the required field values
         if (updatedCourses[index].stream && updatedCourses[index].level) {
@@ -453,9 +453,11 @@ export const CollegeForm = ({ userIdprop }) => {
           ? updatedCourses[index].stream.substring(0, 3).toUpperCase()
           : "";
         const degreeAbbr = updatedCourses[index].degreeName || "";
-        updatedCourses[index].course = `${streamAbbr} - ${degreeAbbr} in ${value}`;
+        updatedCourses[
+          index
+        ].course = `${streamAbbr} - ${degreeAbbr} in ${value}`;
       }
-  
+
       return { ...prevData, coursesAndFee: updatedCourses };
     });
   };
@@ -900,6 +902,17 @@ export const CollegeForm = ({ userIdprop }) => {
     });
   };
 
+  const handleRemoveStep = () => {
+    const updatedSteps = [...formData.examPattern.steps, ""];
+    setFormData({
+      ...formData,
+      examPattern: {
+        ...formData.examPattern,
+        steps: updatedSteps,
+      },
+    });
+  };
+
   const handleAddCompany = () => {
     setFormData({
       ...formData,
@@ -959,6 +972,7 @@ export const CollegeForm = ({ userIdprop }) => {
           handleChange={handleChange}
           handleSingleFileUpload={handleSingleFileUpload}
           uploadProgress={uploadProgress}
+          setFormData={setFormData}
         />
 
         <OverviewSection
@@ -1015,11 +1029,13 @@ export const CollegeForm = ({ userIdprop }) => {
 
         <FacultySection
           formData={formData}
+          setFormData={setFormData}
           handleArrayChange={handleArrayChange}
         />
         <FaqSection formData={formData} handleArrayChange={handleArrayChange} />
 
         <ExamDetailsSection
+          handleRemoveStep={handleRemoveStep}
           handleAddStep={handleAddStep}
           formData={formData}
           handleNestedChange={handleNestedChange}
@@ -1037,6 +1053,7 @@ export const CollegeForm = ({ userIdprop }) => {
           handleNestedArrayChange={handleNestedArrayChange}
           isEditMode={isEditMode}
           loading={loading}
+          setFormData={setFormData}
         />
       </form>
     </div>

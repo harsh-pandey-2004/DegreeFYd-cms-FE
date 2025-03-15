@@ -10,13 +10,12 @@ const BasicInfoSection = ({
   uploadProgress,
   setFormData,
   errors,
-  setErrors,
+ 
 }) => {
   const [quillError, setQuillError] = useState(false);
   // Handle quill change with validation
   const handleQuillChange = (content) => {
-    const isValid = validateQuillContent(content);
-    setQuillError(!isValid);
+    
 
     setFormData({
       ...formData,
