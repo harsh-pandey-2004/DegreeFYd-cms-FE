@@ -903,15 +903,20 @@ export const CollegeForm = ({ userIdprop }) => {
   };
 
   const handleRemoveStep = () => {
-    const updatedSteps = [...formData.examPattern.steps, ""];
-    setFormData({
-      ...formData,
-      examPattern: {
-        ...formData.examPattern,
-        steps: updatedSteps,
-      },
-    });
+    if (formData.examPattern.steps.length > 0) {
+      const updatedSteps = [...formData.examPattern.steps];
+      updatedSteps.pop(); // Remove the last step
+  
+      setFormData({
+        ...formData,
+        examPattern: {
+          ...formData.examPattern,
+          steps: updatedSteps,
+        },
+      });
+    }
   };
+  
 
   const handleAddCompany = () => {
     setFormData({
