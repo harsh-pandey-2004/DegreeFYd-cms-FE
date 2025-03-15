@@ -6,6 +6,7 @@ const ExamDetailsSection = ({
   formData,
   setFormData,
   handleAddStep,
+  handleStepChange,
   handleNestedChange,
   handleRemoveImage,
   handleMultipleFileUpload1,
@@ -591,60 +592,74 @@ const ExamDetailsSection = ({
                 </div>
 
                 {formData.examPattern.steps.length > 0 ? (
-                  formData.examPattern.steps.map((step, index) => (
-                    <div
-                      key={index}
-                      className="mb-5 relative border p-5 rounded-md shadow-sm bg-white"
-                    >
-                      <div className="flex justify-between items-center mb-3">
-                        <label className="font-medium text-blue-700">
-                          Step {index + 1}
-                        </label>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveStep(index)}
-                          className="px-2 py-1 text-red-500 hover:text-red-700 rounded-md text-sm flex items-center"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 mr-1"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
-                          Remove
-                        </button>
-                      </div>
-                      <ReactQuill
-                        theme="snow"
-                        value={step}
-                        onChange={(value) =>
-                          handleNestedArrayChange(
-                            index,
-                            value,
-                            "examPattern",
-                            "steps"
-                          )
-                        }
-                        modules={quillModules}
-                        className="bg-white rounded-md"
-                        placeholder="Describe this step of the exam pattern..."
-                        required
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-red-500 text-sm">
-                    At least one step is required
-                  </p>
-                )}
+  formData.examPattern.steps.map((step, index) => (
+    <div
+      key={index}
+      className="mb-5 relative border p-5 rounded-md shadow-sm bg-white"
+    >
+      <div className="flex justify-between items-center mb-3">
+        <label className="font-medium text-blue-700">
+          Step {index + 1}
+        </label>
+        <button
+          type="button"
+          onClick={() => handleRemoveStep(index)}
+          className="px-2 py-1 text-red-500 hover:text-red-700 rounded-md text-sm flex items-center"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            />
+          </svg>
+          Remove
+        </button>
+      </div>
+      
+      {/* Add text input for each step */}
+      <div className="mb-3">
+        <label className="block mb-2 text-sm font-medium text-gray-700">
+          Step Title
+        </label>
+        <input
+          type="text"
+          value={step.text || ""}
+          onChange={(e) => handleStepChange(index, "text", e.target.value)}
+          className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Enter step title..."
+        />
+      </div>
+      
+      {/* ReactQuill for step description */}
+      <div>
+        <label className="block mb-2 text-sm font-medium text-gray-700">
+          Step Description
+        </label>
+        <ReactQuill
+          theme="snow"
+          value={step.description || ""}
+          onChange={(value) => handleStepChange(index, "description", value)}
+          modules={quillModules}
+          className="bg-white rounded-md"
+          placeholder="Describe this step of the exam pattern..."
+          required
+        />
+      </div>
+    </div>
+  ))
+) : (
+  <p className="text-red-500 text-sm">
+    At least one step is required
+  </p>
+)}
               </div>
             </div>
           </div>

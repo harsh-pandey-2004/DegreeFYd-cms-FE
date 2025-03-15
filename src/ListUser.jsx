@@ -22,7 +22,7 @@ const ListUser = () => {
     try {
       // Fetch all users
       const usersResponse = await axios.get(
-        "https://degreefydcmsbe.onrender.com/api/auth/user"
+        "http://localhost:5000/api/auth/user"
       );
 
       // Extract the user data from the nested structure
@@ -43,7 +43,7 @@ const ListUser = () => {
         userData.map(async (user) => {
           try {
             const collegeResponse = await axios.get(
-              `https://degreefydcmsbe.onrender.com/api/colleges/userId/${user._id}`
+              `http://localhost:5000/api/colleges/userId/${user._id}`
             );
 
             // Handle possible nested structure in college response as well
@@ -108,7 +108,7 @@ const ListUser = () => {
     try {
       // Call the delete API endpoint
       const response = await axios.delete(
-        `https://degreefydcmsbe.onrender.com/api/auth/user/${userId}`
+        `http://localhost:5000/api/auth/user/${userId}`
       );
 
       if (response.data.success) {
@@ -189,7 +189,7 @@ const ListUser = () => {
     setPasswordLoading(selectedUser._id);
     try {
       const response = await axios.post(
-        "https://degreefydcmsbe.onrender.com/api/auth/reset-password",
+        "http://localhost:5000/api/auth/reset-password",
         { id: selectedUser._id, newPassword }
       );
 
@@ -225,7 +225,7 @@ const ListUser = () => {
     setRoleLoading(selectedUser._id);
     try {
       const response = await axios.post(
-        "https://degreefydcmsbe.onrender.com/api/auth/change-role",
+        "http://localhost:5000/api/auth/change-role",
         { id: selectedUser._id, role: newRole }
       );
 

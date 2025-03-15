@@ -161,7 +161,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await axios.post("https://degreefydcmsbe.onrender.com/api/auth/register", {
+      await axios.post("http://localhost:5000/api/auth/register", {
         username,
         email,
         password,

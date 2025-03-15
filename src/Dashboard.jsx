@@ -64,10 +64,10 @@ const Dashboard = () => {
       let response;
       if (isContentCreator) {
         response = await axios.get(
-          `https://degreefydcmsbe.onrender.com/api/colleges/userId/${userId}`
+          `http://localhost:5000/api/colleges/userId/${userId}`
         );
       } else {
-        response = await axios.get("https://degreefydcmsbe.onrender.com/api/colleges");
+        response = await axios.get("http://localhost:5000/api/colleges");
       }
       setResponses(response.data);
       setFilteredResponses(response.data);
@@ -95,7 +95,7 @@ const Dashboard = () => {
       if (!emailMap[id]) {
         try {
           const response = await axios.get(
-            `https://degreefydcmsbe.onrender.com/api/auth/user/${id}`
+            `http://localhost:5000/api/auth/user/${id}`
           );
           emailMap[id] = response?.data.data.email;
         } catch (error) {
@@ -250,7 +250,7 @@ const Dashboard = () => {
 
     try {
       const response = await axios.put(
-        `https://degreefydcmsbe.onrender.com/api/colleges/approve/${selectedCollege._id}`,
+        `http://localhost:5000/api/colleges/approve/${selectedCollege._id}`,
         {
           userId: userId,
           status: "approved",
@@ -285,7 +285,7 @@ const Dashboard = () => {
 
     try {
       const response = await axios.put(
-        `https://degreefydcmsbe.onrender.com/api/colleges/approve/${selectedCollege._id}`,
+        `http://localhost:5000/api/colleges/approve/${selectedCollege._id}`,
         {
           userId: userId,
           status: "rejected",
