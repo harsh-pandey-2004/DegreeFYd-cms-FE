@@ -6,6 +6,7 @@ import "react-quill/dist/quill.snow.css";
 const ApprovalRankingSection = ({ formData, handleNestedChange }) => {
   // Handle Quill editor changes
   const handleQuillChange = (content) => {
+    console.log("Quill content:", content);
     handleNestedChange({
       target: {
         name: "description",

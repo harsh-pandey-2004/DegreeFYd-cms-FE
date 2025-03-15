@@ -27,6 +27,7 @@ export const CollegeForm = ({ userIdprop }) => {
     nirfranking: "",
     established: "",
     collegeImage: "",
+    createdBy:localStorage.getItem('userId'),
     overview: [""],
     coursesAndFeeHeading: "",
     coursesAndFee: [
