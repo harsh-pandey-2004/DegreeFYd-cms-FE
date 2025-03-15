@@ -200,7 +200,7 @@ const Dashboard = () => {
 
   const handlePreview = (college) => {
     const collegeName = encodeURIComponent(college.collegeName); // Ensure the name is URL-safe
-    const url = `http://localhost:5173/college/${collegeName}?istest=true`;
+    const url = `https://degreefydce.netlify.app/college/${collegeName}?istest=true`;
     window.open(url, "_blank"); // Open in a new tab
   };
   
