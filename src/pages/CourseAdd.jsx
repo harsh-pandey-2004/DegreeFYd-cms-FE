@@ -180,7 +180,7 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
       ["clean"],
     ],
   };
-  
+
   const quillFormats = [
     "header",
     "bold",
@@ -191,7 +191,6 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
     "link",
     "image", // Added "image" format support
   ];
-  
 
   // Navigation buttons for quick scrolling
 
@@ -250,7 +249,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Enter a brief description of the course"
-                    className="h-36"
+                     className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                   />
                 </div>
               </div>
@@ -272,7 +276,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Enter key highlights of the course"
-                    className="h-36"
+                     className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                   />
                 </div>
               </div>
@@ -387,7 +396,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Provide a detailed overview of the course"
-                    className="h-48"
+                     className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                   />
                 </div>
               </div>
@@ -409,7 +423,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Explain why students should choose this course"
-                    className="h-48"
+                    className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                   />
                 </div>
               </div>
@@ -463,7 +482,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Provide detailed eligibility criteria"
-                    className="h-48"
+                    className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                   />
                 </div>
               </div>
@@ -497,7 +521,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                   modules={quillModules}
                   formats={quillFormats}
                   placeholder="Describe the admission process in detail"
-                  className="h-48"
+                   className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                 />
               </div>
             </div>
@@ -599,7 +628,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Provide an overview of available specializations"
-                    className="h-36"
+                     className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                   />
                 </div>
               </div>
@@ -647,7 +681,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                       modules={quillModules}
                       formats={quillFormats}
                       placeholder="Describe this specialization"
-                      className="h-32"
+                       className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                     />
                   </div>
                   <button
@@ -700,7 +739,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Provide an overview of the course syllabus"
-                    className="h-48"
+                     className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                   />
                 </div>
               </div>
@@ -766,7 +810,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Describe career opportunities after this course"
-                    className="h-48"
+                     className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                   />
                 </div>
               </div>
@@ -788,7 +837,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="List the top companies that recruit graduates"
-                    className="h-36"
+                     className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                   />
                 </div>
               </div>
@@ -810,7 +864,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="List top institutions that offer this course"
-                    className="h-36"
+                     className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                   />
                 </div>
               </div>
@@ -863,7 +922,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                       modules={quillModules}
                       formats={quillFormats}
                       placeholder="Provide the answer to this question"
-                      className="h-32"
+                       className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                     />
                   </div>
                   <button
@@ -915,7 +979,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                   modules={quillModules}
                   formats={quillFormats}
                   placeholder="Describe the key benefits of pursuing this course"
-                  className="h-48"
+                   className="min-h-[150px] w-full"
+                    style={{
+                      minHeight: "150px",
+                      maxHeight: "none",
+                      overflow: "hidden",
+                    }}
                 />
               </div>
             </div>
