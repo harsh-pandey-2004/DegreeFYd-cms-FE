@@ -27,7 +27,7 @@ export const CollegeForm = ({ userIdprop }) => {
     nirfranking: "",
     established: "",
     collegeImage: "",
-    createdBy:localStorage.getItem('userId'),
+    createdBy: localStorage.getItem("userId"),
     overview: [""],
     coursesAndFeeHeading: "",
     coursesAndFee: [
@@ -818,7 +818,7 @@ export const CollegeForm = ({ userIdprop }) => {
 
       console.log("Success:", response.data);
       setLoading(false);
-
+      localStorage.removeItem(formStorageKey);
       // Clear saved form data from localStorage after successful submission
       clearSavedFormData();
     } catch (error) {
@@ -893,7 +893,10 @@ export const CollegeForm = ({ userIdprop }) => {
   };
 
   const handleAddStep = () => {
-    const updatedSteps = [...formData.examPattern.steps, { description: "", text: "" }];
+    const updatedSteps = [
+      ...formData.examPattern.steps,
+      { description: "", text: "" },
+    ];
     setFormData({
       ...formData,
       examPattern: {
@@ -907,7 +910,7 @@ export const CollegeForm = ({ userIdprop }) => {
     if (formData.examPattern.steps.length > 1) {
       const updatedSteps = [...formData.examPattern.steps];
       updatedSteps.splice(index, 1); // Remove the specific step
-      
+
       setFormData({
         ...formData,
         examPattern: {
@@ -917,7 +920,6 @@ export const CollegeForm = ({ userIdprop }) => {
       });
     }
   };
-  
 
   const handleAddCompany = () => {
     setFormData({
@@ -934,7 +936,7 @@ export const CollegeForm = ({ userIdprop }) => {
       ...updatedSteps[index],
       [field]: value,
     };
-    
+
     setFormData({
       ...formData,
       examPattern: {

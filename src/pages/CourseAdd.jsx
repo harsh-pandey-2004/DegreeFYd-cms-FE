@@ -1,38 +1,53 @@
-import React, { useState, useRef } from "react";
+import axios from "axios";
+import React, { useState, useRef, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-const CourseForm = ({ initialData = {}, onSubmit }) => {
-  const [course, setCourse] = useState(
-    initialData || {
-      createdBy: localStorage.getItem("userId"),
-      courseTitle: "",
-      shortDescription: "",
-      keyHighlights: "",
-      duration: "",
-      mode: "Online",
-      eligibility: "",
-      universities: 0,
-      overview: "",
-      whyCourse: "",
-      eligibilityDetails: "",
-      admissionProcess: "",
-      averageCourseFee: 0,
-      scholarship: false,
-      loanAssistance: false,
-      specializations: "",
-      specializationDetails: [],
-      syllabus: "",
-      semester: [],
-      careerScope: "",
-      topRecruiters: "",
-      topCollegeOffering: "",
-      faq: [],
-      benefitsOfOnlineMBA: "",
-      image: "",
+const CourseForm = ({ userIdprop }) => {
+  const [course, setCourse] = useState({
+    createdBy: localStorage.getItem("userId"),
+    courseTitle: "",
+    shortDescription: "",
+    keyHighlights: "",
+    duration: "",
+    mode: "Online",
+    eligibility: "",
+    universities: 0,
+    overview: "",
+    whyCourse: "",
+    eligibilityDetails: "",
+    admissionProcess: "",
+    averageCourseFee: 0,
+    scholarship: false,
+    loanAssistance: false,
+    specializations: "",
+    specializationDetails: [],
+    syllabus: "",
+    semester: [],
+    careerScope: "",
+    topRecruiters: "",
+    topCollegeOffering: "",
+    faq: [],
+    benefitsOfOnlineMBA: "",
+    image: "",
+  });
+  useEffect(() => {
+    const fetchEditInfo = async () => {
+      try {
+        console;
+        const response = await axios.get(
+          `http://localhost:5000/api/courses1/${userIdprop}`
+        );
+        console.log(response.data);
+        setCourse(response.data);
+      } catch (error) {
+        console.error("Error fetching course:", error);
+      }
+    };
+    if (userIdprop) {
+      fetchEditInfo();
     }
-  );
-
+  });
   // Create refs for each section for scrolling
   const sectionRefs = {
     basicInfo: useRef(),
@@ -163,10 +178,18 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onSubmit) {
-      onSubmit(course);
+    console.log("Form submitted with data:", course);
+    if (course) {
+      try {
+        let a = axios.post("http://localhost:5000/api/courses1", {
+          ...course,
+          createdBy: localStorage.getItem("userId"),
+        });
+      } catch (error) {
+        console.error("Error adding course:", error);
+      }
     }
   };
 
@@ -249,7 +272,7 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Enter a brief description of the course"
-                     className="min-h-[150px] w-full"
+                    className="min-h-[150px] w-full"
                     style={{
                       minHeight: "150px",
                       maxHeight: "none",
@@ -276,7 +299,7 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Enter key highlights of the course"
-                     className="min-h-[150px] w-full"
+                    className="min-h-[150px] w-full"
                     style={{
                       minHeight: "150px",
                       maxHeight: "none",
@@ -396,7 +419,7 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Provide a detailed overview of the course"
-                     className="min-h-[150px] w-full"
+                    className="min-h-[150px] w-full"
                     style={{
                       minHeight: "150px",
                       maxHeight: "none",
@@ -521,12 +544,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                   modules={quillModules}
                   formats={quillFormats}
                   placeholder="Describe the admission process in detail"
-                   className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
+                  className="min-h-[150px] w-full"
+                  style={{
+                    minHeight: "150px",
+                    maxHeight: "none",
+                    overflow: "hidden",
+                  }}
                 />
               </div>
             </div>
@@ -628,7 +651,7 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Provide an overview of available specializations"
-                     className="min-h-[150px] w-full"
+                    className="min-h-[150px] w-full"
                     style={{
                       minHeight: "150px",
                       maxHeight: "none",
@@ -681,12 +704,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                       modules={quillModules}
                       formats={quillFormats}
                       placeholder="Describe this specialization"
-                       className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
+                      className="min-h-[150px] w-full"
+                      style={{
+                        minHeight: "150px",
+                        maxHeight: "none",
+                        overflow: "hidden",
+                      }}
                     />
                   </div>
                   <button
@@ -739,7 +762,7 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Provide an overview of the course syllabus"
-                     className="min-h-[150px] w-full"
+                    className="min-h-[150px] w-full"
                     style={{
                       minHeight: "150px",
                       maxHeight: "none",
@@ -810,7 +833,7 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="Describe career opportunities after this course"
-                     className="min-h-[150px] w-full"
+                    className="min-h-[150px] w-full"
                     style={{
                       minHeight: "150px",
                       maxHeight: "none",
@@ -837,7 +860,7 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="List the top companies that recruit graduates"
-                     className="min-h-[150px] w-full"
+                    className="min-h-[150px] w-full"
                     style={{
                       minHeight: "150px",
                       maxHeight: "none",
@@ -864,7 +887,7 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                     modules={quillModules}
                     formats={quillFormats}
                     placeholder="List top institutions that offer this course"
-                     className="min-h-[150px] w-full"
+                    className="min-h-[150px] w-full"
                     style={{
                       minHeight: "150px",
                       maxHeight: "none",
@@ -922,12 +945,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                       modules={quillModules}
                       formats={quillFormats}
                       placeholder="Provide the answer to this question"
-                       className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
+                      className="min-h-[150px] w-full"
+                      style={{
+                        minHeight: "150px",
+                        maxHeight: "none",
+                        overflow: "hidden",
+                      }}
                     />
                   </div>
                   <button
@@ -979,12 +1002,12 @@ const CourseForm = ({ initialData = {}, onSubmit }) => {
                   modules={quillModules}
                   formats={quillFormats}
                   placeholder="Describe the key benefits of pursuing this course"
-                   className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
+                  className="min-h-[150px] w-full"
+                  style={{
+                    minHeight: "150px",
+                    maxHeight: "none",
+                    overflow: "hidden",
+                  }}
                 />
               </div>
             </div>

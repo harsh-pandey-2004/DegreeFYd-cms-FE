@@ -13,6 +13,7 @@ import {
   ChevronLeft,
   ChevronRight,
   XCircle,
+  Trash,
 } from "lucide-react";
 import CollegeForm from "./CourseAdd";
 import { useNavigate } from "react-router-dom";
@@ -67,7 +68,9 @@ const Dashboard = () => {
           `https://degreefydcmsbe.onrender.com/api/courses1/${userId}`
         );
       } else {
-        response = await axios.get("https://degreefydcmsbe.onrender.com/api/courses1");
+        response = await axios.get(
+          "https://degreefydcmsbe.onrender.com/api/courses1"
+        );
       }
       setResponses(response.data.data);
       setFilteredResponses(response.data.data);
@@ -200,8 +203,7 @@ const Dashboard = () => {
   };
 
   const handlePreview = (college) => {
-    const collegeName = encodeURIComponent(college.collegeName); // Ensure the name is URL-safe
-    window.location.href = `https://degreefydce.netlify.app/college/${collegeName}?istest=true`;
+    alert("Page is not implemented yet");
   };
 
   const openApproveForm = (college) => {
@@ -210,7 +212,19 @@ const Dashboard = () => {
     setActionError("");
     setViewMode("approve");
   };
-
+  const handleDelete = async (collegeData) => {
+    console.log(collegeData._id);
+    try {
+      const response = await axios.delete(
+        `https://degreefydcmsbe.onrender.com/api/courses1/${collegeData._id}`
+      );
+      window.location.reload();
+      console.log(response.data);
+      // fetchColleges();
+    } catch (error) {
+      console;
+    }
+  };
   const openRejectForm = (college) => {
     setSelectedCollege(college);
     setRejectionReason("");
@@ -335,9 +349,7 @@ const Dashboard = () => {
         <div className="truncate" style={{ maxWidth: maxWidth || "200px" }}>
           {text}
         </div>
-        <div className="invisible group-hover:visible absolute z-20 bg-gray-900 text-white p-2 rounded-md shadow-lg text-sm whitespace-normal max-w-xs left-0 top-full mt-1 transition-all opacity-0 group-hover:opacity-100">
-          {text}
-        </div>
+        
       </div>
     );
   };
@@ -785,6 +797,13 @@ const Dashboard = () => {
                               onClick={() => handlePreview(courses)}
                             >
                               <Eye size={16} />
+                            </button>
+                            <button
+                              className="p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-full transition-colors tooltip shadow-sm border border-gray-100"
+                              title="Delete"
+                              onClick={() => handleDelete(courses)}
+                            >
+                              <Trash size={16} />
                             </button>
 
                             {/* Approve button - only for admin/users with permission */}

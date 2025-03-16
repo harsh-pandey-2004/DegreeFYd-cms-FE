@@ -13,12 +13,13 @@ import {
   ChevronLeft,
   ChevronRight,
   XCircle,
+  Trash,
 } from "lucide-react";
 import { CollegeForm } from "./CRM";
 import { useNavigate } from "react-router-dom";
 import ApproveComponent from "./components/ApproveComponent";
 import RejectComponent from "./components/RejectComponent";
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 
 const Dashboard = () => {
   const [responses, setResponses] = useState([]);
@@ -67,7 +68,9 @@ const Dashboard = () => {
           `https://degreefydcmsbe.onrender.com/api/colleges/userId/${userId}`
         );
       } else {
-        response = await axios.get("https://degreefydcmsbe.onrender.com/api/colleges");
+        response = await axios.get(
+          "https://degreefydcmsbe.onrender.com/api/colleges"
+        );
       }
       setResponses(response.data);
       setFilteredResponses(response.data);
@@ -110,7 +113,7 @@ const Dashboard = () => {
 
   // Get email from cache
   const getUserEmail = (userId) => {
-    return userEmails[userId] || "N/A";;
+    return userEmails[userId] || "N/A";
   };
 
   useEffect(() => {
@@ -203,8 +206,20 @@ const Dashboard = () => {
     const url = `https://degreefydce.netlify.app/college/${collegeName}?istest=true`;
     window.open(url, "_blank"); // Open in a new tab
   };
-  
 
+  const handleDelete = async (collegeData) => {
+    console.log(collegeData._id);
+    try {
+      const response = await axios.delete(
+        `https://degreefydcmsbe.onrender.com/api/colleges/${collegeData._id}`
+      );
+      window.location.reload();
+      console.log(response.data);
+      // fetchColleges();
+    } catch (error) {
+      console;
+    }
+  };
   const openApproveForm = (college) => {
     setSelectedCollege(college);
     setApprovalNotes("");
@@ -224,15 +239,18 @@ const Dashboard = () => {
     setPopupReason(reason);
     setPopupCollegeName(collegeName);
     setShowReasonPopup(true);
-    
+
     // Configure DOMPurify to allow list elements
-    DOMPurify.addHook('afterSanitizeAttributes', function(node) {
+    DOMPurify.addHook("afterSanitizeAttributes", function (node) {
       // Fix display issues for list elements by adding style
-      if(node.nodeName === 'UL' || node.nodeName === 'OL') {
-        node.setAttribute('style', 'display: block; list-style-type: disc; padding-left: 40px; margin: 1em 0;');
+      if (node.nodeName === "UL" || node.nodeName === "OL") {
+        node.setAttribute(
+          "style",
+          "display: block; list-style-type: disc; padding-left: 40px; margin: 1em 0;"
+        );
       }
-      if(node.nodeName === 'LI') {
-        node.setAttribute('style', 'display: list-item;');
+      if (node.nodeName === "LI") {
+        node.setAttribute("style", "display: list-item;");
       }
     });
   };
@@ -333,9 +351,7 @@ const Dashboard = () => {
         <div className="truncate" style={{ maxWidth: maxWidth || "200px" }}>
           {text}
         </div>
-        <div className="invisible group-hover:visible absolute z-20 bg-gray-900 text-white p-2 rounded-md shadow-lg text-sm whitespace-normal max-w-xs left-0 top-full mt-1 transition-all opacity-0 group-hover:opacity-100">
-          {text}
-        </div>
+       
       </div>
     );
   };
@@ -422,15 +438,15 @@ const Dashboard = () => {
               </div>
               <div className="p-6 max-h-96 overflow-y-auto prose">
                 {popupReason ? (
-                  <div 
+                  <div
                     className="rejection-reason-content"
-                    dangerouslySetInnerHTML={{ 
+                    dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(popupReason, {
                         USE_PROFILES: { html: true },
-                        ADD_ATTR: ['style'],
-                        ADD_TAGS: ['ul', 'ol', 'li']
-                      }) 
-                    }} 
+                        ADD_ATTR: ["style"],
+                        ADD_TAGS: ["ul", "ol", "li"],
+                      }),
+                    }}
                   />
                 ) : (
                   <p className="text-gray-500 italic">No reason provided</p>
@@ -783,6 +799,13 @@ const Dashboard = () => {
                               onClick={() => handlePreview(college)}
                             >
                               <Eye size={16} />
+                            </button>
+                            <button
+                              className="p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-full transition-colors tooltip shadow-sm border border-gray-100"
+                              title="Delete"
+                              onClick={() => handleDelete(college)}
+                            >
+                              <Trash size={16} />
                             </button>
 
                             {/* Approve button - only for admin/users with permission */}

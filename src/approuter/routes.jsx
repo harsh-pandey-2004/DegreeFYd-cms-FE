@@ -15,6 +15,8 @@ import Sidebar from "../components/Sidebar";
 import ListUser from "../ListUser";
 import DashboardCourse from "../pages/DashboardCourse";
 import CourseAdd from "../pages/CourseAdd";
+import DashboardBlogs from "../DashboardBlogs";
+import AddBlogs from "../AddBlogs";
 
 // Protected route component to check authentication
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -46,7 +48,8 @@ const AppRouterWithLocation = () => {
 const LocationAwareRouter = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
-  const showSidebar = location.pathname === "/" || location.pathname === "/add-course";
+  const showSidebar =
+    location.pathname === "/" || location.pathname === "/add-course";
 
   // Check for token on first render
   useEffect(() => {
@@ -106,10 +109,26 @@ const LocationAwareRouter = () => {
             }
           />
           <Route
+            path="/list-blogs"
+            element={
+              <ProtectedRoute>
+                <DashboardBlogs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/add-course"
             element={
-              <ProtectedRoute adminOnly={true}>
+              <ProtectedRoute>
                 <CourseAdd />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-blogs"
+            element={
+              <ProtectedRoute>
+                <AddBlogs />
               </ProtectedRoute>
             }
           />
