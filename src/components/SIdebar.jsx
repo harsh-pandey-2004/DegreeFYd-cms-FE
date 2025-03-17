@@ -77,7 +77,7 @@ const Sidebar = () => {
 
   return (
     <div className="fixed top-16 left-0 h-screen bg-white w-80 shadow-md p-4 overflow-y-auto pb-20">
-      <h3 className="text-lg font-semibold mb-4 text-violet-600 border-b pb-2">
+      <h3 className="text-lg font-semibold mb-4 text-[#155DFC] border-b pb-2">
         {location.pathname === "/add-college" || location.pathname === "/dashboard"
           ? "College Information"
           : "Course Information"}
@@ -89,12 +89,12 @@ const Sidebar = () => {
               onClick={() => handleClick(item.id)}
               className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 flex items-center ${
                 activeId === item.id
-                  ? "bg-violet-100 text-violet-600 font-medium border-l-4 border-violet-600"
-                  : "hover:bg-green-50 hover:text-violet-600"
+                  ? "bg-violet-100 text-[#155DFC] font-medium border-l-4 border-[#155DFC]"
+                  : "hover:bg-green-50 hover:text-[#155DFC]"
               }`}
             >
               {activeId === item.id && (
-                <span className="mr-2 text-violet-600">•</span>
+                <span className="mr-2 text-[#155DFC]">•</span>
               )}
               {item.label}
             </button>

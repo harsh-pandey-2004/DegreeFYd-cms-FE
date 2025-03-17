@@ -90,7 +90,7 @@ const ApproveComponent = ({
             handleApprove()
           }}
           disabled={processingAction}
-          className="px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-600"
+          className="px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-[#155DFC]"
         >
           {processingAction ? (
             <span className="flex items-center">

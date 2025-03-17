@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DegreeFydLogo from "../assets/logo.png";
 
-const Navbar = ({ isAuthenticated, onLogout, setId }) => {
+const Navbar = ({ isAuthenticated, onLogout }) => {
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
   const [showAddContentDropdown, setShowAddContentDropdown] = useState(false);
@@ -10,25 +10,14 @@ const Navbar = ({ isAuthenticated, onLogout, setId }) => {
 
   const handleLogout = () => {
     onLogout();
-    navigate("/login");
+    handleNavigation("/login");
   };
 
-  const toggleAddContentDropdown = () => {
-    setShowAddContentDropdown(!showAddContentDropdown);
-    if (showDashboardDropdown) setShowDashboardDropdown(false);
-  };
-
-  const toggleDashboardDropdown = () => {
-    setShowDashboardDropdown(!showDashboardDropdown);
-    if (showAddContentDropdown) setShowAddContentDropdown(false);
-  };
-
-  const handleLinkClick = (path) => {
-    if (path === "/list-courses" ) {
-      setId(false);
-    }
-    setShowAddContentDropdown(false);
-    setShowDashboardDropdown(false);
+  const handleNavigation = (path) => {
+    navigate(path);
+    setTimeout(() => {
+      window.location.reload();
+    }, 100); // Small delay to allow navigation before reloading
   };
 
   return (
@@ -37,67 +26,94 @@ const Navbar = ({ isAuthenticated, onLogout, setId }) => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <Link to="/list-user" onClick={() => handleLinkClick("/list-user")} className="text-black font-bold text-xl">
-                <img src={DegreeFydLogo} alt="logo" className="h-14 w-full"></img>
-              </Link>
+              <img
+                src={DegreeFydLogo}
+                alt="logo"
+                className="h-14 w-full cursor-pointer"
+                onClick={() => handleNavigation("/list-user")}
+              />
             </div>
 
             {isAuthenticated && (
               <div className="ml-10 flex items-baseline space-x-4">
                 {/* Dashboard Dropdown */}
                 <div className="relative">
-                  <button onClick={toggleDashboardDropdown} className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                  <button
+                    onClick={() => setShowDashboardDropdown(!showDashboardDropdown)}
+                    className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                  >
                     Dashboard
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={showDashboardDropdown ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}></path>
-                    </svg>
                   </button>
                   {showDashboardDropdown && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                      <Link to="/list-colleges" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleLinkClick("/list-colleges")}>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                        onClick={() => handleNavigation("/list-colleges")}
+                      >
                         List Colleges
-                      </Link>
-                      <Link to="/list-courses" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleLinkClick("/list-courses")}>
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                        onClick={() => handleNavigation("/list-courses")}
+                      >
                         List Courses
-                      </Link>
-                      <Link to="/list-blogs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleLinkClick("/list-blogs")}>
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                        onClick={() => handleNavigation("/list-blogs")}
+                      >
                         List Blogs
-                      </Link>
+                      </button>
                     </div>
                   )}
                 </div>
 
                 {/* Add Content Dropdown */}
                 <div className="relative">
-                  <button onClick={toggleAddContentDropdown} className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                  <button
+                    onClick={() => setShowAddContentDropdown(!showAddContentDropdown)}
+                    className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                  >
                     Add Content
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={showAddContentDropdown ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}></path>
-                    </svg>
                   </button>
                   {showAddContentDropdown && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                      <Link to="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleLinkClick("/")}>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                        onClick={() => handleNavigation("/")}
+                      >
                         Add Colleges
-                      </Link>
-                      <Link to="/add-course" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleLinkClick("/add-course")}>
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                        onClick={() => handleNavigation("/add-course")}
+                      >
                         Add Courses
-                      </Link>
-                      <Link to="/add-blogs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleLinkClick("/add-blogs")}>
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                        onClick={() => handleNavigation("/add-blogs")}
+                      >
                         Add Blogs
-                      </Link>
+                      </button>
                     </div>
                   )}
                 </div>
 
                 {role === "admin" && (
                   <>
-                    <Link to="/register" className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium" onClick={() => handleLinkClick("/register")}>
+                    <button
+                      className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium"
+                      onClick={() => handleNavigation("/register")}
+                    >
                       Register New User
-                    </Link>
-                    <Link to="/list-user" className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium" onClick={() => handleLinkClick("/list-user")}>
+                    </button>
+                    <button
+                      className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium"
+                      onClick={() => handleNavigation("/list-user")}
+                    >
                       List User
-                    </Link>
+                    </button>
                   </>
                 )}
               </div>
@@ -106,13 +122,19 @@ const Navbar = ({ isAuthenticated, onLogout, setId }) => {
 
           <div>
             {isAuthenticated ? (
-              <button onClick={handleLogout} className="text-white bg-violet-600 hover:bg-violet-600 px-4 py-2 rounded-md text-sm font-medium">
+              <button
+                onClick={handleLogout}
+                className="text-white bg-[#155DFC] hover:bg-[#155DFC] px-4 py-2 rounded-md text-sm font-medium"
+              >
                 Logout
               </button>
             ) : (
-              <Link to="/login" className="text-white bg-violet-600 hover:bg-violet-600 px-3 py-2 rounded-md text-sm font-medium" onClick={() => handleLinkClick("/login")}>
+              <button
+                className="text-white bg-[#155DFC] hover:bg-[#155DFC] px-3 py-2 rounded-md text-sm font-medium"
+                onClick={() => handleNavigation("/login")}
+              >
                 Login
-              </Link>
+              </button>
             )}
           </div>
         </div>

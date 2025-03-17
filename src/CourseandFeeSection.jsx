@@ -189,7 +189,7 @@
           </label>
           <div className="relative">
             <div
-              className={`flex justify-between items-center w-full p-2 border rounded focus:ring-2 focus:ring-violet-600 focus:outline-none cursor-pointer ${
+              className={`flex justify-between items-center w-full p-2 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none cursor-pointer ${
                 disabled ? "bg-gray-100" : "bg-white"
               }`}
               onClick={() => !disabled && setIsOpen(!isOpen)}
@@ -216,7 +216,7 @@
                 <div className="sticky top-0 z-10 bg-white p-2 border-b">
                   <input
                     type="text"
-                    className="w-full p-2 border rounded focus:ring-2 focus:ring-violet-600 focus:outline-none"
+                    className="w-full p-2 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
                     placeholder="Search..."
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
@@ -253,7 +253,7 @@
 
     return (
       <div className="bg-white p-6 rounded-lg shadow-md" id="courses-and-fee">
-        <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+        <h2 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
           Courses and Fee
         </h2>
 
@@ -273,13 +273,13 @@
         {/* Add Course Button */}
         <div className="mb-4">
           <div className="flex justify-between items-center">
-            <h3 className="font-medium text-lg mb-2 mt-6 text-violet-600">
+            <h3 className="font-medium text-lg mb-2 mt-6 text-[#155DFC]">
               Courses
             </h3>
             <button
               type="button"
               onClick={addCourse}
-              className="px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-600 flex items-center"
+              className="px-4 py-2 bg-[#155DFC] text-white rounded hover:bg-[#155DFC] flex items-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -305,7 +305,7 @@
             className="mb-6 p-6 border rounded-lg bg-gray-50 hover:shadow-md transition-shadow"
           >
             <div className="flex justify-between items-center mb-4 pb-2 border-b">
-              <h4 className="font-medium text-lg text-violet-600">
+              <h4 className="font-medium text-lg text-[#155DFC]">
                 Course {index + 1}
               </h4>
               {formData.coursesAndFee.length > 1 && (
@@ -415,7 +415,7 @@
                   onChange={(e) =>
                     handleCourseChange(index, "course", e.target.value)
                   }
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-violet-600 focus:outline-none"
+                  className="w-full p-2 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
                   placeholder="B.Tech Computer Science"
                   required
                 />
@@ -434,7 +434,7 @@
                       userIdprop ? course.duration || "" : course.duration || ""
                     }
                     onChange={(e) => handleDurationChange(index, e.target.value)}
-                    className="w-full p-2 border rounded focus:ring-2 focus:ring-violet-600 focus:outline-none"
+                    className="w-full p-2 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
                     placeholder="4"
                     min="1"
                     required
@@ -444,7 +444,7 @@
                     onChange={(e) =>
                       handleDurationUnitChange(index, e.target.value)
                     }
-                    className="p-2 border rounded focus:ring-2 focus:ring-violet-600 focus:outline-none"
+                    className="p-2 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
                     required
                   >
                     <option value="Years">Years</option>
@@ -468,7 +468,7 @@
                     onChange={(e) =>
                       handleCourseChange(index, "fee", e.target.value)
                     }
-                    className="w-full p-2 pl-8 border rounded focus:ring-2 focus:ring-violet-600 focus:outline-none"
+                    className="w-full p-2 pl-8 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
                     placeholder="50,000"
                     required
                   />

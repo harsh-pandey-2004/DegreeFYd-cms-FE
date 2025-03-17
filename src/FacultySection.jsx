@@ -52,7 +52,7 @@ const FacultySection = ({
         <button
           type="button"
           onClick={handleAddFaculty}
-          className="px-3 py-1 bg-violet-600 text-white rounded hover:bg-violet-600 text-sm transition duration-200 ease-in-out"
+          className="px-3 py-1 bg-[#155DFC] text-white rounded hover:bg-[#155DFC] text-sm transition duration-200 ease-in-out"
         >
           Add Faculty
         </button>

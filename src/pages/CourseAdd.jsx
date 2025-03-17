@@ -282,7 +282,7 @@ const CourseForm = ({ userIdprop }) => {
             // ref={sectionRefs.basicInfo}
             className="bg-white rounded-lg shadow-md px-6"
           >
-            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
               Basic Information
             </h3>
 
@@ -449,7 +449,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.overview}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
               Course Overview
             </h3>
 
@@ -516,7 +516,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.eligibility}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
               Eligibility
             </h3>
 
@@ -575,7 +575,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.admissions}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
               Admission Process
             </h3>
 
@@ -613,7 +613,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.fees}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
               Fees and Financial Assistance
             </h3>
 
@@ -645,7 +645,7 @@ const CourseForm = ({ userIdprop }) => {
                     id="scholarship"
                     checked={course.scholarship}
                     onChange={handleInputChange}
-                    className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-[#155DFC] focus:ring-purple-500 border-gray-300 rounded"
                   />
                   <label
                     htmlFor="scholarship"
@@ -662,7 +662,7 @@ const CourseForm = ({ userIdprop }) => {
                     id="loanAssistance"
                     checked={course.loanAssistance}
                     onChange={handleInputChange}
-                    className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-[#155DFC] focus:ring-purple-500 border-gray-300 rounded"
                   />
                   <label
                     htmlFor="loanAssistance"
@@ -681,7 +681,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.specializations}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
               Specializations
             </h3>
 
@@ -778,7 +778,7 @@ const CourseForm = ({ userIdprop }) => {
                 <button
                   type="button"
                   onClick={addSpecialization}
-                  className="px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-600 transition-colors duration-200 flex items-center"
+                  className="px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-[#155DFC] transition-colors duration-200 flex items-center"
                 >
                   <span className="mr-1">+</span> Add Specialization
                 </button>
@@ -792,7 +792,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.syllabus}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
               Syllabus
             </h3>
 
@@ -849,7 +849,7 @@ const CourseForm = ({ userIdprop }) => {
                 <button
                   type="button"
                   onClick={addSemester}
-                  className="mt-4 px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-600 transition-colors duration-200 flex items-center"
+                  className="mt-4 px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-[#155DFC] transition-colors duration-200 flex items-center"
                 >
                   <span className="mr-1">+</span> Add Semester
                 </button>
@@ -863,7 +863,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.career}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
               Career Opportunities
             </h3>
 
@@ -957,7 +957,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.faq}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
               FAQs
             </h3>
 
@@ -1019,7 +1019,7 @@ const CourseForm = ({ userIdprop }) => {
                 <button
                   type="button"
                   onClick={addFaq}
-                  className="px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-600 transition-colors duration-200 flex items-center"
+                  className="px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-[#155DFC] transition-colors duration-200 flex items-center"
                 >
                   <span className="mr-1">+</span> Add FAQ
                 </button>
@@ -1033,7 +1033,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.benefits}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
               Benefits
             </h3>
 
@@ -1069,7 +1069,7 @@ const CourseForm = ({ userIdprop }) => {
           <div className="text-center py-6">
             <button
               type="submit"
-              className="px-8 py-3 bg-purple-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 transition-colors duration-200"
+              className="px-8 py-3 bg-[#155DFC] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 transition-colors duration-200"
             >
               Send for Approval{" "}
             </button>

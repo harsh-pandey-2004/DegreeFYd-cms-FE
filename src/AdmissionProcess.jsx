@@ -32,7 +32,7 @@ const AdmissionProcessSection = ({
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md" id="admission-process">
-      <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+      <h2 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
         Admission Process
       </h2>
 
@@ -53,11 +53,11 @@ const AdmissionProcessSection = ({
 
       <div className="mb-4">
         <div className="flex justify-between items-center">
-          <h3 className="font-medium text-lg mb-2 text-violet-600">Admission Steps</h3>
+          <h3 className="font-medium text-lg mb-2 text-[#155DFC]">Admission Steps</h3>
           <button
             type="button"
             onClick={addAdmissionStep}
-            className="px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-600 flex items-center"
+            className="px-4 py-2 bg-[#155DFC] text-white rounded hover:bg-[#155DFC] flex items-center"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
@@ -70,7 +70,7 @@ const AdmissionProcessSection = ({
       {formData.admissionProcess.steps.map((step, index) => (
         <div key={index} className="mb-4 p-4 border rounded-lg bg-gray-50 hover:shadow-md transition-shadow">
           <div className="flex justify-between items-center mb-3">
-            <label className="font-medium text-violet-600">
+            <label className="font-medium text-[#155DFC]">
               Step {index + 1} <span className="text-red-500">*</span>
             </label>
             {formData.admissionProcess.steps.length > 1 && (
@@ -87,7 +87,7 @@ const AdmissionProcessSection = ({
             )}
           </div>
           <div className="relative">
-            <span className="absolute top-3 left-3 flex items-center justify-center h-5 w-5 bg-violet-600 text-white rounded-full text-xs">
+            <span className="absolute top-3 left-3 flex items-center justify-center h-5 w-5 bg-[#155DFC] text-white rounded-full text-xs">
               {index + 1}
             </span>
             <input
@@ -101,7 +101,7 @@ const AdmissionProcessSection = ({
                   "steps"
                 )
               }
-              className="w-full p-2 pl-10 border rounded focus:ring-2 focus:ring-violet-600 focus:outline-none"
+              className="w-full p-2 pl-10 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
               placeholder="Describe this admission step"
               required
             />

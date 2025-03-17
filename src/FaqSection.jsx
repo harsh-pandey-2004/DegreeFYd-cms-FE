@@ -21,7 +21,7 @@ const FaqSection = ({ formData, handleArrayChange }) => {
 
   return (
     <div className="p-4 bg-white rounded-lg shadow" id="faq">
-      <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">Frequently Asked Questions</h2>
+      <h2 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">Frequently Asked Questions</h2>
       
       {formData.faq.map((faq, index) => (
         <div key={index} className="mb-4 p-3 border border-gray-200 rounded">
@@ -64,7 +64,7 @@ const FaqSection = ({ formData, handleArrayChange }) => {
       <button
         type="button"
         onClick={addFaqItem}
-        className="mt-2 px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-600"
+        className="mt-2 px-4 py-2 bg-[#155DFC] text-white rounded hover:bg-[#155DFC]"
       >
         Add New FAQ
       </button>

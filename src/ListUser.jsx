@@ -159,7 +159,7 @@ const ListUser = () => {
     switch (strength) {
       case "Weak": return "text-red-500";
       case "Medium": return "text-yellow-500";
-      case "Strong": return "text-violet-600";
+      case "Strong": return "text-[#155DFC]";
       case "Too Short": return "text-red-500";
       default: return "";
     }
@@ -290,7 +290,7 @@ const ListUser = () => {
               Cancel
             </button>
             <button
-              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
+              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-[#155DFC]"
               onClick={handleChangeRole}
               disabled={roleLoading === selectedUser?._id}
             >
@@ -364,7 +364,7 @@ const ListUser = () => {
               Cancel
             </button>
             <button
-              className="px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-600"
+              className="px-4 py-2 bg-[#155DFC] text-white rounded hover:bg-[#155DFC]"
               onClick={handleResetPassword}
               disabled={passwordLoading === selectedUser?._id || (newPassword && newPassword.length < 6)}
             >
@@ -428,13 +428,13 @@ const ListUser = () => {
                 </td>
                 <td className="px-4 py-2 border flex space-x-1">
                   <button
-                    className="px-2 py-1 bg-violet-600 text-white text-sm rounded hover:bg-violet-600"
+                    className="px-2 py-1 bg-[#155DFC] text-white text-sm rounded hover:bg-[#155DFC]"
                     onClick={() => openPasswordModal(user)}
                   >
                     Reset Password
                   </button>
                   <button
-                    className="px-2 py-1 bg-purple-500 text-white text-sm rounded hover:bg-purple-600"
+                    className="px-2 py-1 bg-purple-500 text-white text-sm rounded hover:bg-[#155DFC]"
                     onClick={() => openRoleModal(user)}
                   >
                     Change Role

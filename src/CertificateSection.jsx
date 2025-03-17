@@ -15,7 +15,7 @@ const CertificatesSection = ({
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md" id="accreditations">
-      <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
+      <h2 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
         Accredations & Approvals
       </h2>
 
@@ -46,7 +46,7 @@ const CertificatesSection = ({
           <button
             type="button"
             onClick={triggerFileInput}
-            className="mt-4 px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-600 focus:outline-none focus:ring-2 focus:ring-violet-600"
+            className="mt-4 px-4 py-2 bg-[#155DFC] text-white rounded hover:bg-[#155DFC] focus:outline-none focus:ring-2 focus:ring-[#155DFC]"
           >
             Select Files
           </button>
@@ -60,7 +60,7 @@ const CertificatesSection = ({
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
               <div
-                className="bg-violet-600 h-2.5 rounded-full transition-all duration-300"
+                className="bg-[#155DFC] h-2.5 rounded-full transition-all duration-300"
                 style={{
                   width: `${uploadProgress["certificates"]}%`,
                 }}
@@ -71,7 +71,7 @@ const CertificatesSection = ({
 
         {formData.certificates && formData.certificates.length > 0 ? (
           <div className="mt-4">
-            <h3 className="font-medium mb-3 text-violet-600">
+            <h3 className="font-medium mb-3 text-[#155DFC]">
               Uploaded Certificates ({formData.certificates.length})
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">

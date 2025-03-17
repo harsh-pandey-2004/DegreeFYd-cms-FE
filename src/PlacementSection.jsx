@@ -49,7 +49,7 @@ const PlacementSection = ({
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md" id="placement-information">
-      <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2"
+      <h2 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2"
       >
         Placement Information
       </h2>
@@ -75,7 +75,7 @@ const PlacementSection = ({
             name="placementRate"
             value={formData.placement.stats.placementRate}
             onChange={(e) => handleDeepNestedChange(e, "placement", "stats")}
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-violet-600"
+            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-[#155DFC]"
             placeholder="e.g., 95%"
             required
           />
@@ -87,7 +87,7 @@ const PlacementSection = ({
             name="highestPackage"
             value={formData.placement.stats.highestPackage}
             onChange={(e) => handleDeepNestedChange(e, "placement", "stats")}
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-violet-600"
+            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-[#155DFC]"
             placeholder="e.g., ₹10 LPA"
             required
           />
@@ -100,7 +100,7 @@ const PlacementSection = ({
           <button
             type="button"
             onClick={handleAddCompany}
-            className="px-3 py-1 bg-violet-600 text-white rounded hover:bg-violet-600 text-sm transition duration-200 ease-in-out"
+            className="px-3 py-1 bg-[#155DFC] text-white rounded hover:bg-[#155DFC] text-sm transition duration-200 ease-in-out"
           >
             Add Company
           </button>
@@ -121,7 +121,7 @@ const PlacementSection = ({
                     "topCompanies"
                   )
                 }
-                className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-violet-600"
+                className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-[#155DFC]"
                 placeholder="Enter company name"
                 required
               />
@@ -166,7 +166,7 @@ const PlacementSection = ({
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div
-                  className="bg-violet-600 h-2.5 rounded-full transition-all duration-300"
+                  className="bg-[#155DFC] h-2.5 rounded-full transition-all duration-300"
                   style={{
                     width: `${uploadProgress["placement.companies"]}%`,
                   }}
