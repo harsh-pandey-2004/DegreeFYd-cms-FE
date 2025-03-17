@@ -18,7 +18,6 @@ import CourseAdd from "../pages/CourseAdd";
 import DashboardBlogs from "../DashboardBlogs";
 import AddBlogs from "../AddBlogs";
 
-// Protected route component to check authentication
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
@@ -34,7 +33,6 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   return children;
 };
 
-// Wrapper component to access location outside of Routes
 const AppRouterWithLocation = () => {
   return (
     <BrowserRouter>
@@ -43,14 +41,12 @@ const AppRouterWithLocation = () => {
   );
 };
 
-// Inner component that has access to location
 const LocationAwareRouter = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [id, setId] = useState(false);
 
   const location = useLocation();
 
-  // Sidebar should be visible on "/", "/add-course", "/dashboard", and "/list-courses" when `id` is truthy
   const showSidebar =
     location.pathname === "/" ||
     location.pathname === "/add-course" ||
@@ -58,13 +54,11 @@ const LocationAwareRouter = () => {
       (location.pathname === "/dashboard" ||
         location.pathname === "/list-courses"));
 
-  // Check for token on first render
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
   }, []);
 
-  // Logout function to be passed to Navbar
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
@@ -73,14 +67,15 @@ const LocationAwareRouter = () => {
 
   return (
     <div>
-      <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} setId={setId}/>
-      {showSidebar && <Sidebar />} {/* Sidebar conditionally rendered */}
+      <Navbar
+        isAuthenticated={isAuthenticated}
+        onLogout={handleLogout}
+        setId={setId}
+      />
+      {showSidebar && <Sidebar />} 
       <div className={showSidebar ? "ml-80" : ""}>
         <Routes>
-          {/* Public routes */}
           <Route path="/login" element={<Login />} />
-
-          {/* Admin-only routes */}
           <Route
             path="/register"
             element={
@@ -97,8 +92,6 @@ const LocationAwareRouter = () => {
               </ProtectedRoute>
             }
           />
-
-          {/* Protected routes */}
           <Route
             path="/dashboard"
             element={
