@@ -21,7 +21,7 @@ import ApproveComponent from "./ApproveCourse";
 import RejectComponent from "./RejectCourse";
 import DOMPurify from "dompurify";
 
-const Dashboard = ({setId}) => {
+const Dashboard = ({ setId }) => {
   const [responses, setResponses] = useState([]);
   const [filteredResponses, setFilteredResponses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -348,7 +348,6 @@ const Dashboard = ({setId}) => {
         <div className="truncate" style={{ maxWidth: maxWidth || "200px" }}>
           {text}
         </div>
-        
       </div>
     );
   };
@@ -464,8 +463,11 @@ const Dashboard = ({setId}) => {
         {openEdit ? (
           <div>
             <button
-              onClick={() => setopenEdit(false)}
-              className="mb-4 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+              onClick={() => {
+                setopenEdit(false);
+                window.location.reload();
+              }}
+              className="  px-4 py-2 mt-5 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
             >
               Back to List
             </button>
@@ -784,7 +786,7 @@ const Dashboard = ({setId}) => {
                               onClick={() => {
                                 setopenEdit(true);
                                 setSelectedCollege(courses._id);
-                                setId(true)
+                                setId(true);
                               }}
                             >
                               <Edit size={16} />
