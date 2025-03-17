@@ -93,7 +93,7 @@ const CourseForm = ({ userIdprop }) => {
     const fetchEditInfo = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/courses1/${userIdprop}`
+          `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
         );
         setCourse(response.data.data);
       } catch (error) {
@@ -239,7 +239,7 @@ const CourseForm = ({ userIdprop }) => {
     if (course) {
       try {
         if (userIdprop) {
-          let a = await axios.put(`http://localhost:5000/api/courses1/${userIdprop}`, {
+          let a = await axios.put(`https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`, {
             ...course,
             createdBy: localStorage.getItem("userId"),
           });
@@ -247,7 +247,7 @@ const CourseForm = ({ userIdprop }) => {
           navigate("/list-courses");
           window.location.reload();
         } else {
-          let a = await axios.post("http://localhost:5000/api/courses1", {
+          let a = await axios.post("https://degreefydcmsbe.onrender.com/api/courses1", {
             ...course,
             createdBy: localStorage.getItem("userId"),
           });
