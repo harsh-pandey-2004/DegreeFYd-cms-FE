@@ -11,7 +11,7 @@ import Login from "../components/login";
 import Register from "../components/register";
 import Navbar from "../components/Navbar";
 import Dashboard from "../Dashboard";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/SIdebar";
 import ListUser from "../ListUser";
 import DashboardCourse from "../pages/DashboardCourse";
 import CourseAdd from "../pages/CourseAdd";
@@ -23,7 +23,6 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
   const location = useLocation();
-
   if (!token) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
@@ -47,9 +46,17 @@ const AppRouterWithLocation = () => {
 // Inner component that has access to location
 const LocationAwareRouter = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [id, setId] = useState(false);
+
   const location = useLocation();
+
+  // Sidebar should be visible on "/", "/add-course", "/dashboard", and "/list-courses" when `id` is truthy
   const showSidebar =
-    location.pathname === "/" || location.pathname === "/add-course";
+    location.pathname === "/" ||
+    location.pathname === "/add-course" ||
+    (id &&
+      (location.pathname === "/dashboard" ||
+        location.pathname === "/list-courses"));
 
   // Check for token on first render
   useEffect(() => {
@@ -66,8 +73,8 @@ const LocationAwareRouter = () => {
 
   return (
     <div>
-      <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} />
-      {showSidebar && <Sidebar />} {/* Sidebar only on / and /add-course */}
+      <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} setId={setId}/>
+      {showSidebar && <Sidebar />} {/* Sidebar conditionally rendered */}
       <div className={showSidebar ? "ml-80" : ""}>
         <Routes>
           {/* Public routes */}
@@ -96,7 +103,7 @@ const LocationAwareRouter = () => {
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <Dashboard setId={setId} />
               </ProtectedRoute>
             }
           />
@@ -104,7 +111,7 @@ const LocationAwareRouter = () => {
             path="/list-courses"
             element={
               <ProtectedRoute>
-                <DashboardCourse />
+                <DashboardCourse setId={setId} />
               </ProtectedRoute>
             }
           />

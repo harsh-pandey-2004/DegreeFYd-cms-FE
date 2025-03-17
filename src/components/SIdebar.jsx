@@ -80,7 +80,7 @@ const Sidebar = () => {
       <h3 className="text-lg font-semibold mb-4 text-violet-800 border-b pb-2">
         {location.pathname === "/add-college"
           ? "Add College Information"
-          : "College Information"}
+          : "Course Information"}
       </h3>
       <ul className="space-y-1">
         {menuItems.map((item) => (

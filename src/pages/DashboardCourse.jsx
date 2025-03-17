@@ -21,14 +21,13 @@ import ApproveComponent from "./ApproveCourse";
 import RejectComponent from "./RejectCourse";
 import DOMPurify from "dompurify";
 
-const Dashboard = () => {
+const Dashboard = ({setId}) => {
   const [responses, setResponses] = useState([]);
   const [filteredResponses, setFilteredResponses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openEdit, setopenEdit] = useState(false);
   const [selectedCollege, setSelectedCollege] = useState(null);
   const [viewMode, setViewMode] = useState("list"); // 'list', 'preview', 'approve', or 'reject'
-  const [previewCollege, setPreviewCollege] = useState(null);
   const [approvalNotes, setApprovalNotes] = useState("");
   const [rejectionReason, setRejectionReason] = useState("");
   const [processingAction, setProcessingAction] = useState(false);
@@ -785,6 +784,7 @@ const Dashboard = () => {
                               onClick={() => {
                                 setopenEdit(true);
                                 setSelectedCollege(courses._id);
+                                setId(true)
                               }}
                             >
                               <Edit size={16} />

@@ -31,15 +31,65 @@ const CourseForm = ({ userIdprop }) => {
     benefitsOfOnlineMBA: "",
     image: "",
   });
+  const formStorageKey = userIdprop
+    ? `courseForm_${userIdprop}`
+    : "courseForm_draft";
+
+  useEffect(() => {
+    const savedFormData = localStorage.getItem(formStorageKey);
+    if (savedFormData) {
+      try {
+        const parsedData = JSON.parse(savedFormData);
+        setCourse(parsedData);
+        console.log("Form data loaded from localStorage");
+      } catch (e) {
+        console.error("Error parsing saved form data:", e);
+      }
+    }
+  }, [formStorageKey]);
+
+  // Save form data to localStorage whenever it changes
+  useEffect(() => {
+    // Don't save if it's the initial empty state or there's nothing meaningful entered
+    if (course.courseTitle) {
+      try {
+        localStorage.setItem(formStorageKey, JSON.stringify(course));
+        console.log("Form data saved to localStorage");
+      } catch (e) {
+        console.error("Error saving form data:", e);
+      }
+    }
+  }, [course, formStorageKey]);
+  useEffect(() => {
+    // Setup autosave every 30 seconds
+    const autosaveInterval = setInterval(() => {
+      if (course) {
+        try {
+          localStorage.setItem(formStorageKey, JSON.stringify(course));
+          console.log("Form data autosaved to localStorage");
+        } catch (e) {
+          console.error("Error autosaving form data:", e);
+        }
+      }
+    }, 30000); // 30 seconds
+
+    // Clean up interval on component unmount
+    return () => clearInterval(autosaveInterval);
+  }, [course, formStorageKey]);
+
+  // Clear localStorage when form is successfully submitted
+  const clearSavedFormData = () => {
+    localStorage.removeItem(formStorageKey);
+    console.log("Cleared saved form data after successful submission");
+  };
   useEffect(() => {
     const fetchEditInfo = async () => {
       try {
-        console;
         const response = await axios.get(
           `http://localhost:5000/api/courses1/${userIdprop}`
         );
         console.log(response.data);
-        setCourse(response.data);
+        setCourse(response.data.data);
       } catch (error) {
         console.error("Error fetching course:", error);
       }
@@ -47,7 +97,7 @@ const CourseForm = ({ userIdprop }) => {
     if (userIdprop) {
       fetchEditInfo();
     }
-  });
+  }, []);
   // Create refs for each section for scrolling
   const sectionRefs = {
     basicInfo: useRef(),
@@ -187,6 +237,7 @@ const CourseForm = ({ userIdprop }) => {
           ...course,
           createdBy: localStorage.getItem("userId"),
         });
+        clearSavedFormData();
       } catch (error) {
         console.error("Error adding course:", error);
       }
@@ -223,12 +274,12 @@ const CourseForm = ({ userIdprop }) => {
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
           Add New Course
         </h1>
-
+        {}
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Basic Information Section */}
           <div
             id="basicInfo"
-            ref={sectionRefs.basicInfo}
+            // ref={sectionRefs.basicInfo}
             className="bg-white rounded-lg shadow-md p-6"
           >
             <h3 className="text-xl font-semibold mb-6 text-purple-600 border-b pb-2">
@@ -236,6 +287,7 @@ const CourseForm = ({ userIdprop }) => {
             </h3>
 
             <div className="space-y-6">
+              {console.log(course, "listcourse")}
               <div>
                 <label
                   htmlFor="courseTitle"
@@ -1019,7 +1071,7 @@ const CourseForm = ({ userIdprop }) => {
               type="submit"
               className="px-8 py-3 bg-purple-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 transition-colors duration-200"
             >
-              Save Course
+              Send for Approvals{" "}
             </button>
           </div>
         </form>

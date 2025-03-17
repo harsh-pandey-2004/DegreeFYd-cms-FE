@@ -21,7 +21,7 @@ import ApproveComponent from "./components/ApproveComponent";
 import RejectComponent from "./components/RejectComponent";
 import DOMPurify from "dompurify";
 
-const Dashboard = () => {
+const Dashboard = ({ setId }) => {
   const [responses, setResponses] = useState([]);
   const [filteredResponses, setFilteredResponses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -351,7 +351,6 @@ const Dashboard = () => {
         <div className="truncate" style={{ maxWidth: maxWidth || "200px" }}>
           {text}
         </div>
-       
       </div>
     );
   };
@@ -787,6 +786,7 @@ const Dashboard = () => {
                               onClick={() => {
                                 setopenEdit(true);
                                 setSelectedCollege(college._id);
+                                setId(true);
                               }}
                             >
                               <Edit size={16} />

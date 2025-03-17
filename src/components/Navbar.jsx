@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import DegreeFydLogo  from '../assets/logo.png'
-const Navbar = ({ isAuthenticated, onLogout }) => {
+import DegreeFydLogo from "../assets/logo.png";
+
+const Navbar = ({ isAuthenticated, onLogout, setId }) => {
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
   const [showAddContentDropdown, setShowAddContentDropdown] = useState(false);
@@ -22,14 +23,21 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
     if (showAddContentDropdown) setShowAddContentDropdown(false);
   };
 
+  const handleLinkClick = () => {
+    setId(false);
+    setShowAddContentDropdown(false);
+    setShowDashboardDropdown(false);
+    window.location.reload()
+  };
+
   return (
     <nav className="bg-gray-50 fixed w-full z-50 text-black shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <Link to="/list-user" className="text-black font-bold text-xl">
-               <img src={DegreeFydLogo} alt="logo" className="h-14 w-full"></img>
+              <Link to="/list-user" onClick={handleLinkClick} className="text-black font-bold text-xl">
+                <img src={DegreeFydLogo} alt="logo" className="h-14 w-full"></img>
               </Link>
             </div>
 
@@ -42,46 +50,19 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                     className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center"
                   >
                     Dashboard
-                    <svg
-                      className="w-4 h-4 ml-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d={
-                          showDashboardDropdown
-                            ? "M5 15l7-7 7 7"
-                            : "M19 9l-7 7-7-7"
-                        }
-                      ></path>
+                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={showDashboardDropdown ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}></path>
                     </svg>
                   </button>
                   {showDashboardDropdown && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                      <Link
-                        to="/list-colleges"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setShowDashboardDropdown(false)}
-                      >
+                      <Link to="/list-colleges" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={handleLinkClick}>
                         List Colleges
                       </Link>
-                      <Link
-                        to="/list-courses"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setShowDashboardDropdown(false)}
-                      >
+                      <Link to="/list-courses" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={handleLinkClick}>
                         List Courses
                       </Link>
-                      <Link
-                        to="/list-blogs"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setShowDashboardDropdown(false)}
-                      >
+                      <Link to="/list-blogs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={handleLinkClick}>
                         List Blogs
                       </Link>
                     </div>
@@ -95,46 +76,19 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                     className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center"
                   >
                     Add Content
-                    <svg
-                      className="w-4 h-4 ml-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d={
-                          showAddContentDropdown
-                            ? "M5 15l7-7 7 7"
-                            : "M19 9l-7 7-7-7"
-                        }
-                      ></path>
+                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={showAddContentDropdown ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}></path>
                     </svg>
                   </button>
                   {showAddContentDropdown && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                      <Link
-                        to="/"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setShowAddContentDropdown(false)}
-                      >
+                      <Link to="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={handleLinkClick}>
                         Add Colleges
                       </Link>
-                      <Link
-                        to="/add-course"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setShowAddContentDropdown(false)}
-                      >
+                      <Link to="/add-course" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={handleLinkClick}>
                         Add Courses
                       </Link>
-                      <Link
-                        to="/add-blogs"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setShowAddContentDropdown(false)}
-                      >
+                      <Link to="/add-blogs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={handleLinkClick}>
                         Add Blogs
                       </Link>
                     </div>
@@ -143,16 +97,10 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
 
                 {role === "admin" && (
                   <>
-                    <Link
-                      to="/register"
-                      className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium"
-                    >
+                    <Link to="/register" className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium" onClick={handleLinkClick}>
                       Register New User
                     </Link>
-                    <Link
-                      to="/list-user"
-                      className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium"
-                    >
+                    <Link to="/list-user" className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium" onClick={handleLinkClick}>
                       List User
                     </Link>
                   </>
@@ -163,17 +111,11 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
 
           <div>
             {isAuthenticated ? (
-              <button
-                onClick={handleLogout}
-                className="text-white bg-violet-600 hover:bg-violet-600 px-4 py-2 rounded-md text-sm font-medium"
-              >
+              <button onClick={handleLogout} className="text-white bg-violet-600 hover:bg-violet-600 px-4 py-2 rounded-md text-sm font-medium">
                 Logout
               </button>
             ) : (
-              <Link
-                to="/login"
-                className="text-white bg-violet-600 hover:bg-violet-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
+              <Link to="/login" className="text-white bg-violet-600 hover:bg-violet-600 px-3 py-2 rounded-md text-sm font-medium" onClick={handleLinkClick}>
                 Login
               </Link>
             )}
