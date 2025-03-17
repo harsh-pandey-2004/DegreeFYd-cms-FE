@@ -806,6 +806,8 @@ export const CollegeForm = ({ userIdprop }) => {
           formattedData
         );
         alert("College Approved Request Send Successfuly!");
+        navigate("/dashboard");
+        window.location.reload();
         setMessage("College Approved Request Send Successfuly!");
       } else {
         response = await axios.post(
@@ -813,6 +815,8 @@ export const CollegeForm = ({ userIdprop }) => {
           formattedData
         );
         alert("College Approved Request Send Successfuly!");
+        navigate("/dashboard");
+
         setMessage("College Approved Request Send Successfuly!");
       }
 
@@ -986,7 +990,10 @@ export const CollegeForm = ({ userIdprop }) => {
   }, [formData]);
   return (
     <div className="max-w-6xl mx-auto px-4 bg-gray-50">
-      <h1 className="text-2xl font-bold mb-6 text-center">College CMS</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center">
+        {" "}
+        {userIdprop ? "Edit New College" : "Add New College"}
+      </h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <BasicInfoSection

@@ -7,7 +7,7 @@ const Sidebar = () => {
 
   // Define menu items based on the path
   const menuItems =
-    location.pathname === "/add-course"
+    location.pathname === "/add-course"|| location.pathname === "/list-courses"
       ? [
           { id: "basicInfo", label: "Basic Info" },
           { id: "overview", label: "Overview" },

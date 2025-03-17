@@ -33,7 +33,7 @@ const Register = () => {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     if (userRole !== "admin") {
-      navigate("/dashboard");
+      navigate("/dashboard/course_list");
     }
   }, [navigate]);
 

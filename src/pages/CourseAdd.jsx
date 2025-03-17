@@ -2,8 +2,10 @@ import axios from "axios";
 import React, { useState, useRef, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useNavigate } from "react-router-dom";
 
 const CourseForm = ({ userIdprop }) => {
+  const navigate = useNavigate()
   const [course, setCourse] = useState({
     createdBy: localStorage.getItem("userId"),
     courseTitle: "",
@@ -37,7 +39,7 @@ const CourseForm = ({ userIdprop }) => {
 
   useEffect(() => {
     const savedFormData = localStorage.getItem(formStorageKey);
-    if (savedFormData ) {
+    if (savedFormData) {
       try {
         const parsedData = JSON.parse(savedFormData);
         setCourse(parsedData);
@@ -76,17 +78,17 @@ const CourseForm = ({ userIdprop }) => {
   const clearSavedFormData = () => {
     localStorage.removeItem(formStorageKey);
   };
-    const [lastSavedTime, setLastSavedTime] = useState(null);
-  
-    // Update last saved time
-    useEffect(() => {
-      if (
-        course &&
-        (course.courseTitle || course.admissionProcess || course.careerScope)
-      ) {
-        setLastSavedTime(new Date());
-      }
-    }, [course]);
+  const [lastSavedTime, setLastSavedTime] = useState(null);
+
+  // Update last saved time
+  useEffect(() => {
+    if (
+      course &&
+      (course.courseTitle || course.admissionProcess || course.careerScope)
+    ) {
+      setLastSavedTime(new Date());
+    }
+  }, [course]);
   useEffect(() => {
     const fetchEditInfo = async () => {
       try {
@@ -236,12 +238,27 @@ const CourseForm = ({ userIdprop }) => {
     e.preventDefault();
     if (course) {
       try {
-        let a = axios.post("http://localhost:5000/api/courses1", {
-          ...course,
-          createdBy: localStorage.getItem("userId"),
-        });
-        clearSavedFormData();
+        if (userIdprop) {
+          let a = await axios.put(`http://localhost:5000/api/courses1/${userIdprop}`, {
+            ...course,
+            createdBy: localStorage.getItem("userId"),
+          });
+          alert("Your Approval Request is been Sent for course");
+          navigate("/list-courses");
+          window.location.reload();
+        } else {
+          let a = await axios.post("http://localhost:5000/api/courses1", {
+            ...course,
+            createdBy: localStorage.getItem("userId"),
+          });
+          alert("Your Approval Request is been Sent for course");
+          clearSavedFormData();
+          navigate("/list-courses");
+          window.location.reload();
+        }
       } catch (error) {
+        alert("Error adding course");
+
         console.error("Error adding course:", error);
       }
     }
@@ -275,7 +292,7 @@ const CourseForm = ({ userIdprop }) => {
     <div className="bg-gray-50">
       <div className="container mx-auto px-4 pb-8">
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-          Add New Course
+          {userIdprop ? "Edit New Course" : "Add New Course"}
         </h1>
         {}
         <form onSubmit={handleSubmit} className="space-y-8">

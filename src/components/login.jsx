@@ -78,7 +78,7 @@ const Login = () => {
       localStorage.setItem("userId", res.data._id);
 
       setLoading(false);
-      navigate("/dashboard");
+      navigate("/dashboard/course_list");
       window.location.reload();
     } catch (err) {
       setLoading(false);
