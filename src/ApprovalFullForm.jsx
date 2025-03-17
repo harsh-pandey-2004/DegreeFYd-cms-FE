@@ -35,16 +35,16 @@ const ApprovalsSection = ({ formData, setFormData }) => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mt-6">
-      <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-blue-700">
+      <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
         Approvals & Full Forms
       </h2>
 
       <div className="mb-4 flex justify-between items-center">
-        <h3 className="font-medium text-lg text-blue-700">Approvals</h3>
+        <h3 className="font-medium text-lg text-violet-600">Approvals</h3>
         <button
           type="button"
           onClick={addApproval}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 flex items-center"
+          className="px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-600 flex items-center"
         >
           Add Approval
         </button>
@@ -66,7 +66,7 @@ const ApprovalsSection = ({ formData, setFormData }) => {
                 onChange={(e) =>
                   handleApprovalChange(index, "abbreviation", e.target.value)
                 }
-                className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full p-2 border rounded focus:ring-2 focus:ring-violet-600 focus:outline-none"
                 placeholder="Enter Approval Name (e.g., UGC)"
                 required
               />
@@ -82,7 +82,7 @@ const ApprovalsSection = ({ formData, setFormData }) => {
                 onChange={(e) =>
                   handleApprovalChange(index, "fullForm", e.target.value)
                 }
-                className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full p-2 border rounded focus:ring-2 focus:ring-violet-600 focus:outline-none"
                 placeholder="Enter Full Form (e.g., University Grants Commission)"
                 required
               />

@@ -61,11 +61,11 @@ const OverviewSection = ({
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 my-6" id="overview">
       <div className="flex justify-between items-center mb-6 border-b pb-3">
-        <h2 className="text-2xl font-bold text-indigo-700">Overview</h2>
+        <h2 className="text-2xl font-bold text-violet-600">Overview</h2>
         <button
           type="button"
           onClick={handleAddOverviewPoint}
-          className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors duration-300 flex items-center"
+          className="bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-600 transition-colors duration-300 flex items-center"
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 

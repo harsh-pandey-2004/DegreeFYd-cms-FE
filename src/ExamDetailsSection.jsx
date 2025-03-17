@@ -116,7 +116,7 @@ const ExamDetailsSection = ({
       {/* Main Content */}
       <div className=" ">
         <div className="bg-white p-6 rounded-lg shadow-md w-full" id="exam-details">
-          <h2 className="text-2xl font-semibold mb-6 border-b pb-3 text-blue-800">
+          <h2 className="text-2xl font-semibold mb-6 border-b pb-3 text-violet-600">
             Exam Details
           </h2>
 
@@ -126,7 +126,7 @@ const ExamDetailsSection = ({
               id="exam-information"
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300"
             >
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-blue-700">
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
                 Exam Information
               </h2>
 
@@ -140,7 +140,7 @@ const ExamDetailsSection = ({
                     name="difficulty"
                     value={formData.examDetails.difficulty}
                     onChange={(e) => handleNestedChange(e, "examDetails")}
-                    className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-3 border rounded-md focus:ring-2 focus:ring-violet-600 focus:border-violet-600"
                     placeholder="e.g. Moderate, High, Low"
                     required
                   />
@@ -154,7 +154,7 @@ const ExamDetailsSection = ({
                     name="averageCGPA"
                     value={formData.examDetails.averageCGPA}
                     onChange={(e) => handleNestedChange(e, "examDetails")}
-                    className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-3 border rounded-md focus:ring-2 focus:ring-violet-600 focus:border-violet-600"
                     placeholder="e.g. 8.5"
                     required
                   />
@@ -168,7 +168,7 @@ const ExamDetailsSection = ({
                     name="minimumCGPA"
                     value={formData.examDetails.minimumCGPA}
                     onChange={(e) => handleNestedChange(e, "examDetails")}
-                    className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-3 border rounded-md focus:ring-2 focus:ring-violet-600 focus:border-violet-600"
                     placeholder="e.g. 7.0"
                     required
                   />
@@ -197,7 +197,7 @@ const ExamDetailsSection = ({
               id="gallery"
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-blue-700">
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
                 Gallery Images <span className="text-red-500">*</span>
               </h2>
               <div className="mb-4">
@@ -208,7 +208,7 @@ const ExamDetailsSection = ({
                   type="file"
                   multiple
                   onChange={(e) => handleMultipleFileUpload1(e, "gallery")}
-                  className="w-full p-3 border rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors duration-200"
+                  className="w-full p-3 border rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-violet-600 hover:file:bg-blue-100 transition-colors duration-200"
                   accept="image/*"
                   required={formData.gallery.length === 0}
                 />
@@ -216,7 +216,7 @@ const ExamDetailsSection = ({
                   uploadProgress["gallery"] < 100 && (
                     <div className="w-full bg-gray-200 rounded-full h-2.5 mt-3">
                       <div
-                        className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                        className="bg-violet-600 h-2.5 rounded-full transition-all duration-300"
                         style={{
                           width: `${uploadProgress["gallery"]}%`,
                         }}
@@ -265,7 +265,7 @@ const ExamDetailsSection = ({
               id="sample-degree"
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-blue-700">
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
                 Sample Degree <span className="text-red-500">*</span>
               </h2>
 
@@ -293,7 +293,7 @@ const ExamDetailsSection = ({
                 <input
                   type="file"
                   onChange={(e) => handleSingleFileUpload(e, "sampleDegree.image")}
-                  className="w-full p-3 border rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors duration-200"
+                  className="w-full p-3 border rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-violet-600 hover:file:bg-blue-100 transition-colors duration-200"
                   accept="image/*"
                   required={!formData.sampleDegree.image}
                 />
@@ -301,7 +301,7 @@ const ExamDetailsSection = ({
                   uploadProgress["sampleDegree.image"] < 100 && (
                     <div className="w-full bg-gray-200 rounded-full h-2.5 mt-3">
                       <div
-                        className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                        className="bg-violet-600 h-2.5 rounded-full transition-all duration-300"
                         style={{
                           width: `${uploadProgress["sampleDegree.image"]}%`,
                         }}
@@ -343,7 +343,7 @@ const ExamDetailsSection = ({
               id="student-reviews"
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-blue-700">
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
                 Student Reviews <span className="text-red-500">*</span>
               </h2>
 
@@ -354,7 +354,7 @@ const ExamDetailsSection = ({
                     className="mb-6 p-5 border rounded-md bg-gray-50 transition-all duration-200 hover:shadow-sm"
                   >
                     <div className="flex justify-between items-center mb-3">
-                      <h4 className="font-medium text-blue-700">
+                      <h4 className="font-medium text-violet-600">
                         Review {reviewIndex + 1}
                       </h4>
                       {formData.reviews.length > 1 && (
@@ -392,7 +392,7 @@ const ExamDetailsSection = ({
                         onChange={(e) =>
                           handleReviewChange(reviewIndex, "name", e.target.value)
                         }
-                        className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-3 border rounded-md focus:ring-2 focus:ring-violet-600 focus:border-violet-600"
                         placeholder="Enter student name"
                         required
                       />
@@ -452,7 +452,7 @@ const ExamDetailsSection = ({
                                   e.target.value
                                 )
                               }
-                              className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full p-3 border rounded-md focus:ring-2 focus:ring-violet-600 focus:border-violet-600"
                               placeholder="e.g. Positive, Negative, Course, Faculty"
                               required
                             />
@@ -490,7 +490,7 @@ const ExamDetailsSection = ({
                     <button
                       type="button"
                       onClick={() => addReviewItem(reviewIndex)}
-                      className="mt-3 px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors duration-200 flex items-center text-sm font-medium"
+                      className="mt-3 px-4 py-2 bg-blue-50 text-violet-600 rounded-md hover:bg-blue-100 transition-colors duration-200 flex items-center text-sm font-medium"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -519,7 +519,7 @@ const ExamDetailsSection = ({
               <button
                 type="button"
                 onClick={addReview}
-                className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center text-sm font-medium"
+                className="mt-3 px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-600 transition-colors duration-200 flex items-center text-sm font-medium"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -544,7 +544,7 @@ const ExamDetailsSection = ({
               id="exam-pattern"
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-blue-700">
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
                 Exam Pattern <span className="text-red-500">*</span>
               </h2>
 
@@ -557,7 +557,7 @@ const ExamDetailsSection = ({
                   name="title"
                   value={formData.examPattern.title}
                   onChange={(e) => handleNestedChange(e, "examPattern")}
-                  className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-3 border rounded-md focus:ring-2 focus:ring-violet-600 focus:border-violet-600"
                   placeholder="e.g. Entrance Exam Pattern"
                   required
                 />
@@ -571,7 +571,7 @@ const ExamDetailsSection = ({
                   <button
                     type="button"
                     onClick={handleAddStep}
-                    className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center text-sm"
+                    className="px-3 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-600 transition-colors duration-200 flex items-center text-sm"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -598,7 +598,7 @@ const ExamDetailsSection = ({
       className="mb-5 relative border p-5 rounded-md shadow-sm bg-white"
     >
       <div className="flex justify-between items-center mb-3">
-        <label className="font-medium text-blue-700">
+        <label className="font-medium text-violet-600">
           Step {index + 1}
         </label>
         <button
@@ -633,7 +633,7 @@ const ExamDetailsSection = ({
           type="text"
           value={step.text || ""}
           onChange={(e) => handleStepChange(index, "text", e.target.value)}
-          className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-2 border rounded-md focus:ring-2 focus:ring-violet-600 focus:border-violet-600"
           placeholder="Enter step title..."
         />
       </div>
@@ -668,7 +668,7 @@ const ExamDetailsSection = ({
           <div className="mt-10 text-center">
             <button
               type="submit"
-              className="px-8 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-200 flex items-center justify-center mx-auto"
+              className="px-8 py-3 bg-violet-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-opacity-50 transition-all duration-200 flex items-center justify-center mx-auto"
               disabled={loading}
             >
               {loading ? (

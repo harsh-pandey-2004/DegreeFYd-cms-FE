@@ -74,7 +74,7 @@ const PlacementSection = ({
             name="placementRate"
             value={formData.placement.stats.placementRate}
             onChange={(e) => handleDeepNestedChange(e, "placement", "stats")}
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-blue-500"
+            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-violet-600"
             placeholder="e.g., 95%"
             required
           />
@@ -86,7 +86,7 @@ const PlacementSection = ({
             name="highestPackage"
             value={formData.placement.stats.highestPackage}
             onChange={(e) => handleDeepNestedChange(e, "placement", "stats")}
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-blue-500"
+            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-violet-600"
             placeholder="e.g., ₹10 LPA"
             required
           />
@@ -99,7 +99,7 @@ const PlacementSection = ({
           <button
             type="button"
             onClick={handleAddCompany}
-            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm transition duration-200 ease-in-out"
+            className="px-3 py-1 bg-violet-600 text-white rounded hover:bg-violet-600 text-sm transition duration-200 ease-in-out"
           >
             Add Company
           </button>
@@ -120,7 +120,7 @@ const PlacementSection = ({
                     "topCompanies"
                   )
                 }
-                className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-blue-500"
+                className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-violet-600"
                 placeholder="Enter company name"
                 required
               />
@@ -165,7 +165,7 @@ const PlacementSection = ({
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div
-                  className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                  className="bg-violet-600 h-2.5 rounded-full transition-all duration-300"
                   style={{
                     width: `${uploadProgress["placement.companies"]}%`,
                   }}

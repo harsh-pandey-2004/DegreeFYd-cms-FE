@@ -374,7 +374,7 @@ const Dashboard = ({ setId }) => {
     return (
       <div className="flex justify-center items-center p-8 h-screen bg-gray-50">
         <div className="flex flex-col items-center bg-white p-8 rounded-lg shadow-md">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600"></div>
           <span className="mt-4 text-gray-700 font-medium">
             Loading colleges data...
           </span>
@@ -424,7 +424,7 @@ const Dashboard = ({ setId }) => {
         {showReasonPopup && (
           <div className="fixed inset-0 bg-transparent bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
             <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 overflow-hidden">
-              <div className="flex justify-between items-center px-6 py-4 bg-blue-600 text-white">
+              <div className="flex justify-between items-center px-6 py-4 bg-violet-600 text-white">
                 <h3 className="text-lg font-medium">
                   Rejection Reason for {popupCollegeName}
                 </h3>
@@ -496,7 +496,7 @@ const Dashboard = ({ setId }) => {
                       placeholder="Search colleges..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                      className="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-violet-600 transition-colors"
                     />
                     <Search
                       size={18}
@@ -508,7 +508,7 @@ const Dashboard = ({ setId }) => {
                   <div className="relative">
                     <button
                       onClick={() => setShowFilters(!showFilters)}
-                      className="px-4 py-2 border border-gray-300 rounded-md flex items-center space-x-2 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="px-4 py-2 border border-gray-300 rounded-md flex items-center space-x-2 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-600"
                     >
                       <Filter size={16} />
                       <span>Filters</span>
@@ -534,7 +534,7 @@ const Dashboard = ({ setId }) => {
                               onChange={() =>
                                 setFilters({ ...filters, status: "all" })
                               }
-                              className="form-radio text-blue-600"
+                              className="form-radio text-violet-600"
                             />
                             <span>All</span>
                           </label>
@@ -546,7 +546,7 @@ const Dashboard = ({ setId }) => {
                               onChange={() =>
                                 setFilters({ ...filters, status: "approved" })
                               }
-                              className="form-radio text-blue-600"
+                              className="form-radio text-violet-600"
                             />
                             <span>Approved</span>
                           </label>
@@ -558,7 +558,7 @@ const Dashboard = ({ setId }) => {
                               onChange={() =>
                                 setFilters({ ...filters, status: "pending" })
                               }
-                              className="form-radio text-blue-600"
+                              className="form-radio text-violet-600"
                             />
                             <span>Pending</span>
                           </label>
@@ -570,7 +570,7 @@ const Dashboard = ({ setId }) => {
                               onChange={() =>
                                 setFilters({ ...filters, status: "rejected" })
                               }
-                              className="form-radio text-blue-600"
+                              className="form-radio text-violet-600"
                             />
                             <span>Rejected</span>
                           </label>
@@ -584,7 +584,7 @@ const Dashboard = ({ setId }) => {
                     <select
                       value={itemsPerPage}
                       onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                      className="pl-3 pr-8 py-2 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="pl-3 pr-8 py-2 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-violet-600"
                     >
                       <option value={5}>5 per page</option>
                       <option value={10}>10 per page</option>
@@ -601,7 +601,7 @@ const Dashboard = ({ setId }) => {
                   {/* Refresh button */}
                   <button
                     onClick={() => fetchColleges()}
-                    className="px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="px-4 py-2 bg-blue-50 text-violet-600 rounded-md hover:bg-blue-100 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-600"
                   >
                     Refresh
                   </button>
@@ -750,7 +750,7 @@ const Dashboard = ({ setId }) => {
                                   college.collegeName
                                 )
                               }
-                              className="text-blue-600 hover:text-blue-800 hover:underline focus:outline-none"
+                              className="text-violet-600 hover:text-violet-600 hover:underline focus:outline-none"
                             >
                               View Reason
                             </button>
@@ -781,7 +781,7 @@ const Dashboard = ({ setId }) => {
                           <div className="flex space-x-2">
                             {/* Edit button - available to all */}
                             <button
-                              className="p-1.5 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-full transition-colors tooltip shadow-sm border border-gray-100"
+                              className="p-1.5 text-violet-600 hover:text-blue-900 hover:bg-blue-50 rounded-full transition-colors tooltip shadow-sm border border-gray-100"
                               title="Edit"
                               onClick={() => {
                                 setopenEdit(true);
@@ -811,7 +811,7 @@ const Dashboard = ({ setId }) => {
                             {/* Approve button - only for admin/users with permission */}
                             {canApprove && college.status === "pending" && (
                               <button
-                                className="p-1.5 text-green-600 hover:text-green-900 hover:bg-green-50 rounded-full transition-colors tooltip shadow-sm border border-gray-100"
+                                className="p-1.5 text-violet-600 hover:text-green-900 hover:bg-green-50 rounded-full transition-colors tooltip shadow-sm border border-gray-100"
                                 title="Approve"
                                 onClick={() => openApproveForm(college)}
                               >
@@ -877,7 +877,7 @@ const Dashboard = ({ setId }) => {
                         onClick={() => goToPage(pageToShow)}
                         className={`px-3 py-1 rounded-md ${
                           currentPage === pageToShow
-                            ? "bg-blue-600 text-white"
+                            ? "bg-violet-600 text-white"
                             : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
                         }`}
                       >

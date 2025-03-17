@@ -28,7 +28,7 @@ const BasicInfoSection = ({
       className="bg-white p-6 rounded-lg shadow-lg border border-gray-200"
       id="basic-info"
     >
-      <h2 className="text-2xl font-bold mb-6 text-indigo-700 border-b pb-3">
+      <h2 className="text-2xl font-bold mb-6 text-violet-600 border-b pb-3">
         Basic Information
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -193,7 +193,7 @@ const BasicInfoSection = ({
             uploadProgress.collegeLogo < 100 && (
               <div className="w-full bg-gray-200 rounded-full h-2.5 mt-3">
                 <div
-                  className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
+                  className="bg-violet-600 h-2.5 rounded-full transition-all duration-300"
                   style={{ width: `${uploadProgress.collegeLogo}%` }}
                 ></div>
                 <p className="text-xs text-gray-600 text-right mt-1">
@@ -238,7 +238,7 @@ const BasicInfoSection = ({
             uploadProgress.collegeImage < 100 && (
               <div className="w-full bg-gray-200 rounded-full h-2.5 mt-3">
                 <div
-                  className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
+                  className="bg-violet-600 h-2.5 rounded-full transition-all duration-300"
                   style={{ width: `${uploadProgress.collegeImage}%` }}
                 ></div>
                 <p className="text-xs text-gray-600 text-right mt-1">

@@ -280,9 +280,9 @@ const CourseForm = ({ userIdprop }) => {
           <div
             id="basicInfo"
             // ref={sectionRefs.basicInfo}
-            className="bg-white rounded-lg shadow-md p-6"
+            className="bg-white rounded-lg shadow-md px-6"
           >
-            <h3 className="text-xl font-semibold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
               Basic Information
             </h3>
 
@@ -449,7 +449,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.overview}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-xl font-semibold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
               Course Overview
             </h3>
 
@@ -516,7 +516,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.eligibility}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-xl font-semibold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
               Eligibility
             </h3>
 
@@ -575,7 +575,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.admissions}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-xl font-semibold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
               Admission Process
             </h3>
 
@@ -613,7 +613,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.fees}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-xl font-semibold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
               Fees and Financial Assistance
             </h3>
 
@@ -681,7 +681,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.specializations}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-xl font-semibold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
               Specializations
             </h3>
 
@@ -778,7 +778,7 @@ const CourseForm = ({ userIdprop }) => {
                 <button
                   type="button"
                   onClick={addSpecialization}
-                  className="px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition-colors duration-200 flex items-center"
+                  className="px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-600 transition-colors duration-200 flex items-center"
                 >
                   <span className="mr-1">+</span> Add Specialization
                 </button>
@@ -792,7 +792,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.syllabus}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-xl font-semibold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
               Syllabus
             </h3>
 
@@ -849,7 +849,7 @@ const CourseForm = ({ userIdprop }) => {
                 <button
                   type="button"
                   onClick={addSemester}
-                  className="mt-4 px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition-colors duration-200 flex items-center"
+                  className="mt-4 px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-600 transition-colors duration-200 flex items-center"
                 >
                   <span className="mr-1">+</span> Add Semester
                 </button>
@@ -863,7 +863,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.career}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-xl font-semibold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
               Career Opportunities
             </h3>
 
@@ -957,7 +957,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.faq}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-xl font-semibold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
               FAQs
             </h3>
 
@@ -1019,7 +1019,7 @@ const CourseForm = ({ userIdprop }) => {
                 <button
                   type="button"
                   onClick={addFaq}
-                  className="px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition-colors duration-200 flex items-center"
+                  className="px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-600 transition-colors duration-200 flex items-center"
                 >
                   <span className="mr-1">+</span> Add FAQ
                 </button>
@@ -1033,7 +1033,7 @@ const CourseForm = ({ userIdprop }) => {
             ref={sectionRefs.benefits}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-xl font-semibold mb-6 text-purple-600 border-b pb-2">
+            <h3 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
               Benefits
             </h3>
 
