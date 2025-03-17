@@ -41,7 +41,6 @@ const CourseForm = ({ userIdprop }) => {
       try {
         const parsedData = JSON.parse(savedFormData);
         setCourse(parsedData);
-        console.log("Form data loaded from localStorage");
       } catch (e) {
         console.error("Error parsing saved form data:", e);
       }
@@ -54,7 +53,6 @@ const CourseForm = ({ userIdprop }) => {
     if (course.courseTitle) {
       try {
         localStorage.setItem(formStorageKey, JSON.stringify(course));
-        console.log("Form data saved to localStorage");
       } catch (e) {
         console.error("Error saving form data:", e);
       }
@@ -66,7 +64,6 @@ const CourseForm = ({ userIdprop }) => {
       if (course) {
         try {
           localStorage.setItem(formStorageKey, JSON.stringify(course));
-          console.log("Form data autosaved to localStorage");
         } catch (e) {
           console.error("Error autosaving form data:", e);
         }
@@ -80,7 +77,6 @@ const CourseForm = ({ userIdprop }) => {
   // Clear localStorage when form is successfully submitted
   const clearSavedFormData = () => {
     localStorage.removeItem(formStorageKey);
-    console.log("Cleared saved form data after successful submission");
   };
   useEffect(() => {
     const fetchEditInfo = async () => {
@@ -88,7 +84,6 @@ const CourseForm = ({ userIdprop }) => {
         const response = await axios.get(
           `http://localhost:5000/api/courses1/${userIdprop}`
         );
-        console.log(response.data);
         setCourse(response.data.data);
       } catch (error) {
         console.error("Error fetching course:", error);
@@ -97,7 +92,7 @@ const CourseForm = ({ userIdprop }) => {
     if (userIdprop) {
       fetchEditInfo();
     }
-  }, []);
+  }, [userIdprop]);
   // Create refs for each section for scrolling
   const sectionRefs = {
     basicInfo: useRef(),
@@ -230,7 +225,6 @@ const CourseForm = ({ userIdprop }) => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted with data:", course);
     if (course) {
       try {
         let a = axios.post("http://localhost:5000/api/courses1", {
@@ -287,7 +281,6 @@ const CourseForm = ({ userIdprop }) => {
             </h3>
 
             <div className="space-y-6">
-              {console.log(course, "listcourse")}
               <div>
                 <label
                   htmlFor="courseTitle"
