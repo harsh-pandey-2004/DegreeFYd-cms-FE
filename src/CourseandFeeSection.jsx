@@ -253,7 +253,7 @@
 
     return (
       <div className="bg-white p-6 rounded-lg shadow-md" id="courses-and-fee">
-        <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
+        <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
           Courses and Fee
         </h2>
 

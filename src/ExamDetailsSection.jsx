@@ -116,7 +116,7 @@ const ExamDetailsSection = ({
       {/* Main Content */}
       <div className=" ">
         <div className="bg-white p-6 rounded-lg shadow-md w-full" id="exam-details">
-          <h2 className="text-2xl font-semibold mb-6 border-b pb-3 text-violet-600">
+          <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
             Exam Details
           </h2>
 
@@ -126,7 +126,7 @@ const ExamDetailsSection = ({
               id="exam-information"
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300"
             >
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
+              <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
                 Exam Information
               </h2>
 
@@ -197,7 +197,7 @@ const ExamDetailsSection = ({
               id="gallery"
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
+              <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
                 Gallery Images <span className="text-red-500">*</span>
               </h2>
               <div className="mb-4">
@@ -265,7 +265,7 @@ const ExamDetailsSection = ({
               id="sample-degree"
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
+              <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
                 Sample Degree <span className="text-red-500">*</span>
               </h2>
 
@@ -343,7 +343,7 @@ const ExamDetailsSection = ({
               id="student-reviews"
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
+              <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
                 Student Reviews <span className="text-red-500">*</span>
               </h2>
 
@@ -544,7 +544,7 @@ const ExamDetailsSection = ({
               id="exam-pattern"
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 mt-5"
             >
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
+              <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
                 Exam Pattern <span className="text-red-500">*</span>
               </h2>
 

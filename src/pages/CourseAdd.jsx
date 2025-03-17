@@ -1071,7 +1071,7 @@ const CourseForm = ({ userIdprop }) => {
               type="submit"
               className="px-8 py-3 bg-purple-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 transition-colors duration-200"
             >
-              Send for Approvals{" "}
+              Send for Approval{" "}
             </button>
           </div>
         </form>

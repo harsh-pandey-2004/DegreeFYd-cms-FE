@@ -21,7 +21,7 @@ const FaqSection = ({ formData, handleArrayChange }) => {
 
   return (
     <div className="p-4 bg-white rounded-lg shadow" id="faq">
-      <h2 className="text-xl font-bold mb-4">Frequently Asked Questions</h2>
+      <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">Frequently Asked Questions</h2>
       
       {formData.faq.map((faq, index) => (
         <div key={index} className="mb-4 p-3 border border-gray-200 rounded">

@@ -26,6 +26,7 @@ const Navbar = ({ isAuthenticated, onLogout, setId }) => {
   const handleLinkClick = (path) => {
     if (path === "/list-courses" || path === "/list-colleges") {
       setId(false);
+      window.location.reload()
     }
     setShowAddContentDropdown(false);
     setShowDashboardDropdown(false);

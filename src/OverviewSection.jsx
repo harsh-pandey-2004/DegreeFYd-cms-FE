@@ -61,7 +61,7 @@ const OverviewSection = ({
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 my-6" id="overview">
       <div className="flex justify-between items-center mb-6 border-b pb-3">
-        <h2 className="text-2xl font-bold text-violet-600">Overview</h2>
+        <h2 className="text-3xl font-bold mb-6 text-purple-600  pb-2">Overview</h2>
         <button
           type="button"
           onClick={handleAddOverviewPoint}

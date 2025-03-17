@@ -28,7 +28,7 @@ const BasicInfoSection = ({
       className="bg-white p-6 rounded-lg shadow-lg border border-gray-200"
       id="basic-info"
     >
-      <h2 className="text-2xl font-bold mb-6 text-violet-600 border-b pb-3">
+      <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
         Basic Information
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

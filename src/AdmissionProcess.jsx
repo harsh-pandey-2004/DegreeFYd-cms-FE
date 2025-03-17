@@ -32,7 +32,7 @@ const AdmissionProcessSection = ({
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md" id="admission-process">
-      <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-violet-600">
+      <h2 className="text-3xl font-bold mb-6 text-purple-600 border-b pb-2">
         Admission Process
       </h2>
 
