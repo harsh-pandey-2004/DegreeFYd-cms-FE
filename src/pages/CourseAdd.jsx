@@ -37,7 +37,7 @@ const CourseForm = ({ userIdprop }) => {
 
   useEffect(() => {
     const savedFormData = localStorage.getItem(formStorageKey);
-    if (savedFormData) {
+    if (savedFormData ) {
       try {
         const parsedData = JSON.parse(savedFormData);
         setCourse(parsedData);
@@ -47,9 +47,7 @@ const CourseForm = ({ userIdprop }) => {
     }
   }, [formStorageKey]);
 
-  // Save form data to localStorage whenever it changes
   useEffect(() => {
-    // Don't save if it's the initial empty state or there's nothing meaningful entered
     if (course.courseTitle) {
       try {
         localStorage.setItem(formStorageKey, JSON.stringify(course));
@@ -58,8 +56,8 @@ const CourseForm = ({ userIdprop }) => {
       }
     }
   }, [course, formStorageKey]);
+
   useEffect(() => {
-    // Setup autosave every 30 seconds
     const autosaveInterval = setInterval(() => {
       if (course) {
         try {
@@ -78,6 +76,17 @@ const CourseForm = ({ userIdprop }) => {
   const clearSavedFormData = () => {
     localStorage.removeItem(formStorageKey);
   };
+    const [lastSavedTime, setLastSavedTime] = useState(null);
+  
+    // Update last saved time
+    useEffect(() => {
+      if (
+        course &&
+        (course.courseTitle || course.admissionProcess || course.careerScope)
+      ) {
+        setLastSavedTime(new Date());
+      }
+    }, [course]);
   useEffect(() => {
     const fetchEditInfo = async () => {
       try {
