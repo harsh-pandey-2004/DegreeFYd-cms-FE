@@ -12,6 +12,7 @@ import ExamDetailsSection from "./ExamDetailsSection";
 import FacultySection from "./FacultySection";
 import FaqSection from "./FaqSection";
 import ApprovalsSection from "./ApprovalFullForm";
+import { useNavigate } from "react-router-dom";
 
 export const CollegeForm = ({ userIdprop }) => {
   // Initial form data state
@@ -103,7 +104,7 @@ export const CollegeForm = ({ userIdprop }) => {
   const [degreeOptions, setDegreeOptions] = useState([]);
   const [specializationOptions, setSpecializationOptions] = useState([]);
   const [courseNameOptions, setCourseNameOptions] = useState([]);
-
+const navigate = useNavigate()
   // Define a form ID for local storage
   const formStorageKey = userIdprop
     ? `collegeForm_${userIdprop}`
@@ -795,8 +796,6 @@ export const CollegeForm = ({ userIdprop }) => {
         })),
       };
 
-      console.log("Submitting data:", formattedData);
-
       let response;
       console.log(collegeId, "harsgh");
       if (userIdprop) {
@@ -808,7 +807,6 @@ export const CollegeForm = ({ userIdprop }) => {
         alert("College Approved Request Send Successfuly!");
         navigate("/dashboard");
         window.location.reload();
-        setMessage("College Approved Request Send Successfuly!");
       } else {
         response = await axios.post(
           "https://degreefydcmsbe.onrender.com/api/colleges",
@@ -816,14 +814,11 @@ export const CollegeForm = ({ userIdprop }) => {
         );
         alert("College Approved Request Send Successfuly!");
         navigate("/dashboard");
-
-        setMessage("College Approved Request Send Successfuly!");
       }
 
       console.log("Success:", response.data);
       setLoading(false);
       localStorage.removeItem(formStorageKey);
-      // Clear saved form data from localStorage after successful submission
       clearSavedFormData();
     } catch (error) {
       setMessage(`Error: ${error.response?.data?.message || error.message}`);
