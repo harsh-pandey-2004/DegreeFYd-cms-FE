@@ -37,45 +37,45 @@ const CourseForm = ({ userIdprop }) => {
     ? `courseForm_${userIdprop}`
     : "courseForm_draft";
 
-  useEffect(() => {
-    const savedFormData = localStorage.getItem(formStorageKey);
-    console.log("formStorageKey", formStorageKey);
-    if (savedFormData && !userIdprop) {
-      try {
-        console.log(formStorageKey,"testing")
-        console.log("localstoragegot it ", savedFormData);
-        const parsedData = JSON.parse(savedFormData);
-        setCourse(parsedData);
-      } catch (e) {
-        console.error("Error parsing saved form data:", e);
-      }
-    }
-  }, [formStorageKey]);
+  // useEffect(() => {
+  //   const savedFormData = localStorage.getItem(formStorageKey);
+  //   console.log("formStorageKey", formStorageKey);
+  //   if (savedFormData && !userIdprop) {
+  //     try {
+  //       console.log(formStorageKey,"testing")
+  //       console.log("localstoragegot it ", savedFormData);
+  //       const parsedData = JSON.parse(savedFormData);
+  //       setCourse(parsedData);
+  //     } catch (e) {
+  //       console.error("Error parsing saved form data:", e);
+  //     }
+  //   }
+  // }, [formStorageKey]);
 
-  useEffect(() => {
-    if (course.courseTitle) {
-      try {
-        localStorage.setItem(formStorageKey, JSON.stringify(course));
-      } catch (e) {
-        console.error("Error saving form data:", e);
-      }
-    }
-  }, [course, formStorageKey]);
+  // useEffect(() => {
+  //   if (course.courseTitle) {
+  //     try {
+  //       localStorage.setItem(formStorageKey, JSON.stringify(course));
+  //     } catch (e) {
+  //       console.error("Error saving form data:", e);
+  //     }
+  //   }
+  // }, [course, formStorageKey]);
 
-  useEffect(() => {
-    const autosaveInterval = setInterval(() => {
-      if (course && !userIdprop) {
-        try {
-          localStorage.setItem(formStorageKey, JSON.stringify(course));
-        } catch (e) {
-          console.error("Error autosaving form data:", e);
-        }
-      }
-    }, 30000); // 30 seconds
+  // useEffect(() => {
+  //   const autosaveInterval = setInterval(() => {
+  //     if (course && !userIdprop) {
+  //       try {
+  //         localStorage.setItem(formStorageKey, JSON.stringify(course));
+  //       } catch (e) {
+  //         console.error("Error autosaving form data:", e);
+  //       }
+  //     }
+  //   }, 30000); // 30 seconds
 
-    // Clean up interval on component unmount
-    return () => clearInterval(autosaveInterval);
-  }, [course, formStorageKey]);
+  //   // Clean up interval on component unmount
+  //   return () => clearInterval(autosaveInterval);
+  // }, [course, formStorageKey]);
 
   // Clear localStorage when form is successfully submitted
   const clearSavedFormData = () => {
