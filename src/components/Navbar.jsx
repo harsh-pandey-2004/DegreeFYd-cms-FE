@@ -5,8 +5,7 @@ import DegreeFydLogo from "../assets/logo.png";
 const Navbar = ({ isAuthenticated, onLogout, setId }) => {
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
-  const [showAddContentDropdown, setShowAddContentDropdown] = useState(false);
-  const [showDashboardDropdown, setShowDashboardDropdown] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null); // Track active dropdown
 
   const addContentRef = useRef(null);
   const dashboardRef = useRef(null);
@@ -22,9 +21,12 @@ const Navbar = ({ isAuthenticated, onLogout, setId }) => {
     } else {
       navigate(path);
     }
-    setShowAddContentDropdown(false);
-    setShowDashboardDropdown(false);
+    setActiveDropdown(null); // Close dropdowns
     setId(false);
+  };
+
+  const toggleDropdown = (dropdown) => {
+    setActiveDropdown((prev) => (prev === dropdown ? null : dropdown)); // Toggle dropdown
   };
 
   // Close dropdown when clicking outside
@@ -36,8 +38,7 @@ const Navbar = ({ isAuthenticated, onLogout, setId }) => {
         dashboardRef.current &&
         !dashboardRef.current.contains(event.target)
       ) {
-        setShowAddContentDropdown(false);
-        setShowDashboardDropdown(false);
+        setActiveDropdown(null);
       }
     };
 
@@ -66,14 +67,12 @@ const Navbar = ({ isAuthenticated, onLogout, setId }) => {
                 {/* Dashboard Dropdown */}
                 <div className="relative" ref={dashboardRef}>
                   <button
-                    onClick={() =>
-                      setShowDashboardDropdown(!showDashboardDropdown)
-                    }
+                    onClick={() => toggleDropdown("dashboard")}
                     className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center"
                   >
                     Dashboard ▼
                   </button>
-                  {showDashboardDropdown && (
+                  {activeDropdown === "dashboard" && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
                       {[
                         { label: "List Colleges", path: "/list-colleges" },
@@ -95,14 +94,12 @@ const Navbar = ({ isAuthenticated, onLogout, setId }) => {
                 {/* Add Content Dropdown */}
                 <div className="relative" ref={addContentRef}>
                   <button
-                    onClick={() =>
-                      setShowAddContentDropdown(!showAddContentDropdown)
-                    }
+                    onClick={() => toggleDropdown("addContent")}
                     className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center"
                   >
                     Add Content ▼
                   </button>
-                  {showAddContentDropdown && (
+                  {activeDropdown === "addContent" && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
                       {[
                         { label: "Add Colleges", path: "/" },
