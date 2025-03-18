@@ -300,7 +300,7 @@ useEffect(()=>{
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
           {userIdprop ? "Edit New Course" : "Add New Course"}
         </h1>
-        {}
+        {console.log(course,"course-testing")}
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Basic Information Section */}
           <div
@@ -342,7 +342,7 @@ useEffect(()=>{
                 <div className="mb-16">
                   <ReactQuill
                     theme="snow"
-                    value={course.shortDescription}
+                    value={course.keyHighlights}
                     onChange={(content) =>
                       handleQuillChange(content, "shortDescription")
                     }
