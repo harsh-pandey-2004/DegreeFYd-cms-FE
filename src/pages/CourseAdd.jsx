@@ -49,7 +49,7 @@ const CourseForm = ({ userIdprop }) => {
         console.error("Error parsing saved form data:", e);
       }
     }
-  });
+  }, [formStorageKey]);
 
   useEffect(() => {
     if (course.courseTitle) {
@@ -59,7 +59,7 @@ const CourseForm = ({ userIdprop }) => {
         console.error("Error saving form data:", e);
       }
     }
-  });
+  }, [course, formStorageKey]);
 
   useEffect(() => {
     const autosaveInterval = setInterval(() => {
@@ -74,7 +74,7 @@ const CourseForm = ({ userIdprop }) => {
 
     // Clean up interval on component unmount
     return () => clearInterval(autosaveInterval);
-  });
+  }, [course, formStorageKey]);
 
   // Clear localStorage when form is successfully submitted
   const clearSavedFormData = () => {
