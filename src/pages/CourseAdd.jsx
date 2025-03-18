@@ -67,7 +67,7 @@ const CourseForm = ({ userIdprop }) => {
           console.error("Error saving form data:", e);
         }
       }
-    }, [ formStorageKey]);
+    }, [course, formStorageKey]);
 // Modify your useEffect for API fetching
 useEffect(() => {
   const fetchEditInfo = async () => {
@@ -75,7 +75,6 @@ useEffect(() => {
       const response = await axios.get(
         `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
       );
-      console.log("h")
       // Add this check to prevent overwriting with empty data
       setCourse((prevFormData) => {
         // Create a merged object with all fields from the fetched data
@@ -96,11 +95,11 @@ useEffect(() => {
     }
   };
   
-  if (userIdprop) {
-    console.log('trigger')
+
+  
     fetchEditInfo()
-  }
-}, [userIdprop]); // Add formStorageKey as dependency
+  
+}, []); // Add formStorageKey as dependency
   // Create refs for each section for scrolling
   const sectionRefs = {
     basicInfo: useRef(),
@@ -290,7 +289,11 @@ useEffect(() => {
   ];
 
   // Navigation buttons for quick scrolling
-
+useEffect(()=>{
+  if(course.courseTitle){
+    console.log(course,"hasr")
+  }
+},[course])
   return (
     <div className="bg-gray-50">
       <div className="container mx-auto px-4 pb-8">
