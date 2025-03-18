@@ -98,9 +98,9 @@ useEffect(() => {
   if (userIdprop) {
     console.log("h")
     // Add a slight delay to ensure localStorage load completes first
-    setTimeout(fetchEditInfo, 4000);
+    setTimeout(fetchEditInfo, 100);
   }
-}, [userIdprop, formStorageKey]); // Add formStorageKey as dependency
+}, [userIdprop]); // Add formStorageKey as dependency
   // Create refs for each section for scrolling
   const sectionRefs = {
     basicInfo: useRef(),
