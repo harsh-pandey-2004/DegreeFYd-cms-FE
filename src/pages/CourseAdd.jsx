@@ -59,7 +59,7 @@ const CourseForm = ({ userIdprop }) => {
         console.error("Error saving form data:", e);
       }
     }
-  }, [course, formStorageKey]);
+  });
 
   useEffect(() => {
     const autosaveInterval = setInterval(() => {
