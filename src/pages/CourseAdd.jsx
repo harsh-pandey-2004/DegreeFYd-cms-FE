@@ -56,7 +56,7 @@ const CourseForm = ({ userIdprop }) => {
     // Save form data to localStorage whenever it changes
     useEffect(() => {
       // Don't save if it's the initial empty state or there's nothing meaningful entered
-      if (
+      if (!userIdprop &&
         course &&
         (course.courseTitle || course.admissionProcess || course.overview)
       ) {
