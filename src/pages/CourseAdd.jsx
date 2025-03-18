@@ -37,59 +37,82 @@ const CourseForm = ({ userIdprop }) => {
     ? `courseForm_${userIdprop}`
     : "courseForm_draft";
 
-    useEffect(() => {
-      // Only load from localStorage if not in edit mode (no userIdprop)
-      if (!userIdprop) {
-        const savedFormData = localStorage.getItem(formStorageKey);
-        if (savedFormData) {
-          try {
-            const parsedData = JSON.parse(savedFormData);
-            setCourse(parsedData);
-            console.log("Form data loaded from localStorage");
-          } catch (e) {
-            console.error("Error parsing saved form data:", e);
-          }
-        }
-      }
-    }, [formStorageKey, userIdprop]);
-  
-    // Save form data to localStorage whenever it changes
-    useEffect(() => {
-      // Don't save if it's the initial empty state or there's nothing meaningful entered
-      if (!userIdprop &&
-        course &&
-        (course.courseTitle || course.admissionProcess || course.overview)
-      ) {
-        try {
-          localStorage.setItem(formStorageKey, JSON.stringify(course));
-          console.log("Form data saved to localStorage");
-        } catch (e) {
-          console.error("Error saving form data:", e);
-        }
-      }
-    }, [course, formStorageKey]);
-// Modify your useEffect for API fetching
-useEffect(() => {
-  const fetchEditInfo = async () => {
-    try {
-      const response = await axios.get(
-        `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
-      );
-      // Add this check to prevent overwriting with empty data
-      setCourse(response.data.data);
-
-       
-     
-    } catch (error) {
-      console.error("Error fetching course:", error);
-    }
+  // Function to clear saved form data
+  const clearSavedFormData = () => {
+    localStorage.removeItem(formStorageKey);
   };
-  
 
+  useEffect(() => {
+    // Only load from localStorage if not in edit mode (no userIdprop)
+    if (!userIdprop) {
+      const savedFormData = localStorage.getItem(formStorageKey);
+      if (savedFormData) {
+        try {
+          const parsedData = JSON.parse(savedFormData);
+          setCourse(parsedData);
+          console.log("Form data loaded from localStorage");
+        } catch (e) {
+          console.error("Error parsing saved form data:", e);
+        }
+      }
+    }
+  }, [formStorageKey, userIdprop]);
   
-    fetchEditInfo()
-  
-}, []); // Add formStorageKey as dependency
+  // Save form data to localStorage whenever it changes
+  useEffect(() => {
+    // Don't save if it's the initial empty state or there's nothing meaningful entered
+    // Also don't save if in edit mode (userIdprop exists)
+    if (!userIdprop &&
+      course &&
+      (course.courseTitle || course.admissionProcess || course.overview)
+    ) {
+      try {
+        localStorage.setItem(formStorageKey, JSON.stringify(course));
+        console.log("Form data saved to localStorage");
+      } catch (e) {
+        console.error("Error saving form data:", e);
+      }
+    }
+  }, [course, formStorageKey, userIdprop]);
+
+  // Modify your useEffect for API fetching
+  useEffect(() => {
+    const fetchEditInfo = async () => {
+      if (!userIdprop) return; // Only fetch if we have a userIdprop
+      
+      try {
+        console.log("Fetching course data for ID:", userIdprop);
+        const response = await axios.get(
+          `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
+        );
+        
+        if (response.data && response.data.data) {
+          console.log("Course data fetched successfully:", response.data.data);
+          
+          // Ensure all necessary fields exist in the response data
+          const fetchedData = response.data.data;
+          const processedData = {
+            ...course, // Keep defaults for any missing fields
+            ...fetchedData, // Override with fetched values
+            // Convert empty arrays if they are null or undefined
+            specializationDetails: fetchedData.specializationDetails || [],
+            semester: fetchedData.semester || [],
+            faq: fetchedData.faq || []
+          };
+          
+          setCourse(processedData);
+        } else {
+          console.error("Invalid response format:", response);
+        }
+      } catch (error) {
+        console.error("Error fetching course:", error);
+        // Consider showing an error message to the user here
+      }
+    };
+    
+    fetchEditInfo();
+  }, [userIdprop]); // Only depend on userIdprop
+
   // Create refs for each section for scrolling
   const sectionRefs = {
     basicInfo: useRef(),
@@ -224,34 +247,35 @@ useEffect(() => {
     e.preventDefault();
     if (course) {
       try {
+        const userId = localStorage.getItem("userId");
+        const payload = {
+          ...course,
+          createdBy: userId
+        };
+        
         if (userIdprop) {
-          let a = await axios.put(
+          console.log("Updating course with data:", payload);
+          const response = await axios.put(
             `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`,
-            {
-              ...course,
-              createdBy: localStorage.getItem("userId"),
-            }
+            payload
           );
-          alert("Your Approval Request is been Sent for course");
+          console.log("Update response:", response);
+          alert("Your Approval Request has been sent for course");
           navigate("/list-courses");
-          window.location.reload();
         } else {
-          let a = await axios.post(
+          console.log("Creating new course with data:", payload);
+          const response = await axios.post(
             "https://degreefydcmsbe.onrender.com/api/courses1",
-            {
-              ...course,
-              createdBy: localStorage.getItem("userId"),
-            }
+            payload
           );
-          alert("Your Approval Request is been Sent for course");
+          console.log("Create response:", response);
+          alert("Your Approval Request has been sent for course");
           clearSavedFormData();
           navigate("/list-courses");
-          window.location.reload();
         }
       } catch (error) {
-        alert("Error adding course");
-
-        console.error("Error adding course:", error);
+        console.error("Error submitting course:", error);
+        alert(`Error: ${error.response?.data?.message || "Failed to submit course"}`);
       }
     }
   };
@@ -262,7 +286,7 @@ useEffect(() => {
       [{ header: [1, 2, 3, false] }],
       ["bold", "italic", "underline"],
       [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image"], // Added "image" for image uploads
+      ["link", "image"],
       ["clean"],
     ],
   };
@@ -275,15 +299,15 @@ useEffect(() => {
     "list",
     "bullet",
     "link",
-    "image", // Added "image" format support
+    "image",
   ];
 
-  // Navigation buttons for quick scrolling
-useEffect(()=>{
-  if(course.courseTitle){
-    console.log(course,"hasr")
-  }
-},[course])
+  // Debug course state
+  useEffect(() => {
+    if (course.courseTitle) {
+      console.log("Course state updated:", course);
+    }
+  }, [course]);
   return (
     <div className="bg-gray-50">
       <div className="container mx-auto px-4 pb-8">
