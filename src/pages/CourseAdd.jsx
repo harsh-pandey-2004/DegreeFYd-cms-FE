@@ -76,14 +76,20 @@ useEffect(() => {
         `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
       );
       // Add this check to prevent overwriting with empty data
-      if (response.data.data && Object.keys(response.data.data).length > 0) {
-        console.log("Setting course data from API:", response.data.data);
-        setCourse(response.data.data);
-        // Save to localStorage to keep it in sync
-        localStorage.setItem(formStorageKey, JSON.stringify(response.data.data));
-      } else {
-        console.warn("Received empty data from API");
-      }
+      setCourse((prevFormData) => {
+        // Create a merged object with all fields from the fetched data
+        const mergedData = { ...prevFormData };
+
+        // Iterate through the response data and update formData
+        Object.keys(response.data.data).forEach((key) => {
+          if (key in prevFormData) {
+            mergedData[key] = response.data.data[key];
+          }
+        });
+
+        return mergedData;
+      });
+     
     } catch (error) {
       console.error("Error fetching course:", error);
     }
