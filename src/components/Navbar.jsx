@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DegreeFydLogo from "../assets/logo.png";
 
-const Navbar = ({ isAuthenticated, onLogout }) => {
+const Navbar = ({ isAuthenticated, onLogout ,setId}) => {
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
   const [showAddContentDropdown, setShowAddContentDropdown] = useState(false);
@@ -17,6 +17,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
     navigate(path);
     setShowAddContentDropdown(false); // Close dropdowns
     setShowDashboardDropdown(false);
+    setId(false)
   };
 
   return (
