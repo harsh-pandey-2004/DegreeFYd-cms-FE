@@ -15,9 +15,6 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
 
   const handleNavigation = (path) => {
     navigate(path);
-    setTimeout(() => {
-      window.location.reload();
-    }, 100); // Small delay to allow navigation before reloading
   };
 
   return (

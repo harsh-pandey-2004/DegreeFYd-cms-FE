@@ -44,9 +44,8 @@ const AppRouterWithLocation = () => {
 const LocationAwareRouter = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [id, setId] = useState(false);
-
   const location = useLocation();
-
+  console.log(id, "showwala");
   const showSidebar =
     location.pathname === "/" ||
     location.pathname === "/add-course" ||
@@ -72,7 +71,7 @@ const LocationAwareRouter = () => {
         onLogout={handleLogout}
         setId={setId}
       />
-      {showSidebar && <Sidebar />} 
+      {showSidebar && <Sidebar />}
       <div className={showSidebar ? "ml-80" : ""}>
         <Routes>
           <Route path="/login" element={<Login />} />

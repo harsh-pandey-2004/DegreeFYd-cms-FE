@@ -5,7 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import { useNavigate } from "react-router-dom";
 
 const CourseForm = ({ userIdprop }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [course, setCourse] = useState({
     createdBy: localStorage.getItem("userId"),
     courseTitle: "",
@@ -239,18 +239,24 @@ const CourseForm = ({ userIdprop }) => {
     if (course) {
       try {
         if (userIdprop) {
-          let a = await axios.put(`https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`, {
-            ...course,
-            createdBy: localStorage.getItem("userId"),
-          });
+          let a = await axios.put(
+            `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`,
+            {
+              ...course,
+              createdBy: localStorage.getItem("userId"),
+            }
+          );
           alert("Your Approval Request is been Sent for course");
           navigate("/list-courses");
           window.location.reload();
         } else {
-          let a = await axios.post("https://degreefydcmsbe.onrender.com/api/courses1", {
-            ...course,
-            createdBy: localStorage.getItem("userId"),
-          });
+          let a = await axios.post(
+            "https://degreefydcmsbe.onrender.com/api/courses1",
+            {
+              ...course,
+              createdBy: localStorage.getItem("userId"),
+            }
+          );
           alert("Your Approval Request is been Sent for course");
           clearSavedFormData();
           navigate("/list-courses");
