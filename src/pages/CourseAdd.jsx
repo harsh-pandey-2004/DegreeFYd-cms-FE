@@ -4,7 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useNavigate } from "react-router-dom";
 
-const CourseForm = ({ userIdprop }) => {
+const CourseForm = ({ userIdprop, setId }) => {
   const navigate = useNavigate();
   const [course, setCourse] = useState({
     createdBy: localStorage.getItem("userId"),
@@ -263,6 +263,7 @@ const CourseForm = ({ userIdprop }) => {
           console.log("Update response:", response);
           alert("Your Approval Request has been sent for course");
           navigate("/list-courses");
+          window.location.reload();
         } else {
           console.log("Creating new course with data:", payload);
           const response = await axios.post(
@@ -273,6 +274,7 @@ const CourseForm = ({ userIdprop }) => {
           alert("Your Approval Request has been sent for course");
           clearSavedFormData();
           navigate("/list-courses");
+          window.location.reload();
         }
       } catch (error) {
         console.error("Error submitting course:", error);

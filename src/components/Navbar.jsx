@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import DegreeFydLogo from "../assets/logo.png";
 
-const Navbar = ({ isAuthenticated, onLogout ,setId}) => {
+const Navbar = ({ isAuthenticated, onLogout, setId }) => {
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
   const [showAddContentDropdown, setShowAddContentDropdown] = useState(false);
   const [showDashboardDropdown, setShowDashboardDropdown] = useState(false);
+
+  const addContentRef = useRef(null);
+  const dashboardRef = useRef(null);
 
   const handleLogout = () => {
     onLogout();
@@ -14,11 +17,35 @@ const Navbar = ({ isAuthenticated, onLogout ,setId}) => {
   };
 
   const handleNavigation = (path) => {
-    navigate(path);
-    setShowAddContentDropdown(false); // Close dropdowns
+    if (window.location.pathname === path) {
+      window.location.reload(); // Reload if already on the same route
+    } else {
+      navigate(path);
+    }
+    setShowAddContentDropdown(false);
     setShowDashboardDropdown(false);
-    setId(false)
+    setId(false);
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        addContentRef.current &&
+        !addContentRef.current.contains(event.target) &&
+        dashboardRef.current &&
+        !dashboardRef.current.contains(event.target)
+      ) {
+        setShowAddContentDropdown(false);
+        setShowDashboardDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-gray-50 fixed w-full z-50 text-black shadow-md">
@@ -37,7 +64,7 @@ const Navbar = ({ isAuthenticated, onLogout ,setId}) => {
             {isAuthenticated && (
               <div className="ml-10 flex items-baseline space-x-4">
                 {/* Dashboard Dropdown */}
-                <div className="relative">
+                <div className="relative" ref={dashboardRef}>
                   <button
                     onClick={() =>
                       setShowDashboardDropdown(!showDashboardDropdown)
@@ -66,7 +93,7 @@ const Navbar = ({ isAuthenticated, onLogout ,setId}) => {
                 </div>
 
                 {/* Add Content Dropdown */}
-                <div className="relative">
+                <div className="relative" ref={addContentRef}>
                   <button
                     onClick={() =>
                       setShowAddContentDropdown(!showAddContentDropdown)

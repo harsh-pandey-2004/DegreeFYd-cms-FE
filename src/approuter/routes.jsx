@@ -45,7 +45,6 @@ const LocationAwareRouter = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [id, setId] = useState(false);
   const location = useLocation();
-  console.log(id, "showwala");
   const showSidebar =
     location.pathname === "/" ||
     location.pathname === "/add-course" ||
@@ -119,7 +118,7 @@ const LocationAwareRouter = () => {
             path="/add-course"
             element={
               <ProtectedRoute>
-                <CourseAdd />
+                <CourseAdd setId={setId} />
               </ProtectedRoute>
             }
           />
@@ -127,7 +126,7 @@ const LocationAwareRouter = () => {
             path="/add-blogs"
             element={
               <ProtectedRoute>
-                <AddBlogs />
+                <AddBlogs setId={setId} />
               </ProtectedRoute>
             }
           />
@@ -135,7 +134,7 @@ const LocationAwareRouter = () => {
             path="/"
             element={
               <ProtectedRoute>
-                <CollegeForm />
+                <CollegeForm setId={setId} />
               </ProtectedRoute>
             }
           />
