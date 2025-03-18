@@ -57,12 +57,13 @@ const CourseForm = ({ userIdprop }) => {
       }
     }
   }, [formStorageKey, userIdprop]);
-  
+
   // Save form data to localStorage whenever it changes
   useEffect(() => {
     // Don't save if it's the initial empty state or there's nothing meaningful entered
     // Also don't save if in edit mode (userIdprop exists)
-    if (!userIdprop &&
+    if (
+      !userIdprop &&
       course &&
       (course.courseTitle || course.admissionProcess || course.overview)
     ) {
@@ -79,16 +80,16 @@ const CourseForm = ({ userIdprop }) => {
   useEffect(() => {
     const fetchEditInfo = async () => {
       if (!userIdprop) return; // Only fetch if we have a userIdprop
-      
+
       try {
         console.log("Fetching course data for ID:", userIdprop);
         const response = await axios.get(
           `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
         );
-        
+
         if (response.data && response.data.data) {
           console.log("Course data fetched successfully:", response.data.data);
-          
+
           // Ensure all necessary fields exist in the response data
           const fetchedData = response.data.data;
           const processedData = {
@@ -97,9 +98,9 @@ const CourseForm = ({ userIdprop }) => {
             // Convert empty arrays if they are null or undefined
             specializationDetails: fetchedData.specializationDetails || [],
             semester: fetchedData.semester || [],
-            faq: fetchedData.faq || []
+            faq: fetchedData.faq || [],
           };
-          
+
           setCourse(processedData);
         } else {
           console.error("Invalid response format:", response);
@@ -109,7 +110,7 @@ const CourseForm = ({ userIdprop }) => {
         // Consider showing an error message to the user here
       }
     };
-    
+
     fetchEditInfo();
   }, [userIdprop]); // Only depend on userIdprop
 
@@ -250,9 +251,9 @@ const CourseForm = ({ userIdprop }) => {
         const userId = localStorage.getItem("userId");
         const payload = {
           ...course,
-          createdBy: userId
+          createdBy: userId,
         };
-        
+
         if (userIdprop) {
           console.log("Updating course with data:", payload);
           const response = await axios.put(
@@ -275,7 +276,9 @@ const CourseForm = ({ userIdprop }) => {
         }
       } catch (error) {
         console.error("Error submitting course:", error);
-        alert(`Error: ${error.response?.data?.message || "Failed to submit course"}`);
+        alert(
+          `Error: ${error.response?.data?.message || "Failed to submit course"}`
+        );
       }
     }
   };
@@ -314,7 +317,7 @@ const CourseForm = ({ userIdprop }) => {
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
           {userIdprop ? "Edit New Course" : "Add New Course"}
         </h1>
-        {console.log(course,"course-testing")}
+        {console.log(course, "course-testing")}
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Basic Information Section */}
           <div
@@ -339,7 +342,7 @@ const CourseForm = ({ userIdprop }) => {
                   name="courseTitle"
                   id="courseTitle"
                   placeholder="Enter course title"
-                  value={course.courseTitle}
+                  value={course.courseTitle || ""}
                   onChange={handleInputChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
