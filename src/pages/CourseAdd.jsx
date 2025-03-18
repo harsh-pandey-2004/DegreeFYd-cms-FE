@@ -39,6 +39,7 @@ const CourseForm = ({ userIdprop }) => {
 
   useEffect(() => {
     const savedFormData = localStorage.getItem(formStorageKey);
+    console.log("formStorageKey", formStorageKey);
     if (savedFormData && !userIdprop) {
       try {
         console.log(formStorageKey,"testing")
@@ -63,7 +64,7 @@ const CourseForm = ({ userIdprop }) => {
 
   useEffect(() => {
     const autosaveInterval = setInterval(() => {
-      if (course) {
+      if (course && !userIdprop) {
         try {
           localStorage.setItem(formStorageKey, JSON.stringify(course));
         } catch (e) {
