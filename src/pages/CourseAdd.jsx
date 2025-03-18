@@ -37,64 +37,65 @@ const CourseForm = ({ userIdprop }) => {
     ? `courseForm_${userIdprop}`
     : "courseForm_draft";
 
-  useEffect(() => {
-    const savedFormData = localStorage.getItem(formStorageKey);
-    console.log("formStorageKey", formStorageKey);
-    if (savedFormData && !userIdprop) {
-      try {
-        console.log(formStorageKey,"testing")
-        console.log("localstoragegot it ", savedFormData);
-        const parsedData = JSON.parse(savedFormData);
-        setCourse(parsedData);
-      } catch (e) {
-        console.error("Error parsing saved form data:", e);
-      }
-    }
-  }, [formStorageKey]);
+  // useEffect(() => {
+  //   const savedFormData = localStorage.getItem(formStorageKey);
+  //   console.log("formStorageKey", formStorageKey);
+  //   if (savedFormData && !userIdprop) {
+  //     try {
+  //       console.log(formStorageKey,"testing")
+  //       console.log("localstoragegot it ", savedFormData);
+  //       const parsedData = JSON.parse(savedFormData);
+  //       setCourse(parsedData);
+  //     } catch (e) {
+  //       console.error("Error parsing saved form data:", e);
+  //     }
+  //   }
+  // }, [formStorageKey]);
 
-  useEffect(() => {
-    if (course.courseTitle) {
-      try {
-        localStorage.setItem(formStorageKey, JSON.stringify(course));
-      } catch (e) {
-        console.error("Error saving form data:", e);
-      }
-    }
-  }, [course, formStorageKey]);
+  // useEffect(() => {
+  //   if (course.courseTitle) {
+  //     try {
+  //       localStorage.setItem(formStorageKey, JSON.stringify(course));
+  //     } catch (e) {
+  //       console.error("Error saving form data:", e);
+  //     }
+  //   }
+  // }, [course, formStorageKey]);
 
-  useEffect(() => {
-    const autosaveInterval = setInterval(() => {
-      if (course) {
-        try {
-          localStorage.setItem(formStorageKey, JSON.stringify(course));
-        } catch (e) {
-          console.error("Error autosaving form data:", e);
-        }
-      }
-    }, 30000); // 30 seconds
+  // useEffect(() => {
+  //   const autosaveInterval = setInterval(() => {
+  //     if (course) {
+  //       try {
+  //         localStorage.setItem(formStorageKey, JSON.stringify(course));
+  //       } catch (e) {
+  //         console.error("Error autosaving form data:", e);
+  //       }
+  //     }
+  //   }, 30000); // 30 seconds
 
-    // Clean up interval on component unmount
-    return () => clearInterval(autosaveInterval);
-  }, [course, formStorageKey]);
+  //   // Clean up interval on component unmount
+  //   return () => clearInterval(autosaveInterval);
+  // }, [course, formStorageKey]);
 
-  const clearSavedFormData = () => {
-    localStorage.removeItem(formStorageKey);
-  };
-  const [lastSavedTime, setLastSavedTime] = useState(null);
-  useEffect(() => {
-    if (
-      course &&
-      (course.courseTitle || course.admissionProcess || course.careerScope)
-    ) {
-      setLastSavedTime(new Date());
-    }
-  }, [course]);
+  // const clearSavedFormData = () => {
+  //   localStorage.removeItem(formStorageKey);
+  // };
+  // const [lastSavedTime, setLastSavedTime] = useState(null);
+  // useEffect(() => {
+  //   if (
+  //     course &&
+  //     (course.courseTitle || course.admissionProcess || course.careerScope)
+  //   ) {
+  //     setLastSavedTime(new Date());
+  //   }
+  // }, [course]);
   useEffect(() => {
     const fetchEditInfo = async () => {
       try {
         const response = await axios.get(
           `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
         );
+        console.log("response.data.data", response.data.data);
         setCourse(response.data.data);
       } catch (error) {
         console.error("Error fetching course:", error);
