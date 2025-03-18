@@ -342,7 +342,7 @@ useEffect(()=>{
                 <div className="mb-16">
                   <ReactQuill
                     theme="snow"
-                    value={course.keyHighlights}
+                    value={course?.shortDescription}
                     onChange={(content) =>
                       handleQuillChange(content, "shortDescription")
                     }
