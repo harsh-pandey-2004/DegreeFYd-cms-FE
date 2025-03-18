@@ -49,7 +49,7 @@ const CourseForm = ({ userIdprop }) => {
         console.error("Error parsing saved form data:", e);
       }
     }
-  }, [formStorageKey]);
+  },);
 
   useEffect(() => {
     if (course.courseTitle) {
