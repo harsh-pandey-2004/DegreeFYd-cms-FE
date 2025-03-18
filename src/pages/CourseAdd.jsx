@@ -304,11 +304,11 @@ const CourseForm = ({ userIdprop }) => {
     "link",
     "image",
   ];
-
   // Debug course state
   useEffect(() => {
     if (course.courseTitle) {
       console.log("Course state updated:", course);
+      setCourse(course);
     }
   }, [course]);
   return (
