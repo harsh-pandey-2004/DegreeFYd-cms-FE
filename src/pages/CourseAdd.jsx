@@ -41,6 +41,7 @@ const CourseForm = ({ userIdprop }) => {
     const savedFormData = localStorage.getItem(formStorageKey);
     if (savedFormData) {
       try {
+        console.log("localstoragegot it ", savedFormData);
         const parsedData = JSON.parse(savedFormData);
         setCourse(parsedData);
       } catch (e) {
