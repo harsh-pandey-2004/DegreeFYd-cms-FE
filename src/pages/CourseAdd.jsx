@@ -65,22 +65,32 @@ const CourseForm = ({ userIdprop }) => {
         }
       }
     }, [course, formStorageKey]);
-  useEffect(() => {
-    const fetchEditInfo = async () => {
-      try {
-        const response = await axios.get(
-          `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
-        );
-        // console.log("response.data.data", response.data.data);
+// Modify your useEffect for API fetching
+useEffect(() => {
+  const fetchEditInfo = async () => {
+    try {
+      const response = await axios.get(
+        `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
+      );
+      // Add this check to prevent overwriting with empty data
+      if (response.data.data && Object.keys(response.data.data).length > 0) {
+        console.log("Setting course data from API:", response.data.data);
         setCourse(response.data.data);
-      } catch (error) {
-        console.error("Error fetching course:", error);
+        // Save to localStorage to keep it in sync
+        localStorage.setItem(formStorageKey, JSON.stringify(response.data.data));
+      } else {
+        console.warn("Received empty data from API");
       }
-    };
-    if (userIdprop) {
-      fetchEditInfo();
+    } catch (error) {
+      console.error("Error fetching course:", error);
     }
-  }, [userIdprop]);
+  };
+  
+  if (userIdprop) {
+    // Add a slight delay to ensure localStorage load completes first
+    setTimeout(fetchEditInfo, 100);
+  }
+}, [userIdprop, formStorageKey]); // Add formStorageKey as dependency
   // Create refs for each section for scrolling
   const sectionRefs = {
     basicInfo: useRef(),
