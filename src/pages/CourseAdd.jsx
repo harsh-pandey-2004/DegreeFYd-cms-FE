@@ -37,18 +37,21 @@ const CourseForm = ({ userIdprop }) => {
     ? `courseForm_${userIdprop}`
     : "courseForm_draft";
 
-   useEffect(() => {
-      const savedFormData = localStorage.getItem(formStorageKey);
-      if (savedFormData) {
-        try {
-          const parsedData = JSON.parse(savedFormData);
-          setCourse(parsedData);
-          console.log("Form data loaded from localStorage");
-        } catch (e) {
-          console.error("Error parsing saved form data:", e);
+    useEffect(() => {
+      // Only load from localStorage if not in edit mode (no userIdprop)
+      if (!userIdprop) {
+        const savedFormData = localStorage.getItem(formStorageKey);
+        if (savedFormData) {
+          try {
+            const parsedData = JSON.parse(savedFormData);
+            setCourse(parsedData);
+            console.log("Form data loaded from localStorage");
+          } catch (e) {
+            console.error("Error parsing saved form data:", e);
+          }
         }
       }
-    }, [formStorageKey]);
+    }, [formStorageKey, userIdprop]);
   
     // Save form data to localStorage whenever it changes
     useEffect(() => {
