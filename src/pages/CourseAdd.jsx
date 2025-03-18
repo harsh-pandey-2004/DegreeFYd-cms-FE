@@ -41,7 +41,7 @@ const CourseForm = ({ userIdprop }) => {
     const savedFormData = localStorage.getItem(formStorageKey);
     if (savedFormData) {
       try {
-        console.log(formStorageKey,"testing")
+        console.log(formStorageKey)
         console.log("localstoragegot it ", savedFormData);
         const parsedData = JSON.parse(savedFormData);
         setCourse(parsedData);
@@ -49,7 +49,7 @@ const CourseForm = ({ userIdprop }) => {
         console.error("Error parsing saved form data:", e);
       }
     }
-  },);
+  }, [formStorageKey]);
 
   useEffect(() => {
     if (course.courseTitle) {
@@ -59,7 +59,7 @@ const CourseForm = ({ userIdprop }) => {
         console.error("Error saving form data:", e);
       }
     }
-  });
+  }, [course, formStorageKey]);
 
   useEffect(() => {
     const autosaveInterval = setInterval(() => {

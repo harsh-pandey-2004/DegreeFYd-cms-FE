@@ -15,6 +15,8 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
 
   const handleNavigation = (path) => {
     navigate(path);
+    setShowAddContentDropdown(false); // Close dropdowns
+    setShowDashboardDropdown(false);
   };
 
   return (
@@ -36,31 +38,28 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                 {/* Dashboard Dropdown */}
                 <div className="relative">
                   <button
-                    onClick={() => setShowDashboardDropdown(!showDashboardDropdown)}
+                    onClick={() =>
+                      setShowDashboardDropdown(!showDashboardDropdown)
+                    }
                     className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center"
                   >
-                    Dashboard
+                    Dashboard ▼
                   </button>
                   {showDashboardDropdown && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                        onClick={() => handleNavigation("/list-colleges")}
-                      >
-                        List Colleges
-                      </button>
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                        onClick={() => handleNavigation("/list-courses")}
-                      >
-                        List Courses
-                      </button>
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                        onClick={() => handleNavigation("/list-blogs")}
-                      >
-                        List Blogs
-                      </button>
+                      {[
+                        { label: "List Colleges", path: "/list-colleges" },
+                        { label: "List Courses", path: "/list-courses" },
+                        { label: "List Blogs", path: "/list-blogs" },
+                      ].map((item) => (
+                        <button
+                          key={item.path}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                          onClick={() => handleNavigation(item.path)}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -68,31 +67,28 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                 {/* Add Content Dropdown */}
                 <div className="relative">
                   <button
-                    onClick={() => setShowAddContentDropdown(!showAddContentDropdown)}
+                    onClick={() =>
+                      setShowAddContentDropdown(!showAddContentDropdown)
+                    }
                     className="text-black hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center"
                   >
-                    Add Content
+                    Add Content ▼
                   </button>
                   {showAddContentDropdown && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                        onClick={() => handleNavigation("/")}
-                      >
-                        Add Colleges
-                      </button>
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                        onClick={() => handleNavigation("/add-course")}
-                      >
-                        Add Courses
-                      </button>
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                        onClick={() => handleNavigation("/add-blogs")}
-                      >
-                        Add Blogs
-                      </button>
+                      {[
+                        { label: "Add Colleges", path: "/" },
+                        { label: "Add Courses", path: "/add-course" },
+                        { label: "Add Blogs", path: "/add-blogs" },
+                      ].map((item) => (
+                        <button
+                          key={item.path}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                          onClick={() => handleNavigation(item.path)}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
                     </div>
                   )}
                 </div>
