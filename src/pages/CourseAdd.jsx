@@ -306,7 +306,7 @@ const CourseForm = ({ userIdprop }) => {
           <div
             id="basicInfo"
             // ref={sectionRefs.basicInfo}
-            className="bg-white rounded-lg shadow-md px-6"
+            className="bg-white rounded-lg shadow-md p-6"
           >
             <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
               Basic Information
