@@ -39,7 +39,7 @@ const CourseForm = ({ userIdprop }) => {
 
   useEffect(() => {
     const savedFormData = localStorage.getItem(formStorageKey);
-    if (savedFormData) {
+    if (savedFormData && !userIdprop) {
       try {
         console.log(formStorageKey,"testing")
         console.log("localstoragegot it ", savedFormData);
