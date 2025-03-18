@@ -37,65 +37,41 @@ const CourseForm = ({ userIdprop }) => {
     ? `courseForm_${userIdprop}`
     : "courseForm_draft";
 
-  // useEffect(() => {
-  //   const savedFormData = localStorage.getItem(formStorageKey);
-  //   console.log("formStorageKey", formStorageKey);
-  //   if (savedFormData && !userIdprop) {
-  //     try {
-  //       console.log(formStorageKey,"testing")
-  //       console.log("localstoragegot it ", savedFormData);
-  //       const parsedData = JSON.parse(savedFormData);
-  //       setCourse(parsedData);
-  //     } catch (e) {
-  //       console.error("Error parsing saved form data:", e);
-  //     }
-  //   }
-  // }, [formStorageKey]);
-
-  // useEffect(() => {
-  //   if (course.courseTitle) {
-  //     try {
-  //       localStorage.setItem(formStorageKey, JSON.stringify(course));
-  //     } catch (e) {
-  //       console.error("Error saving form data:", e);
-  //     }
-  //   }
-  // }, [course, formStorageKey]);
-
-  // useEffect(() => {
-  //   const autosaveInterval = setInterval(() => {
-  //     if (course) {
-  //       try {
-  //         localStorage.setItem(formStorageKey, JSON.stringify(course));
-  //       } catch (e) {
-  //         console.error("Error autosaving form data:", e);
-  //       }
-  //     }
-  //   }, 30000); // 30 seconds
-
-  //   // Clean up interval on component unmount
-  //   return () => clearInterval(autosaveInterval);
-  // }, [course, formStorageKey]);
-
-  // const clearSavedFormData = () => {
-  //   localStorage.removeItem(formStorageKey);
-  // };
-  // const [lastSavedTime, setLastSavedTime] = useState(null);
-  // useEffect(() => {
-  //   if (
-  //     course &&
-  //     (course.courseTitle || course.admissionProcess || course.careerScope)
-  //   ) {
-  //     setLastSavedTime(new Date());
-  //   }
-  // }, [course]);
+   useEffect(() => {
+      const savedFormData = localStorage.getItem(formStorageKey);
+      if (savedFormData) {
+        try {
+          const parsedData = JSON.parse(savedFormData);
+          setCourse(parsedData);
+          console.log("Form data loaded from localStorage");
+        } catch (e) {
+          console.error("Error parsing saved form data:", e);
+        }
+      }
+    }, [formStorageKey]);
+  
+    // Save form data to localStorage whenever it changes
+    useEffect(() => {
+      // Don't save if it's the initial empty state or there's nothing meaningful entered
+      if (
+        course &&
+        (course.courseTitle || course.admissionProcess || course.overview)
+      ) {
+        try {
+          localStorage.setItem(formStorageKey, JSON.stringify(course));
+          console.log("Form data saved to localStorage");
+        } catch (e) {
+          console.error("Error saving form data:", e);
+        }
+      }
+    }, [course, formStorageKey]);
   useEffect(() => {
     const fetchEditInfo = async () => {
       try {
         const response = await axios.get(
           `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
         );
-        console.log("response.data.data", response.data.data);
+        // console.log("response.data.data", response.data.data);
         setCourse(response.data.data);
       } catch (error) {
         console.error("Error fetching course:", error);
@@ -294,7 +270,11 @@ const CourseForm = ({ userIdprop }) => {
   ];
 
   // Navigation buttons for quick scrolling
-
+useEffect(()=>{
+  if(course.courseTitle){
+    console.log(course,"hasr")
+  }
+},[course])
   return (
     <div className="bg-gray-50">
       <div className="container mx-auto px-4 pb-8">
