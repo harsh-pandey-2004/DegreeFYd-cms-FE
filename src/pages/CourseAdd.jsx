@@ -262,8 +262,8 @@ const CourseForm = ({ userIdprop, setId }) => {
           );
           console.log("Update response:", response);
           alert("Your Approval Request has been sent for course");
-          navigate("/list-courses");
           window.location.reload();
+          navigate("/list-courses");
         } else {
           console.log("Creating new course with data:", payload);
           const response = await axios.post(
@@ -273,8 +273,8 @@ const CourseForm = ({ userIdprop, setId }) => {
           console.log("Create response:", response);
           alert("Your Approval Request has been sent for course");
           clearSavedFormData();
-          navigate("/list-courses");
           window.location.reload();
+          navigate("/list-courses");
         }
       } catch (error) {
         console.error("Error submitting course:", error);
