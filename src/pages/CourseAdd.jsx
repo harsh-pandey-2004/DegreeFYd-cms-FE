@@ -84,7 +84,7 @@ const CourseForm = ({ userIdprop, setId }) => {
       try {
         console.log("Fetching course data for ID:", userIdprop);
         const response = await axios.get(
-          `http://localhost:5000/api/courses1/${userIdprop}`
+          `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
         );
 
         if (response.data && response.data.data) {
@@ -338,7 +338,7 @@ const handleSubjectChange = (semesterIndex, subjectIndex, value) => {
         if (userIdprop) {
           console.log("Updating course with data:", payload);
           const response = await axios.put(
-            `http://localhost:5000/api/courses1/${userIdprop}`,
+            `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`,
             payload
           );
           console.log("Update response:", response);
@@ -348,7 +348,7 @@ const handleSubjectChange = (semesterIndex, subjectIndex, value) => {
         } else {
           console.log("Creating new course with data:", payload);
           const response = await axios.post(
-            "http://localhost:5000/api/courses1",
+            "https://degreefydcmsbe.onrender.com/api/courses1",
             payload
           );
           console.log("Create response:", response);
