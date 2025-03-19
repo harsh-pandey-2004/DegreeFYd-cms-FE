@@ -58,7 +58,7 @@ const Navbar = ({ isAuthenticated, onLogout, setId }) => {
                 src={DegreeFydLogo}
                 alt="logo"
                 className="h-14 w-full cursor-pointer"
-                onClick={() => handleNavigation("/list-user")}
+                onClick={() => handleNavigation("/dashboard")}
               />
             </div>
 
