@@ -10,27 +10,27 @@ const CourseForm = ({ userIdprop, setId }) => {
     createdBy: localStorage.getItem("userId"),
     courseTitle: "",
     shortDescription: "",
-    keyHighlights: "",
-    duration: "",
+    keyHighlights: [], // Change from string to array    duration: "",
     mode: "Online",
     eligibility: "",
     universities: 0,
     overview: "",
     whyCourse: "",
     eligibilityDetails: "",
-    admissionProcess: "",
+    admissionProcess: [], // Change from string to array
     averageCourseFee: 0,
     scholarship: false,
     loanAssistance: false,
     specializations: "",
     specializationDetails: [],
     syllabus: "",
-    semester: [],
+    semester: [], // This will now hold objects instead of strings
     careerScope: "",
     topRecruiters: "",
     topCollegeOffering: "",
     faq: [],
     benefitsOfOnlineMBA: "",
+    topSpecializations: [],
     image: "",
   });
   const formStorageKey = userIdprop
@@ -84,7 +84,7 @@ const CourseForm = ({ userIdprop, setId }) => {
       try {
         console.log("Fetching course data for ID:", userIdprop);
         const response = await axios.get(
-          `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
+          `http://localhost:5000/api/courses1/${userIdprop}`
         );
 
         if (response.data && response.data.data) {
@@ -162,7 +162,97 @@ const CourseForm = ({ userIdprop, setId }) => {
       specializationDetails: updatedSpecs,
     });
   };
+// Add this function for keyHighlights
+const addKeyHighlight = () => {
+  setCourse({
+    ...course,
+    keyHighlights: [...course.keyHighlights, { title: "", description: "", icon: "" }]
+  });
+};
 
+const handleKeyHighlightChange = (index, field, value) => {
+  const updatedHighlights = [...course.keyHighlights];
+  updatedHighlights[index] = { ...updatedHighlights[index], [field]: value };
+  setCourse({
+    ...course,
+    keyHighlights: updatedHighlights
+  });
+};
+
+// Add this function for admissionProcess
+const addAdmissionStep = () => {
+  const newOrder = course.admissionProcess.length + 1;
+  setCourse({
+    ...course,
+    admissionProcess: [...course.admissionProcess, { title: "", description: "", order: newOrder }]
+  });
+};
+
+const handleAdmissionStepChange = (index, field, value) => {
+  const updatedSteps = [...course.admissionProcess];
+  updatedSteps[index] = { ...updatedSteps[index], [field]: value };
+  setCourse({
+    ...course,
+    admissionProcess: updatedSteps
+  });
+};
+
+// Add this function for topSpecializations
+const addTopSpecialization = () => {
+  setCourse({
+    ...course,
+    topSpecializations: [...course.topSpecializations, { title: "", description: "", icon: "" }]
+  });
+};
+
+const handleTopSpecializationChange = (index, field, value) => {
+  const updatedSpecs = [...course.topSpecializations];
+  updatedSpecs[index] = { ...updatedSpecs[index], [field]: value };
+  setCourse({
+    ...course,
+    topSpecializations: updatedSpecs
+  });
+};
+
+// Update semester handler (completely replace the existing one)
+const addSemester = () => {
+  setCourse({
+    ...course,
+    semester: [...course.semester, { title: "", description: "", subjects: [] }]
+  });
+};
+
+const handleSemesterChange = (index, field, value) => {
+  const updatedSemesters = [...course.semester];
+  updatedSemesters[index] = { 
+    ...updatedSemesters[index], 
+    [field]: value 
+  };
+  setCourse({
+    ...course,
+    semester: updatedSemesters
+  });
+};
+
+// Add this function for semester subjects
+const addSubjectToSemester = (semesterIndex) => {
+  const updatedSemesters = [...course.semester];
+  const currentSubjects = updatedSemesters[semesterIndex].subjects || [];
+  updatedSemesters[semesterIndex].subjects = [...currentSubjects, ""];
+  setCourse({
+    ...course,
+    semester: updatedSemesters
+  });
+};
+
+const handleSubjectChange = (semesterIndex, subjectIndex, value) => {
+  const updatedSemesters = [...course.semester];
+  updatedSemesters[semesterIndex].subjects[subjectIndex] = value;
+  setCourse({
+    ...course,
+    semester: updatedSemesters
+  });
+};
   // Add new specialization
   const addSpecialization = () => {
     setCourse({
@@ -216,22 +306,7 @@ const CourseForm = ({ userIdprop, setId }) => {
   };
 
   // Add semester
-  const addSemester = () => {
-    setCourse({
-      ...course,
-      semester: [...course.semester, ""],
-    });
-  };
-
-  // Handle semester change
-  const handleSemesterChange = (index, value) => {
-    const updatedSemesters = [...course.semester];
-    updatedSemesters[index] = value;
-    setCourse({
-      ...course,
-      semester: updatedSemesters,
-    });
-  };
+ 
 
   // Remove semester
   const removeSemester = (index) => {
@@ -252,29 +327,35 @@ const CourseForm = ({ userIdprop, setId }) => {
         const payload = {
           ...course,
           createdBy: userId,
+          keyHighlights: course.keyHighlights || [],
+          admissionProcess: course.admissionProcess || [],
+          topSpecializations: course.topSpecializations || [],
+          specializationDetails: course.specializationDetails || [],
+          semester: course.semester || [],
+          faq: course.faq || []
         };
 
         if (userIdprop) {
           console.log("Updating course with data:", payload);
           const response = await axios.put(
-            `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`,
+            `http://localhost:5000/api/courses1/${userIdprop}`,
             payload
           );
           console.log("Update response:", response);
           alert("Your Approval Request has been sent for course");
           navigate("/list-courses");
-          window.location.reload();
+          // window.location.reload();
         } else {
           console.log("Creating new course with data:", payload);
           const response = await axios.post(
-            "https://degreefydcmsbe.onrender.com/api/courses1",
+            "http://localhost:5000/api/courses1",
             payload
           );
           console.log("Create response:", response);
           alert("Your Approval Request has been sent for course");
           clearSavedFormData();
           navigate("/list-courses");
-          window.location.reload();
+          // window.location.reload();
         }
       } catch (error) {
         console.error("Error submitting course:", error);
@@ -379,31 +460,69 @@ const CourseForm = ({ userIdprop, setId }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="keyHighlights"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Key Highlights
-                </label>
-                <div className="mb-16">
-                  <ReactQuill
-                    theme="snow"
-                    value={course.keyHighlights}
-                    onChange={(content) =>
-                      handleQuillChange(content, "keyHighlights")
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Enter key highlights of the course"
-                    className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
-                  />
-                </div>
-              </div>
+  <label htmlFor="keyHighlights" className="block text-sm font-medium text-gray-700 mb-1">
+    Key Highlights
+  </label>
+  
+  {course.keyHighlights.map((highlight, index) => (
+    <div key={`highlight-${index}`} className="border border-gray-200 rounded-lg p-4 mb-4">
+      <h5 className="font-medium text-gray-700 mb-3">Highlight {index + 1}</h5>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+        <input
+          type="text"
+          value={highlight.title || ""}
+          placeholder="Enter highlight title"
+          onChange={(e) => handleKeyHighlightChange(index, "title", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+        />
+      </div>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <input
+          type="text"
+          value={highlight.description || ""}
+          placeholder="Enter highlight description"
+          onChange={(e) => handleKeyHighlightChange(index, "description", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+        />
+      </div>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Icon</label>
+        <input
+          type="text"
+          value={highlight.icon || ""}
+          placeholder="Enter icon name or URL"
+          onChange={(e) => handleKeyHighlightChange(index, "icon", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+        />
+      </div>
+      
+      <button
+        type="button"
+        onClick={() => {
+          const updatedHighlights = [...course.keyHighlights];
+          updatedHighlights.splice(index, 1);
+          setCourse({ ...course, keyHighlights: updatedHighlights });
+        }}
+        className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors duration-200"
+      >
+        Remove Highlight
+      </button>
+    </div>
+  ))}
+
+  <button
+    type="button"
+    onClick={addKeyHighlight}
+    className="mt-4 px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-[#155DFC] transition-colors duration-200 flex items-center"
+  >
+    <span className="mr-1">+</span> Add Highlight
+  </button>
+</div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -467,22 +586,50 @@ const CourseForm = ({ userIdprop, setId }) => {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="image"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Course Image URL
-                  </label>
-                  <input
-                    type="text"
-                    name="image"
-                    id="image"
-                    placeholder="Enter image URL for the course"
-                    value={course.image}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  />
-                </div>
+  <label
+    htmlFor="image"
+    className="block text-sm font-medium text-gray-700 mb-1"
+  >
+    Course Image
+  </label>
+  <input
+    type="file"
+    name="image"
+    id="image"
+    accept="image/*"
+    onChange={(e) => {
+      const file = e.target.files[0];
+      if (file) {
+        // Create URL for preview
+        const imageUrl = URL.createObjectURL(file);
+        
+        // Store the file object directly
+        setCourse({
+          ...course,
+          image: {
+            file: file,
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            preview: imageUrl
+          }
+        });
+      }
+    }}
+    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+  />
+  
+  {/* Preview the image if available */}
+  {course.image && course.image.preview && (
+    <div className="mt-2">
+      <img 
+        src={course.image.preview} 
+        alt="Course preview" 
+        className="h-32 object-cover rounded-md"
+      />
+    </div>
+  )}
+</div>
               </div>
             </div>
           </div>
@@ -614,42 +761,70 @@ const CourseForm = ({ userIdprop, setId }) => {
           </div>
 
           {/* Admission Process Section */}
-          <div
-            id="admissions"
-            ref={sectionRefs.admissions}
-            className="bg-white rounded-lg shadow-md p-6"
-          >
-            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
-              Admission Process
-            </h3>
+          {/* Admission Process Section - Replace the existing ReactQuill */}
+<div>
+  <label htmlFor="admissionProcess" className="block text-sm font-medium text-gray-700 mb-1">
+    Admission Process
+  </label>
+  
+  {course.admissionProcess.map((step, index) => (
+    <div key={`step-${index}`} className="border border-gray-200 rounded-lg p-4 mb-4">
+      <h5 className="font-medium text-gray-700 mb-3">Step {step.order || index + 1}</h5>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+        <input
+          type="text"
+          value={step.title || ""}
+          placeholder="Enter step title"
+          onChange={(e) => handleAdmissionStepChange(index, "title", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+        />
+      </div>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <textarea
+          value={step.description || ""}
+          placeholder="Describe this admission step"
+          onChange={(e) => handleAdmissionStepChange(index, "description", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+          rows={3}
+        />
+      </div>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Order</label>
+        <input
+          type="number"
+          value={step.order || index + 1}
+          onChange={(e) => handleAdmissionStepChange(index, "order", parseInt(e.target.value))}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+        />
+      </div>
+      
+      <button
+        type="button"
+        onClick={() => {
+          const updatedSteps = [...course.admissionProcess];
+          updatedSteps.splice(index, 1);
+          setCourse({ ...course, admissionProcess: updatedSteps });
+        }}
+        className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors duration-200"
+      >
+        Remove Step
+      </button>
+    </div>
+  ))}
 
-            <div>
-              <label
-                htmlFor="admissionProcess"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Admission Process
-              </label>
-              <div className="mb-16">
-                <ReactQuill
-                  theme="snow"
-                  value={course.admissionProcess}
-                  onChange={(content) =>
-                    handleQuillChange(content, "admissionProcess")
-                  }
-                  modules={quillModules}
-                  formats={quillFormats}
-                  placeholder="Describe the admission process in detail"
-                  className="min-h-[150px] w-full"
-                  style={{
-                    minHeight: "150px",
-                    maxHeight: "none",
-                    overflow: "hidden",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
+  <button
+    type="button"
+    onClick={addAdmissionStep}
+    className="mt-4 px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-[#155DFC] transition-colors duration-200 flex items-center"
+  >
+    <span className="mr-1">+</span> Add Admission Step
+  </button>
+</div>
 
           {/* Fees and Financial Section */}
           <div
@@ -718,7 +893,71 @@ const CourseForm = ({ userIdprop, setId }) => {
               </div>
             </div>
           </div>
+{/* Add this just before or after your existing specializations section */}
+<div>
+  <label htmlFor="topSpecializations" className="block text-sm font-medium text-gray-700 mb-1">
+    Top Specializations
+  </label>
+  
+  {course.topSpecializations.map((spec, index) => (
+    <div key={`topSpec-${index}`} className="border border-gray-200 rounded-lg p-4 mb-4">
+      <h5 className="font-medium text-gray-700 mb-3">Top Specialization {index + 1}</h5>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+        <input
+          type="text"
+          value={spec.title || ""}
+          placeholder="Enter specialization title"
+          onChange={(e) => handleTopSpecializationChange(index, "title", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+        />
+      </div>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <textarea
+          value={spec.description || ""}
+          placeholder="Describe this specialization"
+          onChange={(e) => handleTopSpecializationChange(index, "description", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+          rows={3}
+        />
+      </div>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Icon</label>
+        <input
+          type="text"
+          value={spec.icon || ""}
+          placeholder="Enter icon name or URL"
+          onChange={(e) => handleTopSpecializationChange(index, "icon", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+        />
+      </div>
+      
+      <button
+        type="button"
+        onClick={() => {
+          const updatedSpecs = [...course.topSpecializations];
+          updatedSpecs.splice(index, 1);
+          setCourse({ ...course, topSpecializations: updatedSpecs });
+        }}
+        className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors duration-200"
+      >
+        Remove Specialization
+      </button>
+    </div>
+  ))}
 
+  <button
+    type="button"
+    onClick={addTopSpecialization}
+    className="mt-4 px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-[#155DFC] transition-colors duration-200 flex items-center"
+  >
+    <span className="mr-1">+</span> Add Top Specialization
+  </button>
+</div>
           {/* Specializations Section */}
           <div
             id="specializations"
@@ -869,35 +1108,84 @@ const CourseForm = ({ userIdprop, setId }) => {
               </div>
 
               <div>
-                <h5 className="font-medium text-gray-700 mb-3">Semesters</h5>
-                {course?.semester?.map((sem, index) => (
-                  <div key={`sem-${index}`} className="flex mb-2">
-                    <input
-                      type="text"
-                      value={sem}
-                      onChange={(e) =>
-                        handleSemesterChange(index, e.target.value)
-                      }
-                      placeholder={`Enter subjects for Semester ${index + 1}`}
-                      className="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 mr-2"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeSemester(index)}
-                      className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors duration-200"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={addSemester}
-                  className="mt-4 px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-[#155DFC] transition-colors duration-200 flex items-center"
-                >
-                  <span className="mr-1">+</span> Add Semester
-                </button>
-              </div>
+  <h5 className="font-medium text-gray-700 mb-3">Semesters</h5>
+  {course.semester.map((sem, index) => (
+    <div key={`sem-${index}`} className="border border-gray-200 rounded-lg p-4 mb-4">
+      <h5 className="font-medium text-gray-700 mb-3">Semester {index + 1}</h5>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+        <input
+          type="text"
+          value={sem.title || ""}
+          placeholder={`Enter title for Semester ${index + 1}`}
+          onChange={(e) => handleSemesterChange(index, "title", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+        />
+      </div>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <textarea
+          value={sem.description || ""}
+          placeholder={`Describe Semester ${index + 1}`}
+          onChange={(e) => handleSemesterChange(index, "description", e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+          rows={3}
+        />
+      </div>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Subjects</label>
+        {(sem.subjects || []).map((subject, subjectIndex) => (
+          <div key={`subject-${index}-${subjectIndex}`} className="flex mb-2">
+            <input
+              type="text"
+              value={subject || ""}
+              onChange={(e) => handleSubjectChange(index, subjectIndex, e.target.value)}
+              placeholder={`Enter subject ${subjectIndex + 1}`}
+              className="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 mr-2"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                const updatedSemesters = [...course.semester];
+                updatedSemesters[index].subjects.splice(subjectIndex, 1);
+                setCourse({ ...course, semester: updatedSemesters });
+              }}
+              className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors duration-200"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() => addSubjectToSemester(index)}
+          className="mt-2 px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors duration-200"
+        >
+          Add Subject
+        </button>
+      </div>
+      
+      <button
+        type="button"
+        onClick={() => removeSemester(index)}
+        className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors duration-200"
+      >
+        Remove Semester
+      </button>
+    </div>
+  ))}
+  
+  <button
+    type="button"
+    onClick={addSemester}
+    className="mt-4 px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-[#155DFC] transition-colors duration-200 flex items-center"
+  >
+    <span className="mr-1">+</span> Add Semester
+  </button>
+</div>
             </div>
           </div>
 
