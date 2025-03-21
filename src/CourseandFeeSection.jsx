@@ -343,7 +343,6 @@
                 index={index}
                 fieldName="stream"
                 placeholder="Select Stream"
-                required={true}
               />
 
               {/* Level Dropdown - Searchable */}
@@ -357,7 +356,6 @@
                 index={index}
                 fieldName="level"
                 placeholder="Select Level"
-                required={true}
               />
 
               {/* Degree Name Dropdown - Searchable */}
@@ -371,7 +369,6 @@
                 index={index}
                 fieldName="degreeName"
                 placeholder="Select Degree"
-                required={true}
               />
 
               {/* Specialization Dropdown - Searchable */}
@@ -385,7 +382,6 @@
                 index={index}
                 fieldName="specialization"
                 placeholder="Select Specialization"
-                required={true}
               />
 
               {/* Course Name Dropdown - Searchable */}
@@ -399,7 +395,6 @@
                 index={index}
                 fieldName="courseName"
                 placeholder="Select Course Name"
-                required={true}
               />
 
               {/* College Course Name */}
@@ -417,7 +412,7 @@
                   }
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
                   placeholder="B.Tech Computer Science"
-                  required
+                  
                 />
               </div>
 
@@ -437,7 +432,7 @@
                     className="w-full p-2 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
                     placeholder="4"
                     min="1"
-                    required
+                    
                   />
                   <select
                     value={course.durationUnit || "Years"}
@@ -445,7 +440,7 @@
                       handleDurationUnitChange(index, e.target.value)
                     }
                     className="p-2 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
-                    required
+                    
                   >
                     <option value="Years">Years</option>
                     <option value="Months">Months</option>
@@ -470,7 +465,7 @@
                     }
                     className="w-full p-2 pl-8 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
                     placeholder="50,000"
-                    required
+                    
                   />
                 </div>
               </div>

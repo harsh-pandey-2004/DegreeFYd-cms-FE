@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BASE_URL } from "../constant/utils";
 
 const ListUser = () => {
   const [users, setUsers] = useState([]);
@@ -22,7 +23,7 @@ const ListUser = () => {
     try {
       // Fetch all users
       const usersResponse = await axios.get(
-        "https://degreefydcmsbe.onrender.com/api/auth/user"
+        `${BASE_URL}/auth/user`
       );
 
       // Extract the user data from the nested structure
@@ -43,7 +44,7 @@ const ListUser = () => {
         userData.map(async (user) => {
           try {
             const collegeResponse = await axios.get(
-              `https://degreefydcmsbe.onrender.com/api/colleges/userId/${user._id}`
+              `${BASE_URL}/colleges/userId/${user._id}`
             );
 
             // Handle possible nested structure in college response as well
@@ -108,7 +109,7 @@ const ListUser = () => {
     try {
       // Call the delete API endpoint
       const response = await axios.delete(
-        `https://degreefydcmsbe.onrender.com/api/auth/user/${userId}`
+        `${BASE_URL}/auth/user/${userId}`
       );
 
       if (response.data.success) {
@@ -189,7 +190,7 @@ const ListUser = () => {
     setPasswordLoading(selectedUser._id);
     try {
       const response = await axios.post(
-        "https://degreefydcmsbe.onrender.com/api/auth/reset-password",
+        `${BASE_URL}/auth/reset-password`,
         { id: selectedUser._id, newPassword }
       );
 
@@ -225,7 +226,7 @@ const ListUser = () => {
     setRoleLoading(selectedUser._id);
     try {
       const response = await axios.post(
-        "https://degreefydcmsbe.onrender.com/api/auth/change-role",
+        `${BASE_URL}/auth/change-role`,
         { id: selectedUser._id, role: newRole }
       );
 

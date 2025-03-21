@@ -45,7 +45,6 @@ const BasicInfoSection = ({
               errors?.collegeName ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="Enter college name"
-            required
           />
           {errors?.collegeName && (
             <p className="text-red-500 text-sm mt-1">{errors.collegeName}</p>
@@ -64,7 +63,6 @@ const BasicInfoSection = ({
               errors?.collegeName ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="Enter number (e.g., 42)"
-            required
           />
           {errors?.nirfranking && (
             <p className="text-red-500 text-sm mt-1">{errors.nirfranking}</p>
@@ -83,7 +81,6 @@ const BasicInfoSection = ({
               errors?.students ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="Enter number (e.g., 5000)"
-            required
           />
           {errors?.students && (
             <p className="text-red-500 text-sm mt-1">{errors.students}</p>
@@ -104,7 +101,6 @@ const BasicInfoSection = ({
               errors?.collegeLocation ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="City, State (e.g., Mumbai, Maharashtra)"
-            required
           />
           {errors?.collegeLocation && (
             <p className="text-red-500 text-sm mt-1">
@@ -126,7 +122,6 @@ const BasicInfoSection = ({
               errors?.established ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="Enter year (e.g., 1985)"
-            required
           />
           {errors?.established && (
             <p className="text-red-500 text-sm mt-1">{errors.established}</p>
@@ -146,7 +141,6 @@ const BasicInfoSection = ({
               errors?.highestPackage ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="e.g., 13 Lakh"
-            required
           />
           {errors?.highestPackage && (
             <p className="text-red-500 text-sm mt-1">{errors.highestPackage}</p>
@@ -166,7 +160,6 @@ const BasicInfoSection = ({
               errors?.averagePackage ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="e.g., 8 Lakh"
-            required
           />
           {errors?.averagePackage && (
             <p className="text-red-500 text-sm mt-1">{errors.averagePackage}</p>
@@ -182,7 +175,6 @@ const BasicInfoSection = ({
               type="file"
               onChange={(e) => handleSingleFileUpload(e, "collegeLogo")}
               className="w-full"
-              required={!formData.collegeLogo}
             />
             <p className="text-sm text-gray-500 mt-2">
               Drag and drop a file or click to browse
@@ -227,7 +219,6 @@ const BasicInfoSection = ({
               type="file"
               onChange={(e) => handleSingleFileUpload(e, "collegeImage")}
               className="w-full"
-              required={!formData.collegeImage}
             />
             <p className="text-sm text-gray-500 mt-2">
               Drag and drop a file or click to browse

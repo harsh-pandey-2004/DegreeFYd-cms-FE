@@ -80,7 +80,7 @@ const FacultySection = ({
             modules={quillModules}
             className="bg-white"
             placeholder="Enter faculty information"
-            required
+            
           />
         </div>
       ))}

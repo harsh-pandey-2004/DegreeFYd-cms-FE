@@ -13,6 +13,7 @@ import FacultySection from "./FacultySection";
 import FaqSection from "./FaqSection";
 import ApprovalsSection from "./ApprovalFullForm";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../constant/utils";
 
 export const CollegeForm = ({ userIdprop }) => {
   // Initial form data state
@@ -145,7 +146,7 @@ const navigate = useNavigate()
     const fetchEditDetails = async () => {
       try {
         const response = await axios.get(
-          `https://degreefydcmsbe.onrender.com/api/colleges/collegeId/${userIdprop}`
+          `${BASE_URL}/colleges/collegeId/${userIdprop}`
         );
 
         if (response.data) {
@@ -258,7 +259,7 @@ const navigate = useNavigate()
 
   const updateLevelOptions = (stream) => {
     axios
-      .get("https://degreefydcmsbe.onrender.com/api/courses")
+      .get(`${BASE_URL}/courses`)
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) => course.Stream === stream
@@ -276,7 +277,7 @@ const navigate = useNavigate()
 
   const updateDegreeOptions = (stream, level) => {
     axios
-      .get("https://degreefydcmsbe.onrender.com/api/courses")
+      .get(`${BASE_URL}/courses`)
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) => course.Stream === stream && course.Level === level
@@ -293,7 +294,7 @@ const navigate = useNavigate()
 
   const updateSpecializationOptions = (stream, level, degree) => {
     axios
-      .get("https://degreefydcmsbe.onrender.com/api/courses")
+      .get(`${BASE_URL}/courses`)
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) =>
@@ -314,7 +315,7 @@ const navigate = useNavigate()
 
   const updateCourseNameOptions = (stream, level, degree, specialization) => {
     axios
-      .get("https://degreefydcmsbe.onrender.com/api/courses")
+      .get(`${BASE_URL}/courses`)
       .then((response) => {
         const filteredCourses = response.data.filter(
           (course) =>
@@ -801,7 +802,7 @@ const navigate = useNavigate()
       if (userIdprop) {
         console.log("Editing college with ID:", userIdprop);
         response = await axios.put(
-          `https://degreefydcmsbe.onrender.com/api/colleges/${userIdprop}`,
+          `${BASE_URL}/colleges/${userIdprop}`,
           formattedData
         );
         alert("College Approved Request Send Successfuly!");
@@ -809,7 +810,7 @@ const navigate = useNavigate()
         window.location.reload();
       } else {
         response = await axios.post(
-          "https://degreefydcmsbe.onrender.com/api/colleges",
+          `${BASE_URL}/colleges`,
           formattedData
         );
         alert("College Approved Request Send Successfuly!");
@@ -840,7 +841,7 @@ const navigate = useNavigate()
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://degreefydcmsbe.onrender.com/api/courses"
+          `${BASE_URL}/courses`
         );
         if (response.data) {
           // Extract unique streams

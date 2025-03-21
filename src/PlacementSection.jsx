@@ -63,7 +63,7 @@ const PlacementSection = ({
           modules={quillModules}
           className="bg-white"
           placeholder="Enter placement description"
-          required
+          
         />
       </div>
 
@@ -77,7 +77,7 @@ const PlacementSection = ({
             onChange={(e) => handleDeepNestedChange(e, "placement", "stats")}
             className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-[#155DFC]"
             placeholder="e.g., 95%"
-            required
+            
           />
         </div>
         <div>
@@ -89,7 +89,7 @@ const PlacementSection = ({
             onChange={(e) => handleDeepNestedChange(e, "placement", "stats")}
             className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-[#155DFC]"
             placeholder="e.g., ₹10 LPA"
-            required
+            
           />
         </div>
       </div>
@@ -123,7 +123,7 @@ const PlacementSection = ({
                 }
                 className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-[#155DFC]"
                 placeholder="Enter company name"
-                required
+                
               />
             </div>
             <button

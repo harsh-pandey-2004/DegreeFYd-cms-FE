@@ -142,7 +142,7 @@ const ExamDetailsSection = ({
                     onChange={(e) => handleNestedChange(e, "examDetails")}
                     className="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#155DFC] focus:border-[#155DFC]"
                     placeholder="e.g. Moderate, High, Low"
-                    required
+                    
                   />
                 </div>
                 <div>
@@ -156,7 +156,7 @@ const ExamDetailsSection = ({
                     onChange={(e) => handleNestedChange(e, "examDetails")}
                     className="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#155DFC] focus:border-[#155DFC]"
                     placeholder="e.g. 8.5"
-                    required
+                    
                   />
                 </div>
                 <div>
@@ -170,7 +170,7 @@ const ExamDetailsSection = ({
                     onChange={(e) => handleNestedChange(e, "examDetails")}
                     className="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#155DFC] focus:border-[#155DFC]"
                     placeholder="e.g. 7.0"
-                    required
+                    
                   />
                 </div>
                 <div>
@@ -186,7 +186,7 @@ const ExamDetailsSection = ({
                     modules={quillModules}
                     className="bg-white rounded-md"
                     placeholder="Enter additional exam details here..."
-                    required
+                    
                   />
                 </div>
               </div>
@@ -210,7 +210,6 @@ const ExamDetailsSection = ({
                   onChange={(e) => handleMultipleFileUpload1(e, "gallery")}
                   className="w-full p-3 border rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-[#155DFC] hover:file:bg-blue-100 transition-colors duration-200"
                   accept="image/*"
-                  required={formData.gallery.length === 0}
                 />
                 {uploadProgress["gallery"] > 0 &&
                   uploadProgress["gallery"] < 100 && (
@@ -282,7 +281,7 @@ const ExamDetailsSection = ({
                   modules={quillModules}
                   className="bg-white rounded-md"
                   placeholder="Describe the sample degree..."
-                  required
+                  
                 />
               </div>
 
@@ -295,7 +294,6 @@ const ExamDetailsSection = ({
                   onChange={(e) => handleSingleFileUpload(e, "sampleDegree.image")}
                   className="w-full p-3 border rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-[#155DFC] hover:file:bg-blue-100 transition-colors duration-200"
                   accept="image/*"
-                  required={!formData.sampleDegree.image}
                 />
                 {uploadProgress["sampleDegree.image"] > 0 &&
                   uploadProgress["sampleDegree.image"] < 100 && (
@@ -394,7 +392,7 @@ const ExamDetailsSection = ({
                         }
                         className="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#155DFC] focus:border-[#155DFC]"
                         placeholder="Enter student name"
-                        required
+                        
                       />
                     </div>
 
@@ -454,7 +452,7 @@ const ExamDetailsSection = ({
                               }
                               className="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#155DFC] focus:border-[#155DFC]"
                               placeholder="e.g. Positive, Negative, Course, Faculty"
-                              required
+                              
                             />
                           </div>
 
@@ -476,7 +474,7 @@ const ExamDetailsSection = ({
                               modules={quillModules}
                               className="bg-white rounded-md"
                               placeholder="Enter review content here..."
-                              required
+                              
                             />
                           </div>
                         </div>
@@ -559,7 +557,7 @@ const ExamDetailsSection = ({
                   onChange={(e) => handleNestedChange(e, "examPattern")}
                   className="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#155DFC] focus:border-[#155DFC]"
                   placeholder="e.g. Entrance Exam Pattern"
-                  required
+                  
                 />
               </div>
 
@@ -650,7 +648,7 @@ const ExamDetailsSection = ({
           modules={quillModules}
           className="bg-white rounded-md"
           placeholder="Describe this step of the exam pattern..."
-          required
+          
         />
       </div>
     </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./register.css"
+import { BASE_URL } from "../../constant/utils";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -67,7 +68,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("https://degreefydcmsbe.onrender.com/api/auth/login", {
+      const res = await axios.post(`${BASE_URL}/auth/login`, {
         email,
         password,
       });
@@ -140,7 +141,7 @@ const Login = () => {
                   name="email"
                   type="email"
                   autoComplete="email"
-                  required
+                  
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.email ? "border-red-300" : "border-gray-300"
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
@@ -167,7 +168,7 @@ const Login = () => {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
-                  required
+                  
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.password ? "border-red-300" : "border-gray-300"
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-10`}

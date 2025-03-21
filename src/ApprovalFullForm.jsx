@@ -68,7 +68,7 @@ const ApprovalsSection = ({ formData, setFormData }) => {
                 }
                 className="w-full p-2 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
                 placeholder="Enter Approval Name (e.g., UGC)"
-                required
+                
               />
             </div>
 
@@ -84,7 +84,7 @@ const ApprovalsSection = ({ formData, setFormData }) => {
                 }
                 className="w-full p-2 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
                 placeholder="Enter Full Form (e.g., University Grants Commission)"
-                required
+                
               />
             </div>
           </div>

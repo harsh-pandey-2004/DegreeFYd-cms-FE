@@ -1,1161 +1,1432 @@
-import axios from "axios";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../constant/utils";
 
-const CourseForm = ({ userIdprop, setId }) => {
-  const navigate = useNavigate();
-  const [course, setCourse] = useState({
-    createdBy: localStorage.getItem("userId"),
+const CourseCreationForm = ({ userIdprop }) => {
+  const [formData, setFormData] = useState({
     courseTitle: "",
     shortDescription: "",
-    keyHighlights: "",
-    duration: "",
-    mode: "Online",
-    eligibility: "",
-    universities: 0,
+    mode: [],
+    subAbout: "",
+    subAboutItems: [{ head: "", title: "", subtitle: "" }],
     overview: "",
+    myths: [],
+    facts: [],
+    keyHighlights: [{ title: "", description: "", icon: null }],
+    duration: "",
+    eligibility: {
+      description: "",
+      steps: [],
+    },
+    universities: 0,
     whyCourse: "",
     eligibilityDetails: "",
-    admissionProcess: "",
+    admissionProcess: [],
     averageCourseFee: 0,
     scholarship: false,
     loanAssistance: false,
     specializations: "",
-    specializationDetails: [],
+    topSpecializations: [{ title: "", text: "", icon: null }],
+    specializationDetails: [{ title: "", description: "" }],
     syllabus: "",
-    semester: [],
+    semester: [{ title: "", description: "", subjects: [] }],
     careerScope: "",
-    topRecruiters: "",
+    baseSalary: {
+      description: "",
+      jobs: [{ title: "", salary: "" }],
+    },
+    topRecruiters: [],
     topCollegeOffering: "",
-    faq: [],
-    benefitsOfOnlineMBA: [], // This will remain an array of strings
-    image: "",
+    faq: [{ title: "", answer: "" }],
+    benefitsOfOnlineMBA: [],
+    eligibilityImages: [],
   });
-  const formStorageKey = userIdprop
-    ? `courseForm_${userIdprop}`
-    : "courseForm_draft";
-    const [benefitInput, setBenefitInput] = useState("");
+  const navigate = useNavigate();
+  const [mainImage, setMainImage] = useState(null);
+  const [courseLogo, setCourseLogo] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [mainImagePreview, setMainImagePreview] = useState(null);
+  const [courseLogoPreview, setCourseLogoPreview] = useState(null);
+  const [keyHighlightPreviews, setKeyHighlightPreviews] = useState([]);
+  const [topSpecializationPreviews, setTopSpecializationPreviews] = useState(
+    []
+  );
+  const [eligibilityImagePreviews, setEligibilityImagePreviews] = useState([]);
+  // Handle simple input changes
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
 
-  // Function to clear saved form data
-  const clearSavedFormData = () => {
-    localStorage.removeItem(formStorageKey);
+    if (type === "checkbox") {
+      setFormData({ ...formData, [name]: checked });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+  const handleMainImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setMainImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setMainImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  useEffect(() => {
-    // Only load from localStorage if not in edit mode (no userIdprop)
-    if (!userIdprop) {
-      const savedFormData = localStorage.getItem(formStorageKey);
-      if (savedFormData) {
-        try {
-          const parsedData = JSON.parse(savedFormData);
-          setCourse(parsedData);
-          console.log("Form data loaded from localStorage");
-        } catch (e) {
-          console.error("Error parsing saved form data:", e);
-        }
-      }
+  // Update course logo and preview
+  const handleCourseLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setCourseLogo(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCourseLogoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
-  }, [formStorageKey, userIdprop]);
+  };
 
-  // Save form data to localStorage whenever it changes
-  useEffect(() => {
-    // Don't save if it's the initial empty state or there's nothing meaningful entered
-    // Also don't save if in edit mode (userIdprop exists)
-    if (
-      !userIdprop &&
-      course &&
-      (course.courseTitle || course.admissionProcess || course.overview)
-    ) {
-      try {
-        localStorage.setItem(formStorageKey, JSON.stringify(course));
-        console.log("Form data saved to localStorage");
-      } catch (e) {
-        console.error("Error saving form data:", e);
-      }
+  // Handle keyHighlights icon file changes with preview
+  const handleKeyHighlightIconChange = (index, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const updatedHighlights = [...formData.keyHighlights];
+      updatedHighlights[index] = {
+        ...updatedHighlights[index],
+        icon: file,
+      };
+      setFormData({ ...formData, keyHighlights: updatedHighlights });
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const newPreviews = [...keyHighlightPreviews];
+        newPreviews[index] = reader.result;
+        setKeyHighlightPreviews(newPreviews);
+      };
+      reader.readAsDataURL(file);
     }
-  }, [course, formStorageKey, userIdprop]);
+  };
 
-  // Modify your useEffect for API fetching
+  // Handle topSpecializations icon file changes with preview
+  const handleTopSpecIconChange = (index, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const updatedSpecs = [...formData.topSpecializations];
+      updatedSpecs[index] = {
+        ...updatedSpecs[index],
+        icon: file,
+      };
+      setFormData({ ...formData, topSpecializations: updatedSpecs });
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const newPreviews = [...topSpecializationPreviews];
+        newPreviews[index] = reader.result;
+        setTopSpecializationPreviews(newPreviews);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Fetch college data if userIdprop is provided
   useEffect(() => {
-    const fetchEditInfo = async () => {
-      if (!userIdprop) return; // Only fetch if we have a userIdprop
-
+    const fetchEditDetails = async () => {
       try {
-        console.log("Fetching course data for ID:", userIdprop);
         const response = await axios.get(
-          `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`
+          `${BASE_URL}/courses1/${userIdprop}`
         );
+        if (response.data) {
+          // setEditableState(response.data);
 
-        if (response.data && response.data.data) {
-          console.log("Course data fetched successfully:", response.data.data);
-
-          // Ensure all necessary fields exist in the response data
-          const fetchedData = response.data.data;
-          const processedData = {
-            ...course, // Keep defaults for any missing fields
-            ...fetchedData, // Override with fetched values
-            // Convert empty arrays if they are null or undefined
-            specializationDetails: fetchedData.specializationDetails || [],
-            semester: fetchedData.semester || [],
-            faq: fetchedData.faq || [],
-          };
-
-          setCourse(processedData);
-        } else {
-          console.error("Invalid response format:", response);
+          // Update formData with the fetched data
+          setFormData(response.data.data);
         }
       } catch (error) {
-        console.error("Error fetching course:", error);
-        // Consider showing an error message to the user here
+        console.error("Error fetching college data:", error);
       }
     };
 
-    fetchEditInfo();
-  }, [userIdprop]); // Only depend on userIdprop
-
-  // Create refs for each section for scrolling
-  const sectionRefs = {
-    basicInfo: useRef(),
-    overview: useRef(),
-    eligibility: useRef(),
-    admissions: useRef(),
-    fees: useRef(),
-    specializations: useRef(),
-    syllabus: useRef(),
-    career: useRef(),
-    faq: useRef(),
-    benefits: useRef(),
-  };
-  const handleAddBenefit = () => {
-    if (benefitInput.trim()) {
-      setCourse((prevState) => ({
-        ...prevState,
-        benefitsOfOnlineMBA: [
-          ...prevState.benefitsOfOnlineMBA,
-          benefitInput.trim(),
-        ],
-      }));
-      setBenefitInput(""); // Clear the input after adding
+    if (userIdprop) {
+      fetchEditDetails();
     }
-  };
+  }, [userIdprop]);
+  useEffect(() => {
+    if (userIdprop) {
+      // For server-stored images, you would likely have URLs instead of File objects
+      // You could set the previews to these URLs directly
 
-  // Function to remove a benefit
-  const handleRemoveBenefit = (indexToRemove) => {
-    setCourse((prevState) => ({
-      ...prevState,
-      benefitsOfOnlineMBA: prevState.benefitsOfOnlineMBA.filter(
-        (_, index) => index !== indexToRemove
-      ),
-    }));
-  };
-  // Function to scroll to a specific section
-  const scrollToSection = (sectionId) => {
-    sectionRefs[sectionId]?.current?.scrollIntoView({ behavior: "smooth" });
-  };
+      // Example (assuming formData contains image URLs after fetching from server):
+      if (formData.image) {
+        setMainImagePreview(formData?.image?.url);
+      }
 
-  // Handle text input changes
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setCourse({
-      ...course,
-      [name]: type === "checkbox" ? checked : value,
+      if (formData.courseLogoUrl) {
+        setCourseLogoPreview(formData.courseLogoUrl);
+      }
+
+      // Initialize key highlight previews if they exist
+      if (formData.keyHighlights) {
+        const initialKeyHighlightPreviews = formData.keyHighlights.map((h) =>
+          h.icon ? h.icon : null
+        );
+        setKeyHighlightPreviews(initialKeyHighlightPreviews);
+      }
+
+      // Initialize specialization previews if they exist
+      if (formData.topSpecializations) {
+        const initialSpecPreviews = formData.topSpecializations.map((s) =>
+          s.icon ? s.icon : null
+        );
+        setTopSpecializationPreviews(initialSpecPreviews);
+      }
+
+      // Initialize eligibility image previews if they exist
+      // if (formData.eligibilityImageUrls) {
+      //   setEligibilityImagePreviews(formData.eligibilityImageUrls);
+      // }
+    }
+  });
+  // Handle arrays of strings (comma-separated values)
+  const handleArrayChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value.split(",").map((item) => item.trim()),
     });
   };
 
-  // Handle Quill editor changes
-  const handleQuillChange = (value, name) => {
-    setCourse({
-      ...course,
-      [name]: value,
+  // Handle rich text editor changes
+  const handleRichTextChange = (name, value) => {
+    setFormData({ ...formData, [name]: value });
+  };
+
+  // Handle eligibility description change
+  const handleEligibilityDescriptionChange = (value) => {
+    setFormData({
+      ...formData,
+      eligibility: {
+        ...formData.eligibility,
+        description: value,
+      },
     });
   };
 
-  // Handle specialization details changes
-  const handleSpecializationChange = (index, field, value) => {
-    const updatedSpecs = [...course.specializationDetails];
+  // Handle eligibility steps change
+  const handleEligibilityStepsChange = (e) => {
+    setFormData({
+      ...formData,
+      eligibility: {
+        ...formData.eligibility,
+        steps: e.target.value.split(",").map((item) => item.trim()),
+      },
+    });
+  };
+
+  // Handle keyHighlights changes
+  const handleKeyHighlightChange = (index, field, value) => {
+    const updatedHighlights = [...formData.keyHighlights];
+    updatedHighlights[index] = {
+      ...updatedHighlights[index],
+      [field]: value,
+    };
+    setFormData({ ...formData, keyHighlights: updatedHighlights });
+  };
+
+  // Handle keyHighlights icon file changes
+  // const handleKeyHighlightIconChange = (index, e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const updatedHighlights = [...formData.keyHighlights];
+  //     updatedHighlights[index] = {
+  //       ...updatedHighlights[index],
+  //       icon: file,
+  //     };
+  //     setFormData({ ...formData, keyHighlights: updatedHighlights });
+  //   }
+  // };
+
+  // Add a new key highlight
+  const addKeyHighlight = () => {
+    setFormData({
+      ...formData,
+      keyHighlights: [
+        ...formData.keyHighlights,
+        { title: "", description: "", icon: null },
+      ],
+    });
+  };
+
+  // Remove a key highlight
+  const removeKeyHighlight = (index) => {
+    const updatedHighlights = [...formData.keyHighlights];
+    updatedHighlights.splice(index, 1);
+    setFormData({ ...formData, keyHighlights: updatedHighlights });
+  };
+
+  // Handle topSpecializations changes
+  const handleTopSpecializationChange = (index, field, value) => {
+    const updatedSpecs = [...formData.topSpecializations];
     updatedSpecs[index] = {
       ...updatedSpecs[index],
       [field]: value,
     };
-    setCourse({
-      ...course,
-      specializationDetails: updatedSpecs,
+    setFormData({ ...formData, topSpecializations: updatedSpecs });
+  };
+
+  // Handle topSpecializations icon file changes
+  // const handleTopSpecIconChange = (index, e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const updatedSpecs = [...formData.topSpecializations];
+  //     updatedSpecs[index] = {
+  //       ...updatedSpecs[index],
+  //       icon: file,
+  //     };
+  //     setFormData({ ...formData, topSpecializations: updatedSpecs });
+  //   }
+  // };
+
+  // Add a new top specialization
+  const addTopSpecialization = () => {
+    setFormData({
+      ...formData,
+      topSpecializations: [
+        ...formData.topSpecializations,
+        { title: "", text: "", icon: null },
+      ],
     });
   };
 
-  // Add new specialization
-  const addSpecialization = () => {
-    setCourse({
-      ...course,
+  // Remove a top specialization
+  const removeTopSpecialization = (index) => {
+    const updatedSpecs = [...formData.topSpecializations];
+    updatedSpecs.splice(index, 1);
+    setFormData({ ...formData, topSpecializations: updatedSpecs });
+  };
+
+  // Handle specializationDetails changes
+  const handleSpecializationDetailChange = (index, field, value) => {
+    const updatedDetails = [...formData.specializationDetails];
+    updatedDetails[index] = {
+      ...updatedDetails[index],
+      [field]: value,
+    };
+    setFormData({ ...formData, specializationDetails: updatedDetails });
+  };
+
+  // Add a new specialization detail
+  const addSpecializationDetail = () => {
+    setFormData({
+      ...formData,
       specializationDetails: [
-        ...course.specializationDetails,
+        ...formData.specializationDetails,
         { title: "", description: "" },
       ],
     });
   };
 
-  // Remove specialization
-  const removeSpecialization = (index) => {
-    const updatedSpecs = [...course.specializationDetails];
-    updatedSpecs.splice(index, 1);
-    setCourse({
-      ...course,
-      specializationDetails: updatedSpecs,
+  // Remove a specialization detail
+  const removeSpecializationDetail = (index) => {
+    const updatedDetails = [...formData.specializationDetails];
+    updatedDetails.splice(index, 1);
+    setFormData({ ...formData, specializationDetails: updatedDetails });
+  };
+
+  // Handle semester changes
+  const handleSemesterChange = (index, field, value) => {
+    const updatedSemesters = [...formData.semester];
+    updatedSemesters[index] = {
+      ...updatedSemesters[index],
+      [field]: value,
+    };
+    setFormData({ ...formData, semester: updatedSemesters });
+  };
+
+  // Handle semester subjects changes
+  const handleSemesterSubjectsChange = (index, e) => {
+    const updatedSemesters = [...formData.semester];
+    updatedSemesters[index] = {
+      ...updatedSemesters[index],
+      subjects: e.target.value.split(",").map((item) => item.trim()),
+    };
+    setFormData({ ...formData, semester: updatedSemesters });
+  };
+
+  // Add a new semester
+  const addSemester = () => {
+    setFormData({
+      ...formData,
+      semester: [
+        ...formData.semester,
+        { title: "", description: "", subjects: [] },
+      ],
+    });
+  };
+
+  // Remove a semester
+  const removeSemester = (index) => {
+    const updatedSemesters = [...formData.semester];
+    updatedSemesters.splice(index, 1);
+    setFormData({ ...formData, semester: updatedSemesters });
+  };
+
+  // Handle baseSalary.jobs changes
+  const handleJobChange = (index, field, value) => {
+    const updatedJobs = [...formData.baseSalary.jobs];
+    updatedJobs[index] = {
+      ...updatedJobs[index],
+      [field]: value,
+    };
+    setFormData({
+      ...formData,
+      baseSalary: {
+        ...formData.baseSalary,
+        jobs: updatedJobs,
+      },
+    });
+  };
+
+  // Add a new job
+  const addJob = () => {
+    setFormData({
+      ...formData,
+      baseSalary: {
+        ...formData.baseSalary,
+        jobs: [...formData.baseSalary.jobs, { title: "", salary: "" }],
+      },
+    });
+  };
+
+  // Remove a job
+  const removeJob = (index) => {
+    const updatedJobs = [...formData.baseSalary.jobs];
+    updatedJobs.splice(index, 1);
+    setFormData({
+      ...formData,
+      baseSalary: {
+        ...formData.baseSalary,
+        jobs: updatedJobs,
+      },
     });
   };
 
   // Handle FAQ changes
   const handleFaqChange = (index, field, value) => {
-    const updatedFaqs = [...course.faq];
+    const updatedFaqs = [...formData.faq];
     updatedFaqs[index] = {
       ...updatedFaqs[index],
       [field]: value,
     };
-    setCourse({
-      ...course,
-      faq: updatedFaqs,
-    });
+    setFormData({ ...formData, faq: updatedFaqs });
   };
 
-  // Add new FAQ
+  // Add a new FAQ
   const addFaq = () => {
-    setCourse({
-      ...course,
-      faq: [...course.faq, { question: "", answer: "" }],
+    setFormData({
+      ...formData,
+      faq: [...formData.faq, { title: "", answer: "" }],
     });
   };
 
-  // Remove FAQ
+  // Remove a FAQ
   const removeFaq = (index) => {
-    const updatedFaqs = [...course.faq];
+    const updatedFaqs = [...formData.faq];
     updatedFaqs.splice(index, 1);
-    setCourse({
-      ...course,
-      faq: updatedFaqs,
+    setFormData({ ...formData, faq: updatedFaqs });
+  };
+
+  // Handle subAboutItems changes
+  const handleSubAboutItemChange = (index, field, value) => {
+    const updatedItems = [...formData.subAboutItems];
+    updatedItems[index] = {
+      ...updatedItems[index],
+      [field]: value,
+    };
+    setFormData({ ...formData, subAboutItems: updatedItems });
+  };
+
+  // Add a new subAboutItem
+  const addSubAboutItem = () => {
+    setFormData({
+      ...formData,
+      subAboutItems: [
+        ...formData.subAboutItems,
+        { head: "", title: "", subtitle: "" },
+      ],
     });
   };
 
-  // Add semester
-  const addSemester = () => {
-    setCourse({
-      ...course,
-      semester: [...course.semester, ""],
-    });
-  };
-
-  // Handle semester change
-  const handleSemesterChange = (index, value) => {
-    const updatedSemesters = [...course.semester];
-    updatedSemesters[index] = value;
-    setCourse({
-      ...course,
-      semester: updatedSemesters,
-    });
-  };
-
-  // Remove semester
-  const removeSemester = (index) => {
-    const updatedSemesters = [...course.semester];
-    updatedSemesters.splice(index, 1);
-    setCourse({
-      ...course,
-      semester: updatedSemesters,
-    });
+  // Remove a subAboutItem
+  const removeSubAboutItem = (index) => {
+    const updatedItems = [...formData.subAboutItems];
+    updatedItems.splice(index, 1);
+    setFormData({ ...formData, subAboutItems: updatedItems });
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (course) {
-      try {
-        const userId = localStorage.getItem("userId");
-        const payload = {
-          ...course,
-          createdBy: userId,
-        };
+    setLoading(true);
+    setError("");
+    setSuccess("");
 
-        if (userIdprop) {
-          console.log("Updating course with data:", payload);
-          const response = await axios.put(
-            `https://degreefydcmsbe.onrender.com/api/courses1/${userIdprop}`,
-            payload
-          );
-          console.log("Update response:", response);
-          alert("Your Approval Request has been sent for course");
-          navigate("/list-courses");
-          window.location.reload();
-        } else {
-          console.log("Creating new course with data:", payload);
-          const response = await axios.post(
-            "https://degreefydcmsbe.onrender.com/api/courses1",
-            payload
-          );
-          console.log("Create response:", response);
-          alert("Your Approval Request has been sent for course");
-          clearSavedFormData();
-          navigate("/list-courses");
-          window.location.reload();
-        }
-      } catch (error) {
-        console.error("Error submitting course:", error);
-        alert(
-          `Error: ${error.response?.data?.message || "Failed to submit course"}`
-        );
+    try {
+      // Create FormData object for file uploads
+      const formDataToSend = new FormData();
+
+      // Convert the form data to JSON and add to FormData
+      formDataToSend.append("courseData", JSON.stringify(formData));
+
+      // Add main course image if selected
+      if (mainImage) {
+        formDataToSend.append("mainImage", mainImage);
       }
+
+      // Add course logo if selected
+      if (courseLogo) {
+        formDataToSend.append("courseLogo", courseLogo);
+      }
+
+      // Add keyHighlights icons
+      formData.keyHighlights.forEach((highlight, index) => {
+        if (highlight.icon instanceof File) {
+          formDataToSend.append(`keyHighlights[${index}].icon`, highlight.icon);
+        }
+      });
+
+      // Add topSpecializations icons
+      formData.topSpecializations.forEach((spec, index) => {
+        if (spec.icon instanceof File) {
+          formDataToSend.append(`topSpecializations[${index}].icon`, spec.icon);
+        }
+      });
+
+      if (userIdprop) {
+        const response = await axios.put(
+          `${BASE_URL}/courses1/${userIdprop}`,
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        setSuccess("Course Updated successfully!");
+        window.location.reload();
+        navigate("/list-courses");
+      } else {
+        const response = await axios.post(
+          `${BASE_URL}/courses1`,
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setSuccess("Course created successfully!");
+        window.location.reload();
+        navigate("/list-courses");
+      }
+      // Send the form data to the server
+
+      // Optionally reset form or redirect
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to create course");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Quill editor modules and formats
-  const quillModules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image"],
-      ["clean"],
-    ],
-  };
-
-  const quillFormats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "list",
-    "bullet",
-    "link",
-    "image",
-  ];
-  // Debug course state
-  useEffect(() => {
-    if (course.courseTitle) {
-      console.log("Course state updated:", course);
-      setCourse(course);
-    }
-  }, [course]);
   return (
-    <div className="bg-gray-50">
-      <div className="container mx-auto px-4 pb-8">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-          {userIdprop ? "Edit New Course" : "Add New Course"}
-        </h1>
-        {console.log(course, "course-testing")}
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Basic Information Section */}
-          <div
-            id="basicInfo"
-            // ref={sectionRefs.basicInfo}
-            className="bg-white rounded-lg shadow-md p-6"
-          >
-            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
-              Basic Information
-            </h3>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-6">
+        {" "}
+        {userIdprop ? "Edit New Course" : "Add New Course"}
+      </h1>
 
-            <div className="space-y-6">
-              <div>
-                <label
-                  htmlFor="courseTitle"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Course Title
-                </label>
-                <input
-                  type="text"
-                  name="courseTitle"
-                  id="courseTitle"
-                  placeholder="Enter course title"
-                  value={course.courseTitle || ""}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                />
-              </div>
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}
+      {success && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+          {success}
+        </div>
+      )}
 
-              <div>
-                <label
-                  htmlFor="shortDescription"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Short Description
-                </label>
-                <div className="mb-16">
-                  <ReactQuill
-                    theme="snow"
-                    value={course?.shortDescription}
-                    onChange={(content) =>
-                      handleQuillChange(content, "shortDescription")
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Enter a brief description of the course"
-                    className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
-                  />
-                </div>
-              </div>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Basic Course Information */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
 
-              <div>
-                <label
-                  htmlFor="keyHighlights"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Key Highlights
-                </label>
-                <div className="mb-16">
-                  <ReactQuill
-                    theme="snow"
-                    value={course.keyHighlights}
-                    onChange={(content) =>
-                      handleQuillChange(content, "keyHighlights")
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Enter key highlights of the course"
-                    className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label
-                    htmlFor="duration"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Duration
-                  </label>
-                  <input
-                    type="text"
-                    name="duration"
-                    id="duration"
-                    placeholder="e.g., 2 years, 4 semesters"
-                    value={course.duration}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="mode"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Mode
-                  </label>
-                  <select
-                    name="mode"
-                    id="mode"
-                    value={course.mode}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  >
-                    <option value="Online">Online</option>
-                    <option value="Regular">Regular</option>
-                    <option value="Distance">Distance</option>
-                    <option value="Hybrid">Hybrid</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="universities"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Number of Universities
-                  </label>
-                  <input
-                    type="number"
-                    name="universities"
-                    id="universities"
-                    placeholder="Enter number of universities offering this course"
-                    value={course.universities}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="image"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Course Image URL
-                  </label>
-                  <input
-                    type="text"
-                    name="image"
-                    id="image"
-                    placeholder="Enter image URL for the course"
-                    value={course.image}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  />
-                </div>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block mb-1">Course Title*</label>
+              <input
+                type="text"
+                name="courseTitle"
+                value={formData.courseTitle}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+                required
+              />
             </div>
-          </div>
-
-          {/* Overview Section */}
-          <div
-            id="overview"
-            ref={sectionRefs.overview}
-            className="bg-white rounded-lg shadow-md p-6"
-          >
-            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
-              Course Overview
-            </h3>
-
-            <div className="space-y-6">
-              <div>
-                <label
-                  htmlFor="overview"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Overview
-                </label>
-                <div className="mb-16">
-                  <ReactQuill
-                    theme="snow"
-                    value={course.overview}
-                    onChange={(content) =>
-                      handleQuillChange(content, "overview")
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Provide a detailed overview of the course"
-                    className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="whyCourse"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Why This Course
-                </label>
-                <div className="mb-16">
-                  <ReactQuill
-                    theme="snow"
-                    value={course.whyCourse}
-                    onChange={(content) =>
-                      handleQuillChange(content, "whyCourse")
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Explain why students should choose this course"
-                    className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Eligibility Section */}
-          <div
-            id="eligibility"
-            ref={sectionRefs.eligibility}
-            className="bg-white rounded-lg shadow-md p-6"
-          >
-            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
-              Eligibility
-            </h3>
-
-            <div className="space-y-6">
-              <div>
-                <label
-                  htmlFor="eligibility"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Basic Eligibility
-                </label>
-                <input
-                  type="text"
-                  name="eligibility"
-                  id="eligibility"
-                  placeholder="e.g., Bachelor's degree with 50% marks"
-                  value={course.eligibility}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="eligibilityDetails"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Eligibility Details
-                </label>
-                <div className="mb-16">
-                  <ReactQuill
-                    theme="snow"
-                    value={course.eligibilityDetails}
-                    onChange={(content) =>
-                      handleQuillChange(content, "eligibilityDetails")
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Provide detailed eligibility criteria"
-                    className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Admission Process Section */}
-          <div
-            id="admissions"
-            ref={sectionRefs.admissions}
-            className="bg-white rounded-lg shadow-md p-6"
-          >
-            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
-              Admission Process
-            </h3>
 
             <div>
-              <label
-                htmlFor="admissionProcess"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Admission Process
-              </label>
-              <div className="mb-16">
-                <ReactQuill
-                  theme="snow"
-                  value={course.admissionProcess}
-                  onChange={(content) =>
-                    handleQuillChange(content, "admissionProcess")
-                  }
-                  modules={quillModules}
-                  formats={quillFormats}
-                  placeholder="Describe the admission process in detail"
-                  className="min-h-[150px] w-full"
-                  style={{
-                    minHeight: "150px",
-                    maxHeight: "none",
-                    overflow: "hidden",
-                  }}
-                />
-              </div>
+              <label className="block mb-1">Duration</label>
+              <input
+                type="text"
+                name="duration"
+                value={formData.duration}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+                placeholder="e.g., 2 years"
+              />
             </div>
-          </div>
 
-          {/* Fees and Financial Section */}
-          <div
-            id="fees"
-            ref={sectionRefs.fees}
-            className="bg-white rounded-lg shadow-md p-6"
-          >
-            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
-              Fees and Financial Assistance
-            </h3>
+            <div>
+              <label className="block mb-1">Mode of Education</label>
+              <input
+                type="text"
+                name="mode"
+                value={formData.mode.join(", ")}
+                onChange={handleArrayChange}
+                className="w-full border rounded px-3 py-2"
+                placeholder="Online, Offline, Hybrid (comma-separated)"
+              />
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block mb-1">Average Course Fee</label>
+              <input
+                type="number"
+                name="averageCourseFee"
+                value={formData.averageCourseFee}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+                min="0"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1">Number of Universities</label>
+              <input
+                type="number"
+                name="universities"
+                value={formData.universities}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+                min="0"
+              />
+            </div>
+
+            <div className="flex items-center space-x-4 mt-6">
               <div>
-                <label
-                  htmlFor="averageCourseFee"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Average Course Fee
-                </label>
                 <input
-                  type="number"
-                  name="averageCourseFee"
-                  id="averageCourseFee"
-                  placeholder="Enter average course fee in INR"
-                  value={course.averageCourseFee}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  type="checkbox"
+                  name="scholarship"
+                  checked={formData.scholarship}
+                  onChange={handleChange}
+                  id="scholarship"
+                  className="mr-2"
                 />
+                <label htmlFor="scholarship">Scholarship Available</label>
               </div>
 
-              <div className="flex items-center space-x-8 mt-4">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="scholarship"
-                    id="scholarship"
-                    checked={course.scholarship}
-                    onChange={handleInputChange}
-                    className="h-4 w-4 text-[#155DFC] focus:ring-purple-500 border-gray-300 rounded"
-                  />
-                  <label
-                    htmlFor="scholarship"
-                    className="ml-2 block text-sm text-gray-700"
-                  >
-                    Scholarship Available
-                  </label>
-                </div>
-
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="loanAssistance"
-                    id="loanAssistance"
-                    checked={course.loanAssistance}
-                    onChange={handleInputChange}
-                    className="h-4 w-4 text-[#155DFC] focus:ring-purple-500 border-gray-300 rounded"
-                  />
-                  <label
-                    htmlFor="loanAssistance"
-                    className="ml-2 block text-sm text-gray-700"
-                  >
-                    Loan Assistance
-                  </label>
-                </div>
+              <div>
+                <input
+                  type="checkbox"
+                  name="loanAssistance"
+                  checked={formData.loanAssistance}
+                  onChange={handleChange}
+                  id="loanAssistance"
+                  className="mr-2"
+                />
+                <label htmlFor="loanAssistance">Loan Assistance</label>
               </div>
             </div>
           </div>
 
-          {/* Specializations Section */}
-          <div
-            id="specializations"
-            ref={sectionRefs.specializations}
-            className="bg-white rounded-lg shadow-md p-6"
-          >
-            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
-              Specializations
-            </h3>
+          <div className="mt-4">
+            <label className="block mb-1">Short Description*</label>
+            <textarea
+              name="shortDescription"
+              value={formData.shortDescription}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2"
+              rows="3"
+              required
+            ></textarea>
+          </div>
+        </div>
 
-            <div className="space-y-6">
-              <div>
-                <label
-                  htmlFor="specializations"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Specializations Overview
-                </label>
-                <div className="mb-16">
-                  <ReactQuill
-                    theme="snow"
-                    value={course.specializations}
-                    onChange={(content) =>
-                      handleQuillChange(content, "specializations")
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Provide an overview of available specializations"
-                    className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
+        {/* Course Images */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Course Images</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block mb-1">Main Course Image</label>
+              <input
+                type="file"
+                onChange={handleMainImageChange}
+                className="w-full border rounded px-3 py-2"
+                accept="image/*"
+              />
+              {mainImagePreview && (
+                <div className="mt-2">
+                  <p className="text-sm text-gray-600 mb-1">Preview:</p>
+                  <img
+                    src={mainImagePreview}
+                    alt="Main course preview"
+                    className="max-h-40 border rounded"
                   />
                 </div>
-              </div>
+              )}
+            </div>
 
-              {course?.specializationDetails?.map((spec, index) => (
-                <div
-                  key={`spec-${index}`}
-                  className="border border-gray-200 rounded-lg p-4 mb-4"
-                >
-                  <h5 className="font-medium text-gray-700 mb-3">
-                    Specialization {index + 1}
-                  </h5>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Title
-                    </label>
+            <div>
+              <label className="block mb-1">Course Logo</label>
+              <input
+                type="file"
+                onChange={handleCourseLogoChange}
+                className="w-full border rounded px-3 py-2"
+                accept="image/*"
+              />
+              {courseLogoPreview && (
+                <div className="mt-2">
+                  <p className="text-sm text-gray-600 mb-1">Preview:</p>
+                  <img
+                    src={courseLogoPreview}
+                    alt="Course logo preview"
+                    className="max-h-40 border rounded"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Overview & About */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Overview & About</h2>
+
+          <div className="mb-4">
+            <label className="block mb-1">Course Overview</label>
+            <ReactQuill
+              value={formData.overview}
+              onChange={(value) => handleRichTextChange("overview", value)}
+              className="bg-white"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-1">Why This Course</label>
+            <ReactQuill
+              value={formData.whyCourse}
+              onChange={(value) => handleRichTextChange("whyCourse", value)}
+              className="bg-white"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-1">Sub About</label>
+            <ReactQuill
+              value={formData.subAbout}
+              onChange={(value) => handleRichTextChange("subAbout", value)}
+              className="bg-white"
+            />
+          </div>
+
+          {/* Sub About Items */}
+          <div className="mt-4">
+            <h3 className="text-lg font-medium mb-2">Sub About Items</h3>
+
+            {formData.subAboutItems.map((item, index) => (
+              <div
+                key={`subAbout-${index}`}
+                className="border p-4 rounded mb-4"
+              >
+                <div className="flex justify-between mb-2">
+                  <h4>Item {index + 1}</h4>
+                  <button
+                    type="button"
+                    onClick={() => removeSubAboutItem(index)}
+                    className="text-red-500"
+                  >
+                    Remove
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block mb-1">Head</label>
                     <input
                       type="text"
-                      value={spec.title || ""}
-                      placeholder="Enter specialization title"
+                      value={item.head}
                       onChange={(e) =>
-                        handleSpecializationChange(
+                        handleSubAboutItemChange(index, "head", e.target.value)
+                      }
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block mb-1">Title</label>
+                    <input
+                      type="text"
+                      value={item.title}
+                      onChange={(e) =>
+                        handleSubAboutItemChange(index, "title", e.target.value)
+                      }
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block mb-1">Subtitle</label>
+                    <input
+                      type="text"
+                      value={item.subtitle}
+                      onChange={(e) =>
+                        handleSubAboutItemChange(
+                          index,
+                          "subtitle",
+                          e.target.value
+                        )
+                      }
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={addSubAboutItem}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Add Sub About Item
+            </button>
+          </div>
+        </div>
+
+        {/* Key Highlights */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Key Highlights</h2>
+
+          {formData.keyHighlights.map((highlight, index) => (
+            <div key={`highlight-${index}`} className="border p-4 rounded mb-4">
+              <div className="flex justify-between mb-2">
+                <h4>Highlight {index + 1}</h4>
+                <button
+                  type="button"
+                  onClick={() => removeKeyHighlight(index)}
+                  className="text-red-500"
+                >
+                  Remove
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block mb-1">Title</label>
+                  <input
+                    type="text"
+                    value={highlight.title}
+                    onChange={(e) =>
+                      handleKeyHighlightChange(index, "title", e.target.value)
+                    }
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-1">Description</label>
+                  <input
+                    type="text"
+                    value={highlight.description}
+                    onChange={(e) =>
+                      handleKeyHighlightChange(
+                        index,
+                        "description",
+                        e.target.value
+                      )
+                    }
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block mb-1">Icon</label>
+                  <input
+                    type="file"
+                    onChange={(e) => handleKeyHighlightIconChange(index, e)}
+                    className="w-full border rounded px-3 py-2"
+                    accept="image/*"
+                  />
+                  {keyHighlightPreviews[index] && (
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600 mb-1">Preview:</p>
+                      <img
+                        src={keyHighlightPreviews[index]}
+                        alt={`Highlight ${index + 1} icon`}
+                        className="max-h-24 border rounded"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <button
+            type="button"
+            onClick={addKeyHighlight}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Add Key Highlight
+          </button>
+        </div>
+
+        {/* Myths & Facts */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Myths & Facts</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block mb-1">Myths</label>
+              <textarea
+                name="myths"
+                value={formData.myths.join(", ")}
+                onChange={handleArrayChange}
+                className="w-full border rounded px-3 py-2"
+                rows="4"
+                placeholder="Enter myths separated by commas"
+              ></textarea>
+            </div>
+
+            <div>
+              <label className="block mb-1">Facts</label>
+              <textarea
+                name="facts"
+                value={formData.facts.join(", ")}
+                onChange={handleArrayChange}
+                className="w-full border rounded px-3 py-2"
+                rows="4"
+                placeholder="Enter facts separated by commas"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        {/* Eligibility & Admission */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">
+            Eligibility & Admission
+          </h2>
+
+          <div className="mb-4">
+            <label className="block mb-1">Eligibility Description</label>
+            <ReactQuill
+              value={formData.eligibility.description}
+              onChange={handleEligibilityDescriptionChange}
+              className="bg-white"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-1">Eligibility Steps</label>
+            <textarea
+              value={formData.eligibility.steps.join(", ")}
+              onChange={handleEligibilityStepsChange}
+              className="w-full border rounded px-3 py-2"
+              rows="3"
+              placeholder="Enter steps separated by commas"
+            ></textarea>
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-1">
+              Detailed Eligibility Information
+            </label>
+            <ReactQuill
+              value={formData.eligibilityDetails}
+              onChange={(value) =>
+                handleRichTextChange("eligibilityDetails", value)
+              }
+              className="bg-white"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-1">Admission Process</label>
+            <textarea
+              name="admissionProcess"
+              value={formData.admissionProcess.join(", ")}
+              onChange={handleArrayChange}
+              className="w-full border rounded px-3 py-2"
+              rows="3"
+              placeholder="Enter steps separated by commas"
+            ></textarea>
+          </div>
+        </div>
+
+        {/* Specializations */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Specializations</h2>
+
+          <div className="mb-4">
+            <label className="block mb-1">Specializations Overview</label>
+            <ReactQuill
+              value={formData.specializations}
+              onChange={(value) =>
+                handleRichTextChange("specializations", value)
+              }
+              className="bg-white"
+            />
+          </div>
+
+          {/* Top Specializations */}
+          <div className="mt-6">
+            <h3 className="text-lg font-medium mb-2">Top Specializations</h3>
+
+            {formData.topSpecializations.map((spec, index) => (
+              <div key={`topSpec-${index}`} className="border p-4 rounded mb-4">
+                <div className="flex justify-between mb-2">
+                  <h4>Specialization {index + 1}</h4>
+                  <button
+                    type="button"
+                    onClick={() => removeTopSpecialization(index)}
+                    className="text-red-500"
+                  >
+                    Remove
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-1">Title</label>
+                    <input
+                      type="text"
+                      value={spec.title}
+                      onChange={(e) =>
+                        handleTopSpecializationChange(
                           index,
                           "title",
                           e.target.value
                         )
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                      className="w-full border rounded px-3 py-2"
                     />
                   </div>
-                  <div className="mb-16">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Description
-                    </label>
-                    <ReactQuill
-                      theme="snow"
-                      value={spec.description || ""}
-                      onChange={(content) =>
-                        handleSpecializationChange(
+
+                  <div>
+                    <label className="block mb-1">Text</label>
+                    <input
+                      type="text"
+                      value={spec.text}
+                      onChange={(e) =>
+                        handleTopSpecializationChange(
                           index,
-                          "description",
-                          content
+                          "text",
+                          e.target.value
                         )
                       }
-                      modules={quillModules}
-                      formats={quillFormats}
-                      placeholder="Describe this specialization"
-                      className="min-h-[150px] w-full"
-                      style={{
-                        minHeight: "150px",
-                        maxHeight: "none",
-                        overflow: "hidden",
-                      }}
+                      className="w-full border rounded px-3 py-2"
                     />
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => removeSpecialization(index)}
-                    className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors duration-200"
-                  >
-                    Remove Specialization
-                  </button>
-                </div>
-              ))}
 
-              <div className="mt-4">
-                <button
-                  type="button"
-                  onClick={addSpecialization}
-                  className="px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-[#155DFC] transition-colors duration-200 flex items-center"
-                >
-                  <span className="mr-1">+</span> Add Specialization
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Syllabus Section */}
-          <div
-            id="syllabus"
-            ref={sectionRefs.syllabus}
-            className="bg-white rounded-lg shadow-md p-6"
-          >
-            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
-              Syllabus
-            </h3>
-
-            <div className="space-y-6">
-              <div>
-                <label
-                  htmlFor="syllabus"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Syllabus Overview
-                </label>
-                <div className="mb-16">
-                  <ReactQuill
-                    theme="snow"
-                    value={course.syllabus}
-                    onChange={(content) =>
-                      handleQuillChange(content, "syllabus")
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Provide an overview of the course syllabus"
-                    className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <h5 className="font-medium text-gray-700 mb-3">Semesters</h5>
-                {course?.semester?.map((sem, index) => (
-                  <div key={`sem-${index}`} className="flex mb-2">
+                  <div className="md:col-span-2">
+                    <label className="block mb-1">Icon</label>
                     <input
-                      type="text"
-                      value={sem}
-                      onChange={(e) =>
-                        handleSemesterChange(index, e.target.value)
-                      }
-                      placeholder={`Enter subjects for Semester ${index + 1}`}
-                      className="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 mr-2"
+                      type="file"
+                      onChange={(e) => handleTopSpecIconChange(index, e)}
+                      className="w-full border rounded px-3 py-2"
+                      accept="image/*"
                     />
-                    <button
-                      type="button"
-                      onClick={() => removeSemester(index)}
-                      className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors duration-200"
-                    >
-                      Remove
-                    </button>
+                    {topSpecializationPreviews[index] && (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-600 mb-1">Preview:</p>
+                        <img
+                          src={topSpecializationPreviews[index]}
+                          alt={`Specialization ${index + 1} icon`}
+                          className="max-h-24 border rounded"
+                        />
+                      </div>
+                    )}
                   </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={addSemester}
-                  className="mt-4 px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-[#155DFC] transition-colors duration-200 flex items-center"
-                >
-                  <span className="mr-1">+</span> Add Semester
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Career Section */}
-          <div
-            id="career"
-            ref={sectionRefs.career}
-            className="bg-white rounded-lg shadow-md p-6"
-          >
-            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
-              Career Opportunities
-            </h3>
-
-            <div className="space-y-6">
-              <div>
-                <label
-                  htmlFor="careerScope"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Career Scope
-                </label>
-                <div className="mb-16">
-                  <ReactQuill
-                    theme="snow"
-                    value={course.careerScope}
-                    onChange={(content) =>
-                      handleQuillChange(content, "careerScope")
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Describe career opportunities after this course"
-                    className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
-                  />
                 </div>
               </div>
+            ))}
 
-              <div>
-                <label
-                  htmlFor="topRecruiters"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Top Recruiters
-                </label>
-                <div className="mb-16">
-                  <ReactQuill
-                    theme="snow"
-                    value={course.topRecruiters}
-                    onChange={(content) =>
-                      handleQuillChange(content, "topRecruiters")
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="List the top companies that recruit graduates"
-                    className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="topCollegeOffering"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Top Colleges Offering This Course
-                </label>
-                <div className="mb-16">
-                  <ReactQuill
-                    theme="snow"
-                    value={course.topCollegeOffering}
-                    onChange={(content) =>
-                      handleQuillChange(content, "topCollegeOffering")
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="List top institutions that offer this course"
-                    className="min-h-[150px] w-full"
-                    style={{
-                      minHeight: "150px",
-                      maxHeight: "none",
-                      overflow: "hidden",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* FAQ Section */}
-          <div
-            id="faq"
-            ref={sectionRefs.faq}
-            className="bg-white rounded-lg shadow-md p-6"
-          >
-            <h3 className="text-3xl font-bold mb-6 text-[#155DFC] border-b pb-2">
-              FAQs
-            </h3>
-
-            <div className="space-y-6">
-              {course?.faq?.map((faq, index) => (
-                <div
-                  key={`faq-${index}`}
-                  className="border border-gray-200 rounded-lg p-4 mb-4"
-                >
-                  <h5 className="font-medium text-gray-700 mb-3">
-                    FAQ {index + 1}
-                  </h5>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Question
-                    </label>
-                    <input
-                      type="text"
-                      value={faq.question || ""}
-                      placeholder="Enter frequently asked question"
-                      onChange={(e) =>
-                        handleFaqChange(index, "question", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                    />
-                  </div>
-                  <div className="mb-16">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Answer
-                    </label>
-                    <ReactQuill
-                      theme="snow"
-                      value={faq.answer || ""}
-                      onChange={(content) =>
-                        handleFaqChange(index, "answer", content)
-                      }
-                      modules={quillModules}
-                      formats={quillFormats}
-                      placeholder="Provide the answer to this question"
-                      className="min-h-[150px] w-full"
-                      style={{
-                        minHeight: "150px",
-                        maxHeight: "none",
-                        overflow: "hidden",
-                      }}
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => removeFaq(index)}
-                    className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors duration-200"
-                  >
-                    Remove FAQ
-                  </button>
-                </div>
-              ))}
-
-              <div className="mt-4">
-                <button
-                  type="button"
-                  onClick={addFaq}
-                  className="px-4 py-2 bg-[#155DFC] text-white rounded-md hover:bg-[#155DFC] transition-colors duration-200 flex items-center"
-                >
-                  <span className="mr-1">+</span> Add FAQ
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Benefits Section */}
-          <div>
-  <label 
-    htmlFor="benefitsOfOnlineMBA" 
-    className="block text-sm font-medium text-gray-700 mb-1"
-  >
-    Benefits of This Course
-  </label>
-  <div className="mb-4">
-    <div className="flex space-x-2">
-      <input
-        type="text"
-        value={benefitInput}
-        onChange={(e) => setBenefitInput(e.target.value)}
-        placeholder="Add a course benefit"
-        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-      />
-      <button
-        type="button"
-        onClick={handleAddBenefit}
-        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        Add Benefit
-      </button>
-    </div>
-  </div>
-  
-  {/* Display the list of benefits */}
-  {course.benefitsOfOnlineMBA.length > 0 && (
-    <div className="mt-4">
-      <h4 className="text-sm font-medium text-gray-700">Current Benefits:</h4>
-      <ul className="mt-2 pl-5 list-disc">
-        {course.benefitsOfOnlineMBA.length>0 &&course?.benefitsOfOnlineMBA?.map((benefit, index) => (
-          <li key={index} className="text-sm text-gray-600 flex justify-between items-center">
-            <span>{benefit}</span>
             <button
               type="button"
-              onClick={() => handleRemoveBenefit(index)}
-              className="text-red-500 hover:text-red-700"
+              onClick={addTopSpecialization}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
             >
-              <span className="sr-only">Remove</span>
-              ×
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )}
-</div>
-
-          {/* Submit Button */}
-          <div className="text-center py-6">
-            <button
-              type="submit"
-              className="px-8 py-3 bg-[#155DFC] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 transition-colors duration-200"
-            >
-              Send for Approval{" "}
+              Add Top Specialization
             </button>
           </div>
-        </form>
-      </div>
+
+          {/* Specialization Details */}
+          <div className="mt-6">
+            <h3 className="text-lg font-medium mb-2">Specialization Details</h3>
+
+            {formData.specializationDetails.map((detail, index) => (
+              <div
+                key={`specDetail-${index}`}
+                className="border p-4 rounded mb-4"
+              >
+                <div className="flex justify-between mb-2">
+                  <h4>Detail {index + 1}</h4>
+                  <button
+                    type="button"
+                    onClick={() => removeSpecializationDetail(index)}
+                    className="text-red-500"
+                  >
+                    Remove
+                  </button>
+                </div>
+
+                <div>
+                  <label className="block mb-1">Title</label>
+                  <input
+                    type="text"
+                    value={detail.title}
+                    onChange={(e) =>
+                      handleSpecializationDetailChange(
+                        index,
+                        "title",
+                        e.target.value
+                      )
+                    }
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+
+                <div className="mt-2">
+                  <label className="block mb-1">Description</label>
+                  <ReactQuill
+                    value={detail.description}
+                    onChange={(value) =>
+                      handleSpecializationDetailChange(
+                        index,
+                        "description",
+                        value
+                      )
+                    }
+                    className="bg-white"
+                  />
+                </div>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={addSpecializationDetail}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Add Specialization Detail
+            </button>
+          </div>
+        </div>
+
+        {/* Syllabus & Semesters */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Syllabus & Semesters</h2>
+
+          <div className="mb-4">
+            <label className="block mb-1">Syllabus Overview</label>
+            <ReactQuill
+              value={formData.syllabus}
+              onChange={(value) => handleRichTextChange("syllabus", value)}
+              className="bg-white"
+            />
+          </div>
+
+          {/* Semesters */}
+          <div className="mt-4">
+            <h3 className="text-lg font-medium mb-2">Semester Details</h3>
+
+            {formData.semester.map((sem, index) => (
+              <div
+                key={`semester-${index}`}
+                className="border p-4 rounded mb-4"
+              >
+                <div className="flex justify-between mb-2">
+                  <h4>Semester {index + 1}</h4>
+                  <button
+                    type="button"
+                    onClick={() => removeSemester(index)}
+                    className="text-red-500"
+                  >
+                    Remove
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-1">Title</label>
+                    <input
+                      type="text"
+                      value={sem.title}
+                      onChange={(e) =>
+                        handleSemesterChange(index, "title", e.target.value)
+                      }
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block mb-1">Description</label>
+                    <input
+                      type="text"
+                      value={sem.description}
+                      onChange={(e) =>
+                        handleSemesterChange(
+                          index,
+                          "description",
+                          e.target.value
+                        )
+                      }
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block mb-1">Subjects</label>
+                    <textarea
+                      value={sem.subjects.join(", ")}
+                      onChange={(e) => handleSemesterSubjectsChange(index, e)}
+                      className="w-full border rounded px-3 py-2"
+                      rows="3"
+                      placeholder="Enter subjects separated by commas"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={addSemester}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Add Semester
+            </button>
+          </div>
+        </div>
+
+        {/* Career & Salary Information */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Career Information</h2>
+
+          <div className="mb-4">
+            <label className="block mb-1">Career Scope</label>
+            <ReactQuill
+              value={formData.careerScope}
+              onChange={(value) => handleRichTextChange("careerScope", value)}
+              className="bg-white"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-1">Base Salary Description</label>
+            <input
+              type="text"
+              value={formData.baseSalary.description}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  baseSalary: {
+                    ...formData.baseSalary,
+                    description: e.target.value,
+                  },
+                })
+              }
+              className="w-full border rounded px-3 py-2"
+            />
+          </div>
+
+          {/* Salary Jobs */}
+          <div className="mt-4">
+            <h3 className="text-lg font-medium mb-2">
+              Salary Information by Job
+            </h3>
+
+            {formData.baseSalary.jobs.map((job, index) => (
+              <div key={`job-${index}`} className="border p-4 rounded mb-4">
+                <div className="flex justify-between mb-2">
+                  <h4>Job {index + 1}</h4>
+                  <button
+                    type="button"
+                    onClick={() => removeJob(index)}
+                    className="text-red-500"
+                  >
+                    Remove
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-1">Job Title</label>
+                    <input
+                      type="text"
+                      value={job.title}
+                      onChange={(e) =>
+                        handleJobChange(index, "title", e.target.value)
+                      }
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block mb-1">Salary Range</label>
+                    <input
+                      type="text"
+                      value={job.salary}
+                      onChange={(e) =>
+                        handleJobChange(index, "salary", e.target.value)
+                      }
+                      className="w-full border rounded px-3 py-2"
+                      placeholder="e.g., ₹5-8 LPA"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={addJob}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Add Job
+            </button>
+          </div>
+
+          <div className="mt-6">
+            <label className="block mb-1">Top Recruiters</label>
+            <textarea
+              name="topRecruiters"
+              value={formData.topRecruiters.join(", ")}
+              onChange={handleArrayChange}
+              className="w-full border rounded px-3 py-2"
+              rows="3"
+              placeholder="Enter top recruiters separated by commas"
+            ></textarea>
+          </div>
+
+          <div className="mt-4">
+            <label className="block mb-1">
+              Top Colleges Offering This Course
+            </label>
+            <ReactQuill
+              value={formData.topCollegeOffering}
+              onChange={(value) =>
+                handleRichTextChange("topCollegeOffering", value)
+              }
+              className="bg-white"
+            />
+          </div>
+        </div>
+
+        {/* Additional Information */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Additional Information</h2>
+
+          <div className="mb-4">
+            <label className="block mb-1">Benefits of Online MBA</label>
+            <textarea
+              name="benefitsOfOnlineMBA"
+              value={formData.benefitsOfOnlineMBA.join(", ")}
+              onChange={handleArrayChange}
+              className="w-full border rounded px-3 py-2"
+              rows="3"
+              placeholder="Enter benefits separated by commas"
+            ></textarea>
+          </div>
+        </div>
+
+        {/* FAQs */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">
+            Frequently Asked Questions
+          </h2>
+
+          {formData.faq.map((faq, index) => (
+            <div key={`faq-${index}`} className="border p-4 rounded mb-4">
+              <div className="flex justify-between mb-2">
+                <h4>FAQ {index + 1}</h4>
+                <button
+                  type="button"
+                  onClick={() => removeFaq(index)}
+                  className="text-red-500"
+                >
+                  Remove
+                </button>
+              </div>
+
+              <div>
+                <label className="block mb-1">Question</label>
+                <input
+                  type="text"
+                  value={faq.title}
+                  onChange={(e) =>
+                    handleFaqChange(index, "title", e.target.value)
+                  }
+                  className="w-full border rounded px-3 py-2"
+                />
+              </div>
+
+              <div className="mt-2">
+                <label className="block mb-1">Answer</label>
+                <ReactQuill
+                  value={faq.answer}
+                  onChange={(value) => handleFaqChange(index, "answer", value)}
+                  className="bg-white"
+                />
+              </div>
+            </div>
+          ))}
+
+          <button
+            type="button"
+            onClick={addFaq}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Add FAQ
+          </button>
+        </div>
+
+        {/* Submit Button */}
+        <div className="mt-6 flex justify-end">
+          <button
+            type="submit"
+            className="bg-green-500 text-white px-6 py-3 rounded font-semibold"
+            disabled={loading}
+          >
+            {loading
+              ? "Saving..."
+              : `${userIdprop ? "Update Course" : "Create Course"}`}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
 
-export default CourseForm;
+export default CourseCreationForm;

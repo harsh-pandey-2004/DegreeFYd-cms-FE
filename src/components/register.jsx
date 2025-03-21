@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./register.css"
+import { BASE_URL } from "../../constant/utils";
 const Register = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -161,7 +162,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await axios.post("https://degreefydcmsbe.onrender.com/api/auth/register", {
+      await axios.post(`${BASE_URL}/auth/register`, {
         username,
         email,
         password,

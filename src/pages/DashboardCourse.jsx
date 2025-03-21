@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import ApproveComponent from "./ApproveCourse";
 import RejectComponent from "./RejectCourse";
 import DOMPurify from "dompurify";
+import { BASE_URL } from "../../constant/utils";
 
 const Dashboard = ({ setId }) => {
   const [responses, setResponses] = useState([]);
@@ -64,11 +65,11 @@ const Dashboard = ({ setId }) => {
       let response;
       if (isContentCreator) {
         response = await axios.get(
-          `https://degreefydcmsbe.onrender.com/api/courses1/${userId}`
+          `${BASE_URL}/courses1/${userId}`
         );
       } else {
         response = await axios.get(
-          "https://degreefydcmsbe.onrender.com/api/courses1"
+          `${BASE_URL}/courses1`
         );
       }
       setResponses(response.data.data);
@@ -98,7 +99,7 @@ const Dashboard = ({ setId }) => {
       if (!emailMap[id]) {
         try {
           const response = await axios.get(
-            `https://degreefydcmsbe.onrender.com/api/auth/user/${id}`
+            `${BASE_URL}/auth/user/${id}`
           );
           emailMap[id] = response.data.data.email;
         } catch (error) {
@@ -215,7 +216,7 @@ const Dashboard = ({ setId }) => {
     console.log(collegeData._id);
     try {
       const response = await axios.delete(
-        `https://degreefydcmsbe.onrender.com/api/courses1/${collegeData._id}`
+        `${BASE_URL}/courses1/${collegeData._id}`
       );
       window.location.reload();
       console.log(response.data);
@@ -265,7 +266,7 @@ const Dashboard = ({ setId }) => {
 
     try {
       const response = await axios.put(
-        `https://degreefydcmsbe.onrender.com/api/colleges/approve/${selectedCollege._id}`,
+        `${BASE_URL}/colleges/approve/${selectedCollege._id}`,
         {
           userId: userId,
           status: "approved",
@@ -300,7 +301,7 @@ const Dashboard = ({ setId }) => {
 
     try {
       const response = await axios.put(
-        `https://degreefydcmsbe.onrender.com/api/courses1/approve/${selectedCollege._id}`,
+        `${BASE_URL}/courses1/approve/${selectedCollege._id}`,
         {
           userId: userId,
           status: "rejected",

@@ -103,7 +103,6 @@ const AdmissionProcessSection = ({
               }
               className="w-full p-2 pl-10 border rounded focus:ring-2 focus:ring-[#155DFC] focus:outline-none"
               placeholder="Describe this admission step"
-              required
             />
           </div>
         </div>
