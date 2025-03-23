@@ -4,7 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constant/utils";
-
+import Select from "react-select";
 const CourseCreationForm = ({ userIdprop }) => {
   const [formData, setFormData] = useState({
     courseTitle: "",
@@ -56,6 +56,8 @@ const CourseCreationForm = ({ userIdprop }) => {
   const [topSpecializationPreviews, setTopSpecializationPreviews] = useState(
     []
   );
+  const [recruiterImages, setRecruiterImages] = useState([]);
+  const [recruiterImagePreviews, setRecruiterImagePreviews] = useState([]);
   const [eligibilityImagePreviews, setEligibilityImagePreviews] = useState([]);
   // Handle simple input changes
   const handleChange = (e) => {
@@ -78,7 +80,33 @@ const CourseCreationForm = ({ userIdprop }) => {
       reader.readAsDataURL(file);
     }
   };
+  const handleRecruiterImagesChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length) {
+      // Add new files to existing recruiter images
+      const newImages = [...recruiterImages, ...files];
+      setRecruiterImages(newImages);
 
+      // Create previews for all new files
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setRecruiterImagePreviews((prev) => [...prev, reader.result]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const removeRecruiterImage = (index) => {
+    const updatedImages = [...recruiterImages];
+    updatedImages.splice(index, 1);
+    setRecruiterImages(updatedImages);
+
+    const updatedPreviews = [...recruiterImagePreviews];
+    updatedPreviews.splice(index, 1);
+    setRecruiterImagePreviews(updatedPreviews);
+  };
   // Update course logo and preview
   const handleCourseLogoChange = (e) => {
     const file = e.target.files[0];
@@ -135,29 +163,39 @@ const CourseCreationForm = ({ userIdprop }) => {
       reader.readAsDataURL(file);
     }
   };
-
+  const [degreeName, setDegreeName] = useState([]);
+  const [selectedDegree, setSelectedDegree] = useState(null);
   // Fetch college data if userIdprop is provided
   useEffect(() => {
     const fetchEditDetails = async () => {
       try {
         const response = await axios.get(
-          `${BASE_URL}/courses1/${userIdprop}`
+          `${BASE_URL}/courses1/id/${userIdprop}`
         );
         if (response.data) {
-          // setEditableState(response.data);
+          console.log("Response data:", response.data);
+          setFormData(response.data);
 
-          // Update formData with the fetched data
-          setFormData(response.data.data);
+          const fetchedDegree = response.data.degree; // This is a string like "BA"
+
+          // Ensure we find the corresponding object in `degreeName`
+          const matchedDegree = degreeName.find(
+            (d) => d.value === fetchedDegree
+          );
+
+          setSelectedDegree(matchedDegree || null); // Ensure it's an object
         }
       } catch (error) {
         console.error("Error fetching college data:", error);
       }
     };
 
-    if (userIdprop) {
+    if (userIdprop && degreeName.length > 0) {
       fetchEditDetails();
     }
-  }, [userIdprop]);
+  }, [userIdprop, degreeName]);
+  // Wait for degreeName to be populated before setting selectedDegree
+
   useEffect(() => {
     if (userIdprop) {
       // For server-stored images, you would likely have URLs instead of File objects
@@ -171,7 +209,12 @@ const CourseCreationForm = ({ userIdprop }) => {
       if (formData.courseLogoUrl) {
         setCourseLogoPreview(formData.courseLogoUrl);
       }
-
+      const urls = Array.isArray(formData.topRecruiters)
+        ? formData.topRecruiters.map((img) =>
+            typeof img === "string" ? img : img.url
+          )
+        : [];
+      setRecruiterImagePreviews(urls);
       // Initialize key highlight previews if they exist
       if (formData.keyHighlights) {
         const initialKeyHighlightPreviews = formData.keyHighlights.map((h) =>
@@ -199,7 +242,7 @@ const CourseCreationForm = ({ userIdprop }) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value.split(",").map((item) => item.trim()),
+      [name]: value.split("|||").map((item) => item.trim()),
     });
   };
 
@@ -225,7 +268,7 @@ const CourseCreationForm = ({ userIdprop }) => {
       ...formData,
       eligibility: {
         ...formData.eligibility,
-        steps: e.target.value.split(",").map((item) => item.trim()),
+        steps: e.target.value.split("|||").map((item) => item.trim()),
       },
     });
   };
@@ -263,6 +306,24 @@ const CourseCreationForm = ({ userIdprop }) => {
       ],
     });
   };
+  const handleRecruiterImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length) {
+      const newImages = [...recruiterImages, ...files];
+      setRecruiterImages(newImages);
+
+      // Create previews for new files
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setRecruiterImagePreviews((prev) => [...prev, reader.result]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  // Remove a recruiter image
 
   // Remove a key highlight
   const removeKeyHighlight = (index) => {
@@ -355,7 +416,7 @@ const CourseCreationForm = ({ userIdprop }) => {
     const updatedSemesters = [...formData.semester];
     updatedSemesters[index] = {
       ...updatedSemesters[index],
-      subjects: e.target.value.split(",").map((item) => item.trim()),
+      subjects: e.target.value.split("|||").map((item) => item.trim()),
     };
     setFormData({ ...formData, semester: updatedSemesters });
   };
@@ -482,8 +543,14 @@ const CourseCreationForm = ({ userIdprop }) => {
       // Create FormData object for file uploads
       const formDataToSend = new FormData();
 
-      // Convert the form data to JSON and add to FormData
-      formDataToSend.append("courseData", JSON.stringify(formData));
+      // Ensure courseData includes the selected degree
+      const updatedCourseData = {
+        ...formData,
+        degree: selectedDegree ? selectedDegree.value : "", // Add the degree inside courseData
+      };
+
+      // Convert the updated courseData to JSON and add to FormData
+      formDataToSend.append("courseData", JSON.stringify(updatedCourseData));
 
       // Add main course image if selected
       if (mainImage) {
@@ -502,6 +569,13 @@ const CourseCreationForm = ({ userIdprop }) => {
         }
       });
 
+      // Add recruiter images
+      recruiterImages.forEach((image, index) => {
+        if (image instanceof File) {
+          formDataToSend.append(`recruiterImages[${index}]`, image);
+        }
+      });
+
       // Add topSpecializations icons
       formData.topSpecializations.forEach((spec, index) => {
         if (spec.icon instanceof File) {
@@ -509,6 +583,7 @@ const CourseCreationForm = ({ userIdprop }) => {
         }
       });
 
+      // Check if updating or creating a course
       if (userIdprop) {
         const response = await axios.put(
           `${BASE_URL}/courses1/${userIdprop}`,
@@ -533,13 +608,11 @@ const CourseCreationForm = ({ userIdprop }) => {
             },
           }
         );
-        setSuccess("Course created successfully!");
-        window.location.reload();
-        navigate("/list-courses");
-      }
-      // Send the form data to the server
 
-      // Optionally reset form or redirect
+        setSuccess("Course created successfully!");
+        navigate("/list-courses");
+        window.location.reload();
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Failed to create course");
     } finally {
@@ -547,6 +620,21 @@ const CourseCreationForm = ({ userIdprop }) => {
     }
   };
 
+  useEffect(() => {
+    const fetchDegree = async () => {
+      try {
+        let response = await axios.get(`${BASE_URL}/courses/degree-names`);
+        const formattedDegrees = response.data.data.map((degree) => ({
+          value: degree,
+          label: degree,
+        }));
+        setDegreeName(formattedDegrees);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchDegree();
+  }, []);
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">
@@ -567,6 +655,22 @@ const CourseCreationForm = ({ userIdprop }) => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Course Information */}
+        <div className="bg-gray-50 p-6 rounded-lg shadow">
+          <label htmlFor="degree-select" className="degree-label">
+            Select Degree:
+          </label>
+          <Select
+            id="degree-select"
+            value={selectedDegree} // ✅ Must be an object: { value, label }
+            onChange={(selectedOption) => setSelectedDegree(selectedOption)} // ✅ Handle as object
+            options={degreeName} // ✅ Must be an array of objects [{ value: "BA", label: "BA" }, ...]
+            isClearable
+            placeholder="Select a degree..."
+            noOptionsMessage={() => "No degree options available"}
+            loadingMessage={() => "Loading degree options..."}
+            className="degree-select"
+          />
+        </div>
         <div className="bg-gray-50 p-6 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
 
@@ -597,14 +701,14 @@ const CourseCreationForm = ({ userIdprop }) => {
 
             <div>
               <label className="block mb-1">Mode of Education</label>
-              <input
+               <input
                 type="text"
                 name="mode"
-                value={formData.mode.join(", ")}
+                value={formData?.mode.join("||| ")}
                 onChange={handleArrayChange}
                 className="w-full border rounded px-3 py-2"
-                placeholder="Online, Offline, Hybrid (comma-separated)"
-              />
+                placeholder="Online, Offline, Hybrid (|||-separated)"
+              /> 
             </div>
 
             <div>
@@ -669,8 +773,8 @@ const CourseCreationForm = ({ userIdprop }) => {
               required
             ></textarea>
           </div>
+          <div></div>
         </div>
-
         {/* Course Images */}
         <div className="bg-gray-50 p-6 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4">Course Images</h2>
@@ -753,7 +857,7 @@ const CourseCreationForm = ({ userIdprop }) => {
           <div className="mt-4">
             <h3 className="text-lg font-medium mb-2">Sub About Items</h3>
 
-            {formData.subAboutItems.map((item, index) => (
+            {formData?.subAboutItems.map((item, index) => (
               <div
                 key={`subAbout-${index}`}
                 className="border p-4 rounded mb-4"
@@ -910,11 +1014,11 @@ const CourseCreationForm = ({ userIdprop }) => {
               <label className="block mb-1">Myths</label>
               <textarea
                 name="myths"
-                value={formData.myths.join(", ")}
+                value={formData.myths.join("||| ")}
                 onChange={handleArrayChange}
                 className="w-full border rounded px-3 py-2"
                 rows="4"
-                placeholder="Enter myths separated by commas"
+                placeholder="Enter myths separated by |||"
               ></textarea>
             </div>
 
@@ -922,11 +1026,11 @@ const CourseCreationForm = ({ userIdprop }) => {
               <label className="block mb-1">Facts</label>
               <textarea
                 name="facts"
-                value={formData.facts.join(", ")}
+                value={formData.facts.join("||| ")}
                 onChange={handleArrayChange}
                 className="w-full border rounded px-3 py-2"
                 rows="4"
-                placeholder="Enter facts separated by commas"
+                placeholder="Enter facts separated by |||"
               ></textarea>
             </div>
           </div>
@@ -950,11 +1054,11 @@ const CourseCreationForm = ({ userIdprop }) => {
           <div className="mb-4">
             <label className="block mb-1">Eligibility Steps</label>
             <textarea
-              value={formData.eligibility.steps.join(", ")}
+              value={formData.eligibility.steps.join("||| ")}
               onChange={handleEligibilityStepsChange}
               className="w-full border rounded px-3 py-2"
               rows="3"
-              placeholder="Enter steps separated by commas"
+              placeholder="Enter steps separated by |||"
             ></textarea>
           </div>
 
@@ -975,11 +1079,11 @@ const CourseCreationForm = ({ userIdprop }) => {
             <label className="block mb-1">Admission Process</label>
             <textarea
               name="admissionProcess"
-              value={formData.admissionProcess.join(", ")}
+              value={formData.admissionProcess.join("||| ")}
               onChange={handleArrayChange}
               className="w-full border rounded px-3 py-2"
               rows="3"
-              placeholder="Enter steps separated by commas"
+              placeholder="Enter steps separated by |||"
             ></textarea>
           </div>
         </div>
@@ -1209,11 +1313,11 @@ const CourseCreationForm = ({ userIdprop }) => {
                   <div className="md:col-span-2">
                     <label className="block mb-1">Subjects</label>
                     <textarea
-                      value={sem.subjects.join(", ")}
+                      value={sem.subjects.join("||| ")}
                       onChange={(e) => handleSemesterSubjectsChange(index, e)}
                       className="w-full border rounded px-3 py-2"
                       rows="3"
-                      placeholder="Enter subjects separated by commas"
+                      placeholder="Enter subjects separated by |||"
                     ></textarea>
                   </div>
                 </div>
@@ -1319,15 +1423,55 @@ const CourseCreationForm = ({ userIdprop }) => {
           </div>
 
           <div className="mt-6">
-            <label className="block mb-1">Top Recruiters</label>
-            <textarea
-              name="topRecruiters"
-              value={formData.topRecruiters.join(", ")}
-              onChange={handleArrayChange}
-              className="w-full border rounded px-3 py-2"
-              rows="3"
-              placeholder="Enter top recruiters separated by commas"
-            ></textarea>
+            <label className="block mb-1 font-medium">Top Recruiters</label>
+            <p className="text-sm text-gray-600 mb-2">
+              Upload multiple company logos
+            </p>
+
+            <div className="mb-3">
+              <input
+                type="file"
+                id="recruiterImages"
+                onChange={handleRecruiterImagesChange}
+                accept="image/*"
+                multiple
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  document.getElementById("recruiterImages").click()
+                }
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+              >
+                Select Company Logos
+              </button>
+            </div>
+
+            {/* Display image previews with delete option */}
+            {recruiterImagePreviews.length > 0 && (
+              <div className="mt-3">
+                <label className="block mb-1">Selected Company Logos:</label>
+                <div className="flex flex-wrap gap-4">
+                  {recruiterImagePreviews.map((preview, index) => (
+                    <div key={index} className="relative group">
+                      <img
+                        src={preview}
+                        alt={`Company ${index + 1}`}
+                        className="w-24 h-24 object-contain border rounded p-1"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeRecruiterImage(index)}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-90 hover:opacity-100"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="mt-4">
@@ -1352,11 +1496,11 @@ const CourseCreationForm = ({ userIdprop }) => {
             <label className="block mb-1">Benefits of Online MBA</label>
             <textarea
               name="benefitsOfOnlineMBA"
-              value={formData.benefitsOfOnlineMBA.join(", ")}
+              value={formData.benefitsOfOnlineMBA.join("||| ")}
               onChange={handleArrayChange}
               className="w-full border rounded px-3 py-2"
               rows="3"
-              placeholder="Enter benefits separated by commas"
+              placeholder="Enter benefits separated by |||"
             ></textarea>
           </div>
         </div>
