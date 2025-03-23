@@ -671,7 +671,7 @@ const CourseCreationForm = ({ userIdprop }) => {
             className="degree-select"
           />
         </div>
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-gray-50 p-6 rounded-lg shadow" id="basicInfo">
           <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -776,7 +776,7 @@ const CourseCreationForm = ({ userIdprop }) => {
           <div></div>
         </div>
         {/* Course Images */}
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-gray-50 p-6 rounded-lg shadow" id="courseImages">
           <h2 className="text-xl font-semibold mb-4">Course Images</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -823,7 +823,7 @@ const CourseCreationForm = ({ userIdprop }) => {
         </div>
 
         {/* Overview & About */}
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-gray-50 p-6 rounded-lg shadow" id="Overview">
           <h2 className="text-xl font-semibold mb-4">Overview & About</h2>
 
           <div className="mb-4">
@@ -928,7 +928,7 @@ const CourseCreationForm = ({ userIdprop }) => {
         </div>
 
         {/* Key Highlights */}
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-gray-50 p-6 rounded-lg shadow" id="Highlights">
           <h2 className="text-xl font-semibold mb-4">Key Highlights</h2>
 
           {formData.keyHighlights.map((highlight, index) => (
@@ -1006,7 +1006,7 @@ const CourseCreationForm = ({ userIdprop }) => {
         </div>
 
         {/* Myths & Facts */}
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-gray-50 p-6 rounded-lg shadow" id="Mythsfacts">
           <h2 className="text-xl font-semibold mb-4">Myths & Facts</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1037,7 +1037,7 @@ const CourseCreationForm = ({ userIdprop }) => {
         </div>
 
         {/* Eligibility & Admission */}
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-gray-50 p-6 rounded-lg shadow" id="Eligibility">
           <h2 className="text-xl font-semibold mb-4">
             Eligibility & Admission
           </h2>
@@ -1089,7 +1089,7 @@ const CourseCreationForm = ({ userIdprop }) => {
         </div>
 
         {/* Specializations */}
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-gray-50 p-6 rounded-lg shadow" id="Speciality">
           <h2 className="text-xl font-semibold mb-4">Specializations</h2>
 
           <div className="mb-4">
@@ -1249,7 +1249,7 @@ const CourseCreationForm = ({ userIdprop }) => {
         </div>
 
         {/* Syllabus & Semesters */}
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-gray-50 p-6 rounded-lg shadow" id="Syllabus">
           <h2 className="text-xl font-semibold mb-4">Syllabus & Semesters</h2>
 
           <div className="mb-4">
@@ -1335,7 +1335,7 @@ const CourseCreationForm = ({ userIdprop }) => {
         </div>
 
         {/* Career & Salary Information */}
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-gray-50 p-6 rounded-lg shadow" id="career">
           <h2 className="text-xl font-semibold mb-4">Career Information</h2>
 
           <div className="mb-4">
@@ -1489,7 +1489,7 @@ const CourseCreationForm = ({ userIdprop }) => {
         </div>
 
         {/* Additional Information */}
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-gray-50 p-6 rounded-lg shadow" id="additinal">
           <h2 className="text-xl font-semibold mb-4">Additional Information</h2>
 
           <div className="mb-4">
@@ -1506,7 +1506,7 @@ const CourseCreationForm = ({ userIdprop }) => {
         </div>
 
         {/* FAQs */}
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-gray-50 p-6 rounded-lg shadow" id="faq">
           <h2 className="text-xl font-semibold mb-4">
             Frequently Asked Questions
           </h2>

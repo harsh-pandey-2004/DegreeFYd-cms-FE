@@ -7,18 +7,19 @@ const Sidebar = () => {
 
   // Define menu items based on the path
   const menuItems =
-    location.pathname === "/add-course"|| location.pathname === "/list-courses"
+    location.pathname === "/add-course" || location.pathname === "/list-courses"
       ? [
           { id: "basicInfo", label: "Basic Info" },
-          { id: "overview", label: "Overview" },
-          { id: "eligibility", label: "Eligibility" },
-          { id: "admissions", label: "Admissions" },
-          { id: "fees", label: "Fees" },
-          { id: "specializations", label: "Specializations" },
-          { id: "syllabus", label: "Syllabus" },
-          { id: "career", label: "Career" },
+          { id: "courseImages", label: "Course Images" },
+          { id: "Overview", label: "Overview" },
+          { id: "Highlights", label: "Highlights" },
+          { id: "Mythsfacts", label: "Myths & facts" },
+          { id: "Eligibility", label: "Eligibility & Admission" },
+          { id: "Speciality", label: "Speciality" },
+          { id: "Syllabus", label: "Syllabus and Semester" },
+          { id: "career", label: "Career & Salary" },
+          { id: "additinal", label: "Addtional Information" },
           { id: "faq", label: "Frequently Asked Questions" },
-          { id: "benefits", label: "Benefits" },
         ]
       : [
           { id: "basic-info", label: "Basic Info" },
